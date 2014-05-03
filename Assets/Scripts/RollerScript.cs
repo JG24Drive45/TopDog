@@ -3,6 +3,8 @@ using System.Collections;
 
 public class RollerScript : MonoBehaviour {
 
+	public float rollerRotSpeed = 50.0f;
+
 	// Use this for initialization
 	void Start () {
 	
@@ -11,6 +13,6 @@ public class RollerScript : MonoBehaviour {
 	// Update is called once per frame
 	void Update () 
 	{
-		transform.RotateAround( transform.position, Vector3.back, 50 * Time.deltaTime );
+		transform.RotateAround( transform.position, Vector3.back, rollerRotSpeed * Time.deltaTime );
 	}
 }
