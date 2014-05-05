@@ -4,10 +4,13 @@ using System;
 
 public class ScoreScript : MonoBehaviour {
 
-	private int playerScore;	//stores the player's current score
-	private int playerMoveCount;//number of moves the player has made
-	private float playerTime;	//stores the player's current time
-	private bool timerActive;	//whether or not the timer is currently running
+	//note: these variables are only public so they are visible in the inspector.  
+	//proper acesss is through the properties
+
+	public int playerScore;	//stores the player's current score
+	public int playerMoveCount;//number of moves the player has made
+	public float playerTime;	//stores the player's current time
+	public bool timerActive;	//whether or not the timer is currently running
 
 	// Use this for initialization
 	void Start () 
