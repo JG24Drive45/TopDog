@@ -106,4 +106,15 @@ public class HotDogScript : MonoBehaviour
 			}
 		}
 	}
+
+	void OnTriggerEnter( Collider other )
+	{
+		switch( other.gameObject.tag )
+		{
+		case "TempKetchup":
+			Destroy( other.gameObject );
+			Debug.Log( "You collided with ketchup" );
+			break;
+		}
+	}
 }
