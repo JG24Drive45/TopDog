@@ -3,6 +3,11 @@ using System.Collections;
 
 public class HotDogScript : MonoBehaviour 
 {
+	#region Hotdog Movement Offsets
+
+	// Since our object is oblong we cannot rotate around the center.
+	// These offsets provide for a pivot point relative to the center of the object.
+
 	private Vector3 RIGHTVERTPIVOTOFFSET 	= new Vector3( 12.5f, -25.0f, 0.0f );
 	private Vector3 LEFTVERTPIVOTOFFSET		= new Vector3( -12.5f, -25.0f, 0.0f );
 	private Vector3 UPVERTPIVOTOFFSET		= new Vector3( 0.0f, -25.0f, 12.5f );
@@ -18,6 +23,10 @@ public class HotDogScript : MonoBehaviour
 	private Vector3 UPVHPIVOTOFFSET			= new Vector3( 0.0f, -12.5f, 25.0f );
 	private Vector3 DOWNVHPIVOTOFFSET		= new Vector3( 0.0f, -12.5f, -25.0f );
 
+	#endregion
+
+	// Describes how the hotdog is currently oriented.
+	// The pivot point to use depends upon this state.
 	enum OrientationState { VERTICAL, HORIZONTAL, VERTANDHORZ };
 	OrientationState orientationState;
 
@@ -109,12 +118,28 @@ public class HotDogScript : MonoBehaviour
 
 	void OnTriggerEnter( Collider other )
 	{
+		GameObject cam = GameObject.Find( "Main Camera" );
+
 		switch( other.gameObject.tag )
 		{
 		case "TempKetchup":
+			cam.SendMessage( "AcquiredCondiment" );
 			Destroy( other.gameObject );
 			Debug.Log( "You collided with ketchup" );
 			break;
+
+		case "TempMustard":
+			cam.SendMessage( "AcquiredCondiment" );
+			Destroy( other.gameObject );
+			Debug.Log( "You collided with mustard" );
+			break;
+
+		case "TempRelish":
+			cam.SendMessage( "AcquiredCondiment" );
+			Destroy( other.gameObject );
+			Debug.Log( "You collided with relish" );
+			break;
 		}
+
 	}
 }

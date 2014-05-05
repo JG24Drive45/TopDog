@@ -94,4 +94,10 @@ public class ScoreScript : MonoBehaviour {
 		}
 	}
 
+
+	void AcquiredCondiment()
+	{
+		Debug.Log( "Message received" );
+		playerScore += 50;
+	}
 }
