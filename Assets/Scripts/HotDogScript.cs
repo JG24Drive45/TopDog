@@ -31,6 +31,7 @@ public class HotDogScript : MonoBehaviour
 	OrientationState orientationState;
 
 	private Vector3 v3OriginalPosition = new Vector3( 12.5f, 15.0f, 0.0f );
+	private Vector3 v3OriginalRotation = new Vector3( 0.0f, 270.0f, 90.0f );
 
 	private float fKillHeight = -200.0f;										// Terminating Y-Coordinate value
 	private bool bFallDownRunning = false;										// Is the FallDown Coroutine running?
@@ -197,7 +198,7 @@ public class HotDogScript : MonoBehaviour
 		}
 
 		transform.rigidbody.isKinematic = true;
-		transform.rotation = Quaternion.identity;
+		transform.rotation = Quaternion.Euler( v3OriginalRotation );
 		transform.position = v3OriginalPosition;
 		orientationState = OrientationState.HORIZONTAL;
 		bFallDownRunning = false;
