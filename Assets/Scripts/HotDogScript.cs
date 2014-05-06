@@ -67,6 +67,7 @@ public class HotDogScript : MonoBehaviour
 					transform.RotateAround( transform.position + DOWNHORZPIVOTOFFSET, Vector3.left, 90.0f );
 				}
 
+				audio.Play();
 				break;
 			case OrientationState.VERTICAL:
 				if( Input.GetKeyDown( KeyCode.RightArrow ) )
@@ -90,6 +91,7 @@ public class HotDogScript : MonoBehaviour
 					orientationState = OrientationState.VERTANDHORZ;
 				}
 
+				audio.Play();
 				break;
 			case OrientationState.VERTANDHORZ:
 				if( Input.GetKeyDown( KeyCode.RightArrow ) )
@@ -111,6 +113,7 @@ public class HotDogScript : MonoBehaviour
 					orientationState = OrientationState.VERTICAL;
 				}
 
+				audio.Play();
 				break;
 			}
 		}
