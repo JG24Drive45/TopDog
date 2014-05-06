@@ -4,13 +4,10 @@ using System;
 
 public class ScoreScript : MonoBehaviour {
 
-	//note: these variables are only public so they are visible in the inspector.  
-	//proper acesss is through the properties
-
-	public int playerScore;	//stores the player's current score
-	public int playerMoveCount;//number of moves the player has made
-	public float playerTime;	//stores the player's current time
-	public bool timerActive;	//whether or not the timer is currently running
+	private int playerScore;	//stores the player's current score
+	private int playerMoveCount;//number of moves the player has made
+	private float playerTime;	//stores the player's current time
+	private bool timerActive;	//whether or not the timer is currently running
 
 	// Use this for initialization
 	void Start () 
@@ -38,6 +35,42 @@ public class ScoreScript : MonoBehaviour {
 		GUI.Label( new Rect(0,0,512,128), "Time: " + iMinutes + ":" + fSeconds + "\n" +
 		          						  "Score: " + playerScore + "\n" +
 		          						  "Moves: " + playerMoveCount);
+	}
+
+	//-----------messages------------//
+
+	void AcquiredCondiment()
+	{
+		Debug.Log( "Message received" );
+		playerScore += 50;
+	}
+
+	void IncrementMoveCount()
+	{
+		playerMoveCount++;
+	}
+
+	void StartTimer()
+	{
+		timerActive = true;
+	}
+
+	void StopTimer()
+	{
+		timerActive = false;
+	}
+
+	void TimeBonus(float fAmount)
+	{
+		playerTime -= fAmount;
+	}
+
+	void LevelComplete(bool bHasAllCondiments)
+	{
+		playerScore += 100; //100 points for winning level
+
+		if (bHasAllCondiments)
+			playerScore += 100; //100 more if all condiments were collected
 	}
 
 	//-----------accessors-----------//
@@ -95,9 +128,5 @@ public class ScoreScript : MonoBehaviour {
 	}
 
 
-	void AcquiredCondiment()
-	{
-		Debug.Log( "Message received" );
-		playerScore += 50;
-	}
+
 }
