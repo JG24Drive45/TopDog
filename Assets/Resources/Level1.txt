@@ -1,0 +1,26 @@
+; Level1
+; Placement of Tiles Goes here
+EEEEEEEEEEEEEEEEE
+EMMMMMMMMMMMMMMME
+EMMMMMMMMMMMMMMME
+EMMMMMMMMMMMMMMME
+EMMMMMMMMMMMMMMME
+EMMMMMMMMMMMMMMME
+EMMMMMMMMMMMMMMME
+EMMMMMMMMMMMMMMME
+EMMMMMMMMMMMMMMME
+EMMMMMMMMMMMMMMME
+EMMMMMMMMMMMMMMGE
+EEEEEEEEEEEEEEEEE
+; Placement of condiments goes here -- only X and Z coordinates needed
+; Ketchup
+500
+250
+; Mustard
+250
+300
+; Relish
+750
+150
+; Placement of switchModel goes here
+; Placement of player goes here
