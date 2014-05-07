@@ -16,6 +16,16 @@ public class ScoreScript : MonoBehaviour {
 		playerTime = 0.0f;
 		timerActive = false;
 	}
+
+	public void OnEnable()
+	{
+		Messenger.AddListener( "acquired condiment", AcquiredCondiment );
+	}
+
+	public void OnDisable()
+	{
+		Messenger.RemoveListener( "acquired condiment", AcquiredCondiment );
+	}
 	
 	// Update is called once per frame
 	void Update () 

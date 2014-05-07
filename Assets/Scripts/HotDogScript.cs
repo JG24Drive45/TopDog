@@ -8,29 +8,32 @@ public class HotDogScript : MonoBehaviour
 	// Since our object is oblong we cannot rotate around the center.
 	// These offsets provide for a pivot point relative to the center of the object.
 
-	private Vector3 RIGHTVERTPIVOTOFFSET 	= new Vector3( 12.5f, -25.0f, 0.0f );
-	private Vector3 LEFTVERTPIVOTOFFSET		= new Vector3( -12.5f, -25.0f, 0.0f );
-	private Vector3 UPVERTPIVOTOFFSET		= new Vector3( 0.0f, -25.0f, 12.5f );
-	private Vector3 DOWNVERTPIVOTOFFSET		= new Vector3( 0.0f, -25.0f, -12.5f );
+	// Pivots for vertical orientation
+	private Vector3 RIGHTVERTPIVOTOFFSET 	= new Vector3( 25.0f, -50.0f, 0.0f );
+	private Vector3 LEFTVERTPIVOTOFFSET		= new Vector3( -25.0f, -50.0f, 0.0f );
+	private Vector3 UPVERTPIVOTOFFSET		= new Vector3( 0.0f, -50.0f, 25.0f );
+	private Vector3 DOWNVERTPIVOTOFFSET		= new Vector3( 0.0f, -50.0f, -25.0f );
 
-	private Vector3 RIGHTHORZPIVOTOFFSET	= new Vector3( 25.0f, -12.5f, 0.0f );
-	private Vector3 LEFTHORZPIVOTOFFSET		= new Vector3( -25.0f, -12.5f, 0.0f );
-	private Vector3 UPHORZPIVOTOFFSET		= new Vector3( 0.0f, -12.5f, 12.5f );
-	private Vector3 DOWNHORZPIVOTOFFSET		= new Vector3( 0.0f, -12.5f, -12.5f );
+	// Pivots for horizontal orientation
+	private Vector3 RIGHTHORZPIVOTOFFSET	= new Vector3( 50.0f, -25.0f, 0.0f );
+	private Vector3 LEFTHORZPIVOTOFFSET		= new Vector3( -50.0f, -25.0f, 0.0f );
+	private Vector3 UPHORZPIVOTOFFSET		= new Vector3( 0.0f, -25.0f, 25.0f );
+	private Vector3 DOWNHORZPIVOTOFFSET		= new Vector3( 0.0f, -25.0f, -25.0f );
 
-	private Vector3 RIGHTVHPIVOTOFFSET		= new Vector3( 12.5f, -12.5f, 0.0f );
-	private Vector3 LEFTVHPIVOTOFFSET		= new Vector3( -12.5f, -12.5f, 0.0f );
-	private Vector3 UPVHPIVOTOFFSET			= new Vector3( 0.0f, -12.5f, 25.0f );
-	private Vector3 DOWNVHPIVOTOFFSET		= new Vector3( 0.0f, -12.5f, -25.0f );
+	// Pivots for vertical and horizontal orientation
+	private Vector3 RIGHTVHPIVOTOFFSET		= new Vector3( 25.0f, -25.0f, 0.0f );
+	private Vector3 LEFTVHPIVOTOFFSET		= new Vector3( -25.0f, -25.0f, 0.0f );
+	private Vector3 UPVHPIVOTOFFSET			= new Vector3( 0.0f, -25.0f, 50.0f );
+	private Vector3 DOWNVHPIVOTOFFSET		= new Vector3( 0.0f, -25.0f, -50.0f );
 
 	#endregion
 
 	// Describes how the hotdog is currently oriented.
 	// The pivot point to use depends upon this state.
-	enum OrientationState { VERTICAL, HORIZONTAL, VERTANDHORZ };
-	OrientationState orientationState;
+	enum OrientationState { NONE, VERTICAL, HORIZONTAL, VERTANDHORZ };
+	OrientationState orientationState = OrientationState.NONE;
 
-	private Vector3 v3OriginalPosition = new Vector3( 12.5f, 15.0f, 0.0f );
+	private Vector3 v3OriginalPosition;
 	private Vector3 v3OriginalRotation = new Vector3( 0.0f, 270.0f, 90.0f );
 
 	private float fKillHeight = -200.0f;										// Terminating Y-Coordinate value
@@ -39,9 +42,24 @@ public class HotDogScript : MonoBehaviour
 	// Use this for initialization
 	void Start () 
 	{
-		orientationState = OrientationState.HORIZONTAL;							// Starting state for the hotdog
+		//orientationState = OrientationState.NONE;								// Starting state for the hotdog
+		v3OriginalPosition = transform.position;								// Cache original position
 		Physics.gravity *= 5.0f;												// Testing - Increasing the rate of gravity
 		Debug.Log( Physics.gravity );											// Testing	
+
+
+	}
+
+	public void OnEnable()
+	{
+		// Add listeners here
+		Messenger<int>.AddListener( "set player orientation state", SetPlayerOrientationState );
+	}
+
+	public void OnDisable()
+	{
+		// Remove listeners here
+		Messenger<int>.RemoveListener( "set player orientation state", SetPlayerOrientationState );
 	}
 	
 	// Update is called once per frame
@@ -130,29 +148,33 @@ public class HotDogScript : MonoBehaviour
 		}
 	}
 
+	public void SetPlayerOrientationState( int orientation )
+	{
+		orientationState = (OrientationState)orientation;
+	}
+
 	void OnTriggerEnter( Collider other )
 	{
-		GameObject cam = GameObject.Find( "Main Camera" );
-
 		switch( other.gameObject.tag )
 		{
-		case "TempKetchup":
-			cam.SendMessage( "AcquiredCondiment" );
+		case "Ketchup":
+			Debug.Log( other.gameObject.tag );
+			Messenger.Broadcast( "acquired condiment" );
 			Destroy( other.gameObject );
 			Debug.Log( "You collided with ketchup" );
 			break;
 
-		case "TempMustard":
-			cam.SendMessage( "AcquiredCondiment" );
-			Destroy( other.gameObject );
-			Debug.Log( "You collided with mustard" );
-			break;
-
-		case "TempRelish":
-			cam.SendMessage( "AcquiredCondiment" );
-			Destroy( other.gameObject );
-			Debug.Log( "You collided with relish" );
-			break;
+//		case "TempMustard":
+//			cam.SendMessage( "AcquiredCondiment" );
+//			Destroy( other.gameObject );
+//			Debug.Log( "You collided with mustard" );
+//			break;
+//
+//		case "TempRelish":
+//			cam.SendMessage( "AcquiredCondiment" );
+//			Destroy( other.gameObject );
+//			Debug.Log( "You collided with relish" );
+//			break;
 
 		case "Sphere":
 			Debug.Log( "Touched Sphere" );

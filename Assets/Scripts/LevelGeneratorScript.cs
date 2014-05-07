@@ -11,6 +11,7 @@ public class LevelGeneratorScript : MonoBehaviour
 	public GameObject ketchup;
 	public GameObject mustard;
 	public GameObject relish;
+	public GameObject player;
 
 	string sLevel = "Level1";
 
@@ -57,26 +58,19 @@ public class LevelGeneratorScript : MonoBehaviour
 		Debug.Log( "Relish is at: " + tempPosition );			// For testing
 		Instantiate( relish, tempPosition, Quaternion.Euler( new Vector3( 90.0f, 0.0f, 0.0f ) ) );
 
-//		int x, z;
-//		z = 0;
-//
-//		for(int i = 0; i < 10; i++)
-//		{
-//			x = 0;
-//
-//			for(int j = 0; j < 10; j++)
-//			{
-//				Instantiate( tempMainTile, new Vector3( x, 0, z), Quaternion.identity );
-//				x += 25;
-//			}
-//
-//			z += 25;
-//		}
-//
-//		// Place the ketchup, mustard, and relish
-//		Instantiate( tempKetchup, new Vector3( 125.0f, 0.0f, 0.0f ), Quaternion.identity );
-//		Instantiate( tempMustard, new Vector3( 75.0f, 0.0f, 75.0f ), Quaternion.identity );
-//		Instantiate( tempRelish, new Vector3( 0.0f, 0.0f, 150.0f ), Quaternion.identity );
+		// Read lines 30 - 32 to get the player's (hotdog) location
+		tempPosition = new Vector3( int.Parse( lines[29] ), int.Parse( lines[30] ), -int.Parse( lines[31] ) );
+		Debug.Log( "Player is at: " + tempPosition );
+		// Read lines 34 - 36 to get the player's (hotdog) rotation
+		Vector3 tempRotation = new Vector3( int.Parse( lines[33] ), int.Parse( lines[34] ), int.Parse( lines[35] ) );
+		Debug.Log( "Player rotation is: " + tempRotation );
+		Instantiate( player, tempPosition, Quaternion.Euler( tempRotation ) );
+
+		// Read line 34 to get the player's orientation state
+		int tempState = int.Parse( lines[37] );
+		Debug.Log( "OState is: " + tempState );
+		// Send the message to set the player's orientation state
+		Messenger<int>.Broadcast( "set player orientation state", tempState );
 
 
 	}
