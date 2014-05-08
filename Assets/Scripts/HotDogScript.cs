@@ -34,7 +34,7 @@ public class HotDogScript : MonoBehaviour
 	OrientationState orientationState = OrientationState.NONE;
 
 	private Vector3 v3OriginalPosition;
-	private Vector3 v3OriginalRotation = new Vector3( 0.0f, 270.0f, 90.0f );
+	private Vector3 v3OriginalRotation;
 
 	private float fKillHeight = -200.0f;										// Terminating Y-Coordinate value
 	private bool bFallDownRunning = false;										// Is the FallDown Coroutine running?
@@ -44,6 +44,7 @@ public class HotDogScript : MonoBehaviour
 	{
 		//orientationState = OrientationState.NONE;								// Starting state for the hotdog
 		v3OriginalPosition = transform.position;								// Cache original position
+		v3OriginalRotation = transform.rotation.eulerAngles;					// Cache original rotation
 		Physics.gravity *= 5.0f;												// Testing - Increasing the rate of gravity
 		Debug.Log( Physics.gravity );											// Testing	
 
@@ -54,12 +55,14 @@ public class HotDogScript : MonoBehaviour
 	{
 		// Add listeners here
 		Messenger<int>.AddListener( "set player orientation state", SetPlayerOrientationState );
+		Messenger<int,int,int>.AddListener( "set player original rotation", SetPlayerOriginalRotation );
 	}
 
 	public void OnDisable()
 	{
 		// Remove listeners here
 		Messenger<int>.RemoveListener( "set player orientation state", SetPlayerOrientationState );
+		Messenger<int,int,int>.RemoveListener( "set player original rotation", SetPlayerOriginalRotation );
 	}
 	
 	// Update is called once per frame
@@ -153,76 +156,39 @@ public class HotDogScript : MonoBehaviour
 		orientationState = (OrientationState)orientation;
 	}
 
+	public void SetPlayerOriginalRotation( int x, int y, int z )
+	{
+		v3OriginalRotation.x = x;
+		v3OriginalRotation.y = y;
+		v3OriginalRotation.z = z;
+	}
+
 	void OnTriggerEnter( Collider other )
 	{
 		switch( other.gameObject.tag )
 		{
 		case "Ketchup":
-			Debug.Log( other.gameObject.tag );
+			// TODO: update hasKetchup bool
 			Messenger.Broadcast( "acquired condiment" );
 			Destroy( other.gameObject );
 			Debug.Log( "You collided with ketchup" );
 			break;
 
-//		case "TempMustard":
-//			cam.SendMessage( "AcquiredCondiment" );
-//			Destroy( other.gameObject );
-//			Debug.Log( "You collided with mustard" );
-//			break;
-//
-//		case "TempRelish":
-//			cam.SendMessage( "AcquiredCondiment" );
-//			Destroy( other.gameObject );
-//			Debug.Log( "You collided with relish" );
-//			break;
+		case "Mustard":
+			// TODO: update hasMustard bool
+			Messenger.Broadcast( "acquired condiment" );
+			Destroy( other.gameObject );
+			Debug.Log( "You collided with mustard" );
+			break;
 
-		case "Sphere":
-			Debug.Log( "Touched Sphere" );
-			gameObject.rigidbody.isKinematic = false;
-			char direction;
-
-			if( Input.GetKey( KeyCode.LeftArrow ) )
-				direction = 'L';
-			else if( Input.GetKey( KeyCode.RightArrow ) )
-				direction = 'R';
-			else if( Input.GetKey( KeyCode.UpArrow ) )
-				direction = 'U';
-			else
-				direction = 'D';
-
-				
-			StartCoroutine( "FallDown", direction );
-
+		case "Relish":
+			// TODO: update hasRelish bool
+			Messenger.Broadcast( "acquired condiment" );
+			Destroy( other.gameObject );
+			Debug.Log( "You collided with relish" );
 			break;
 		}
 
 	}
 
-	IEnumerator FallDown( char arrowDir )
-	{
-		bFallDownRunning = true;
-		Vector3 fallingDirection = Vector3.zero;
-
-		if( arrowDir == 'L' )
-			fallingDirection = Vector3.forward;
-		else if( arrowDir == 'R' )
-			fallingDirection = Vector3.back;
-		else if( arrowDir == 'U' )
-			fallingDirection = Vector3.right;
-		else
-			fallingDirection = Vector3.left;
-
-		while( transform.position.y > fKillHeight )
-		{
-			transform.RotateAround( transform.position, fallingDirection, 1.0f );
-			Debug.Log( "Running Coroutine" );
-			yield return null;
-		}
-
-		transform.rigidbody.isKinematic = true;
-		transform.rotation = Quaternion.Euler( v3OriginalRotation );
-		transform.position = v3OriginalPosition;
-		orientationState = OrientationState.HORIZONTAL;
-		bFallDownRunning = false;
-	}
 }
