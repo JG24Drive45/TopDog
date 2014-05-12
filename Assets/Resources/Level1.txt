@@ -30,9 +30,9 @@ EEEEEEEEEEEEEEEEE
 50
 38
 75
-; Player orientation goes here
+; Player rotation orientation goes here
 0
 0
-0
+90
 ; Player orientation state goes here -- 0: None / 1: Vertical / 2: Horizontal / 3: Vertical & Horizontal
 3
