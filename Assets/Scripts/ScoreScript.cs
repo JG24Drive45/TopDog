@@ -21,11 +21,29 @@ public class ScoreScript : MonoBehaviour {
 	public void OnEnable()
 	{
 		Messenger.AddListener( "acquired condiment", AcquiredCondiment );
+		Messenger.AddListener( "increment move count", IncrementMoveCount );
+		Messenger.AddListener( "start timer", StartTimer );
+		Messenger.AddListener( "stop timer", StopTimer );
+		Messenger<int>.AddListener( "set level", setLevel );
+		Messenger<float>.AddListener( "time bonus", TimeBonus );
+		Messenger<bool>.AddListener( "level complete", LevelComplete );
+		Messenger<int>.AddListener( "set score", setScore );
+		Messenger<int>.AddListener( "set move count", setPlayerMoveCount );
+		Messenger<float>.AddListener( "set time", setPlayerTime );
 	}
 
 	public void OnDisable()
 	{
 		Messenger.RemoveListener( "acquired condiment", AcquiredCondiment );
+		Messenger.RemoveListener( "increment move count", IncrementMoveCount );
+		Messenger.RemoveListener( "start timer", StartTimer );
+		Messenger.RemoveListener( "stop timer", StopTimer );
+		Messenger<int>.RemoveListener( "set level", setLevel );
+		Messenger<float>.RemoveListener( "time bonus", TimeBonus );
+		Messenger<bool>.RemoveListener( "level complete", LevelComplete );
+		Messenger<int>.RemoveListener( "set score", setScore );
+		Messenger<int>.RemoveListener( "set move count", setPlayerMoveCount );
+		Messenger<float>.RemoveListener( "set time", setPlayerTime );
 	}
 	
 	// Update is called once per frame
@@ -39,7 +57,7 @@ public class ScoreScript : MonoBehaviour {
 	void OnGUI()
 	{
 		//divide time into minutes and seconds
-		int iMinutes = (int)fPlayerTime / 60;
+		int iMinutes = (int)playerTime / 60;
 		float fSeconds = playerTime - (iMinutes * 60);
 
 		//create label
@@ -94,60 +112,38 @@ public class ScoreScript : MonoBehaviour {
 			playerScore += 100; //100 more if all condiments were collected
 	}
 
-	//-----------accessors-----------//
-
-	public int iPlayerScore
+	int getScore()
 	{
-		get
-		{
-			return playerScore;
-		}
-
-		set
-		{
-			playerScore = Math.Min(value, 0); //prevent negative score
-		}
+		return playerScore;
 	}
 
-	public int iPlayerMoveCount
+	void setScore(int score)
 	{
-		get
-		{
-			return playerMoveCount;
-		}
-
-		set
-		{
-			playerMoveCount = value;
-		}
+		playerScore = score;
 	}
 
-	public float fPlayerTime
+	int getPlayerMoveCount()
 	{
-		get
-		{
-			return playerTime;
-		}
-
-		set
-		{
-			playerTime = Math.Min(value, 0.0f); //prevent negative time
-		}
+		return playerMoveCount;
 	}
 
-	public bool bIsTimerActive
+	void setPlayerMoveCount(int count)
 	{
-		get
-		{
-			return timerActive;
-		}
-
-		set
-		{
-			timerActive = value;
-		}
+		playerMoveCount = count;
 	}
 
+	float getPlayerTime()
+	{
+		return playerTime;
+	}
 
+	void setPlayerTime(float time)
+	{
+		playerTime = time;
+	}
 
+	bool isTimerActive()
+	{
+		return timerActive;
+	}
 }
