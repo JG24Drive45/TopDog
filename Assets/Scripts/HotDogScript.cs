@@ -98,7 +98,8 @@ public class HotDogScript : MonoBehaviour
 						transform.RotateAround( transform.position + DOWNHORZPIVOTOFFSET, Vector3.left, 90.0f );
 					}
 
-					audio.Play();
+					//audio.Play();
+                    EventAggregatorManager.Publish(new PlaySoundMessage("splat", false));
 					break;
 				case OrientationState.VERTICAL:
 					if( Input.GetKeyDown( KeyCode.RightArrow ) )
@@ -122,7 +123,8 @@ public class HotDogScript : MonoBehaviour
 						orientationState = OrientationState.VERTANDHORZ;
 					}
 
-					audio.Play();
+					//audio.Play();
+                    EventAggregatorManager.Publish(new PlaySoundMessage("splat", false));
 					break;
 				case OrientationState.VERTANDHORZ:
 					if( Input.GetKeyDown( KeyCode.RightArrow ) )
@@ -144,7 +146,8 @@ public class HotDogScript : MonoBehaviour
 						orientationState = OrientationState.VERTICAL;
 					}
 
-					audio.Play();
+					//audio.Play();
+                    EventAggregatorManager.Publish(new PlaySoundMessage("splat", false));
 					break;
 				}
 			}

@@ -17,12 +17,20 @@ public class LevelGeneratorScript : MonoBehaviour
 	public GameObject player;
 	public GameObject switchObject;
 
+    SoundManager m_SoundManager;
+
 	private string sLevel;											// Name of the current level
 
+    void Awake()
+    {
+        EventAggregatorManager.AddEventAggregator(GameEventAggregator.GameMessenger);
+    }
 
 	// INSTEAD OF GENERATING TILES LIKE BELOW, WE CAN READ DATA IN FROM A TEXT FILE TO GENERATE THE LEVELS
 	void Start () 
 	{
+
+        GameEventAggregator.GameMessenger.Subscribe(this);
 		sLevel = Application.loadedLevelName;						// Get the name of the current level
 
 		string[] lines;												// Array that stores text file info
@@ -93,11 +101,30 @@ public class LevelGeneratorScript : MonoBehaviour
 		// Send the message to set the player's orientation state
 		Messenger<int>.Broadcast( "set player orientation state", tempState );
 
-
+        LoadSounds();
 	}
+
+    void LoadSounds()
+    {
+        m_SoundManager = gameObject.GetComponent<SoundManager>() as SoundManager;
+        m_SoundManager.LoadSound("splat", "splat3",5);
+        m_SoundManager.LoadSound("lvlMusic", "level_music_7", 1);
+    }
 	
 	// Update is called once per frame
 	void Update () {
-	
+
+        if (Input.GetKeyUp(KeyCode.Keypad1))
+        {
+            Debug.Log("Key Pressed");
+            EventAggregatorManager.Publish(new PlaySoundMessage("lvlMusic", true));
+        }
+        if (Input.GetKeyUp(KeyCode.Keypad2))
+        {
+            Debug.Log("Key Pressed");
+            EventAggregatorManager.Publish(new StopSoundLoopMessage("lvlMusic"));
+        }
+        GameEventAggregator.GameMessenger.Update();
+
 	}
 }

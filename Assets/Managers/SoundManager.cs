@@ -117,31 +117,17 @@ public class LoopingSoundEfectInstances
     public SoundManager.MusicFadeEffect MusicFadeEffect { get; set; }
 }
 
-public class SoundManager : MonoBehaviour
+public class SoundManager : MonoBehaviour,
+    IHandle<StopSoundMessage>,
+    IHandle<StopSoundLoopMessage>,
+    IHandle<PlaySoundMessage>,
+    IHandle<PauseSoundMessage>,
+    IHandle<ResumeSoundMessage>
 {
-
-    private static SoundManager instance;
-
-    void Awake()
-    {
-        if (instance != null && instance != this)
-        {
-            Destroy(this.gameObject);
-            return;
-        }
-        else
-            instance = this;
-    }
-
-    public static SoundManager GetInstance()
-    {
-        return instance;
-    }
-
     public Dictionary<string, SoundEffects> m_Sounds = new Dictionary<string, SoundEffects>();
     private Dictionary<string, SoundEffectInstances> m_PlayingSounds = new Dictionary<string, SoundEffectInstances>();
     private Dictionary<string, LoopingSoundEfectInstances> m_PlayingSoundLoop = new Dictionary<string, LoopingSoundEfectInstances>();
-
+    EventAggregator m_EventAggregator;
     private static float volume = 1.0f;
     public static float SoundVolume
     {
@@ -149,9 +135,17 @@ public class SoundManager : MonoBehaviour
         set { AudioListener.volume = value; }
     }
 
-    private SoundManager()
+    void Start()
     {
         AudioListener.volume = 1.0f;
+        GameEventAggregator.GameMessenger.Subscribe(this);
+    }
+
+    void Unload()
+    {
+        GameEventAggregator.GameMessenger.Unsubscribe(this);
+        if (m_EventAggregator != null)
+            m_EventAggregator.Unsubscribe(this);
     }
 
     public void LoadSound(string soundName, AudioClip clip)
@@ -414,5 +408,51 @@ public class SoundManager : MonoBehaviour
             m_PlayingSoundLoop[removeLoopingInstances[i]].SoundEffectInstance.SoundEffects[0].audio.Stop();
         }
 
+    }
+    public void Handle(PlaySoundMessage message)
+    {
+
+        Debug.Log("PlaySound Message");
+        if (message.LoopAble)
+        {
+            if (message.FadeInDuration > 0)
+            {
+                PlaySoundLooped(message.SoundName, message.FadeInDuration);
+            }
+            else
+            {
+                PlaySoundLooped(message.SoundName);
+            }
+        }
+        else
+        {
+            PlaySound(message.SoundName);
+        }
+    }
+
+    public void Handle(StopSoundMessage message)
+    {
+        StopSound(message.SoundName);
+    }
+
+    public void Handle(StopSoundLoopMessage message)
+    {
+        if (message.FadeDuration > 0)
+        {
+            StopSoundLoop(message.SoundName, message.FadeDuration);
+        }
+        else
+        {
+            StopSoundLoop(message.SoundName);
+        }
+    }
+
+    public void Handle(PauseSoundMessage message)
+    {
+        PauseSound(message.SoundName);
+    }
+    public void Handle(ResumeSoundMessage message)
+    {
+        ResumeSound(message.SoundName);
     }
 }
