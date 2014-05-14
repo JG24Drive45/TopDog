@@ -72,9 +72,12 @@ public class LevelGeneratorScript : MonoBehaviour
 		Instantiate( relish, tempPosition, Quaternion.Euler( new Vector3( 90.0f, 0.0f, 0.0f ) ) );
 
 		// Read lines 26 & 27 to get the switch location
-		tempPosition = new Vector3( int.Parse( lines[25] ), 12.5f, -int.Parse( lines[26] ) );
-		Debug.Log( "Switch is at: " + tempPosition );
-		Instantiate( switchObject, tempPosition, Quaternion.Euler( new Vector3( 270.0f, 0.0f, 0.0f ) ) );
+		if( lines[25] != "none" )
+		{
+			tempPosition = new Vector3( int.Parse( lines[25] ), 12.5f, -int.Parse( lines[26] ) );
+			Debug.Log( "Switch is at: " + tempPosition );
+			Instantiate( switchObject, tempPosition, Quaternion.Euler( new Vector3( 270.0f, 0.0f, 0.0f ) ) );
+		}
 
 		// Read lines 29 - 31 to get the player's (hotdog) location
 		tempPosition = new Vector3( int.Parse( lines[28] ), int.Parse( lines[29] ), -int.Parse( lines[30] ) );
