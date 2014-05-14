@@ -4,6 +4,7 @@ using System;
 
 public class ScoreScript : MonoBehaviour {
 
+	private int currentLevel;	//holds the current level number
 	private int playerScore;	//stores the player's current score
 	private int playerMoveCount;//number of moves the player has made
 	private float playerTime;	//stores the player's current time
@@ -68,6 +69,16 @@ public class ScoreScript : MonoBehaviour {
 	void StopTimer()
 	{
 		timerActive = false;
+	}
+
+	int getLevel()
+	{
+		return currentLevel;
+	}
+
+	void setLevel(int levelIndex)
+	{
+		currentLevel = levelIndex;
 	}
 
 	void TimeBonus(float fAmount)
