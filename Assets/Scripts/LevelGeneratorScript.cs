@@ -37,7 +37,7 @@ public class LevelGeneratorScript : MonoBehaviour
 
 		TextAsset data;												// Text file variable
 
-		data = ( TextAsset )Resources.Load( sLevel );
+		data = ( TextAsset )Resources.Load( "LevelData/" + sLevel );
 		lines = data.text.Split( "\n"[0] );
 
 		// Read the first 13 lines of text file that make up the tiles

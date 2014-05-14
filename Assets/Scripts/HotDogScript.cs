@@ -28,16 +28,34 @@ public class HotDogScript : MonoBehaviour
 
 	#endregion
 
+	// Hotdog Condiment Traits
+	private bool bHasKetchup = false;
+	private bool bHasMustard = false;
+	private bool bHasRelish	 = false;
+	private bool bFullDog	 = false;
+
+	// Materials for Hotdog
+	public Material[] hotdogMaterials;
+		// 0 - Empty Dog
+		// 1 - Ketchup
+		// 2 - Mustard
+		// 3 - Relish
+		// 4 - Ketchup & Mustard
+		// 5 - Ketchup & Relish
+		// 6 - Mustard & Relish
+		// 7 - Ketchup & Mustard & Relish
+
 	// Describes how the hotdog is currently oriented.
 	// The pivot point to use depends upon this state.
 	enum OrientationState { NONE, VERTICAL, HORIZONTAL, VERTANDHORZ };
 	OrientationState orientationState = OrientationState.NONE;
 
-	private Vector3 v3OriginalPosition;
-	private Vector3 v3OriginalRotation;
+	private bool bCanMove = true;												// Can the player currently move
+
+	private Vector3 v3OriginalPosition;											// Starting position for the level
+	private Vector3 v3OriginalRotation;											// Starting rotation for the level
 
 	private float fKillHeight = -200.0f;										// Terminating Y-Coordinate value
-	private bool bFallDownRunning = false;										// Is the FallDown Coroutine running?
 
 	// Use this for initialization
 	void Start () 
@@ -48,7 +66,7 @@ public class HotDogScript : MonoBehaviour
 		Physics.gravity *= 5.0f;												// Testing - Increasing the rate of gravity
 		Debug.Log( Physics.gravity );											// Testing	
 
-
+		renderer.material = hotdogMaterials[0];									// Give the hotdog the empty material
 	}
 
 	public void OnEnable()
@@ -69,7 +87,7 @@ public class HotDogScript : MonoBehaviour
 	void Update () 
 	{
 		// Stop player from moving if they are currently falling
-		if( !bFallDownRunning )
+		if( bCanMove )
 		{
 			// MOVEMENT IF THE PLAYER PRESSES <LEFT>, <RIGHT>, <UP>, OR <DOWN>
 			if ( Input.GetKeyDown( KeyCode.DownArrow ) || Input.GetKeyDown( KeyCode.UpArrow ) || 
@@ -170,29 +188,80 @@ public class HotDogScript : MonoBehaviour
 	{
 		switch( other.gameObject.tag )
 		{
+		case "EmptyTile":
+			bCanMove = false;
+			break;
+
+		case "Switch":
+			break;
+
 		case "Ketchup":
-			// TODO: update hasKetchup bool
 			Messenger.Broadcast( "acquired condiment" );								// Send the message to update the score
+			bHasKetchup = true;															// Player has acquired the ketchup
+			bFullDog = IsFullDog();														// Is the dog full?
+			SetMaterial();																// Update the material
 			EventAggregatorManager.Publish( new PlaySoundMessage( "splat", false ) );	// Play the splat sound
 			Destroy( other.gameObject );
 			Debug.Log( "You collided with ketchup" );
 			break;
 
 		case "Mustard":
-			// TODO: update hasMustard bool
-			Messenger.Broadcast( "acquired condiment" );
+			Messenger.Broadcast( "acquired condiment" );								// Send the message to update the score
+			bHasMustard = true;															// Player has acquired the mustard
+			bFullDog = IsFullDog();														// Is the dog full?
+			SetMaterial();																// Update the material
+			EventAggregatorManager.Publish( new PlaySoundMessage( "splat", false ) );	// Play the splat sound
 			Destroy( other.gameObject );
 			Debug.Log( "You collided with mustard" );
 			break;
 
 		case "Relish":
-			// TODO: update hasRelish bool
-			Messenger.Broadcast( "acquired condiment" );
+			Messenger.Broadcast( "acquired condiment" );								// Send the message to update the score
+			bHasRelish = true;															// Player has acquired the relish
+			bFullDog = IsFullDog();														// Is the dog full?
+			SetMaterial();																// Update the material
+			EventAggregatorManager.Publish( new PlaySoundMessage( "splat", false ) );	// Play the splat sound
 			Destroy( other.gameObject );
 			Debug.Log( "You collided with relish" );
 			break;
 		}
 
+	}
+
+	bool IsFullDog()
+	{
+		if( bHasKetchup && bHasMustard && bHasRelish )
+			return true;
+		else
+			return false;
+	}
+
+	void SetMaterial()
+	{
+		// If you have no condiments
+		if( !bHasKetchup && !bHasMustard && !bHasRelish )
+			renderer.material = hotdogMaterials[0];
+		// If you only have ketchup
+		else if( bHasKetchup && !bHasMustard && !bHasRelish )
+			renderer.material = hotdogMaterials[1];
+		// If you only have mustard
+		else if( !bHasKetchup && bHasMustard && !bHasRelish )
+			renderer.material = hotdogMaterials[2];
+		// If you only have relish
+		else if( !bHasKetchup && !bHasMustard && bHasRelish )
+			renderer.material = hotdogMaterials[3];
+		// If you have ketchup & mustard
+		else if( bHasKetchup && bHasMustard && !bHasRelish )
+			renderer.material = hotdogMaterials[4];
+		// If you have ketchup & relish
+		else if( bHasKetchup && !bHasMustard && bHasRelish )
+			renderer.material = hotdogMaterials[5];
+		// If you have mustard & relish
+		else if( !bHasKetchup && bHasMustard && bHasRelish )
+			renderer.material = hotdogMaterials[6];
+		// If you have all condiments
+		else if( IsFullDog() )
+			renderer.material = hotdogMaterials[7];
 	}
 
 }
