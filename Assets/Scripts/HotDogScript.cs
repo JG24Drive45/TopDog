@@ -99,7 +99,7 @@ public class HotDogScript : MonoBehaviour
 					}
 
 					//audio.Play();
-                    EventAggregatorManager.Publish(new PlaySoundMessage("splat", false));
+					EventAggregatorManager.Publish(new PlaySoundMessage("hotdogStep", false));
 					break;
 				case OrientationState.VERTICAL:
 					if( Input.GetKeyDown( KeyCode.RightArrow ) )
@@ -124,7 +124,7 @@ public class HotDogScript : MonoBehaviour
 					}
 
 					//audio.Play();
-                    EventAggregatorManager.Publish(new PlaySoundMessage("splat", false));
+					EventAggregatorManager.Publish(new PlaySoundMessage("hotdogStep", false));
 					break;
 				case OrientationState.VERTANDHORZ:
 					if( Input.GetKeyDown( KeyCode.RightArrow ) )
@@ -147,7 +147,7 @@ public class HotDogScript : MonoBehaviour
 					}
 
 					//audio.Play();
-                    EventAggregatorManager.Publish(new PlaySoundMessage("splat", false));
+					EventAggregatorManager.Publish(new PlaySoundMessage("hotdogStep", false));
 					break;
 				}
 			}
@@ -172,7 +172,8 @@ public class HotDogScript : MonoBehaviour
 		{
 		case "Ketchup":
 			// TODO: update hasKetchup bool
-			Messenger.Broadcast( "acquired condiment" );
+			Messenger.Broadcast( "acquired condiment" );								// Send the message to update the score
+			EventAggregatorManager.Publish( new PlaySoundMessage( "splat", false ) );	// Play the splat sound
 			Destroy( other.gameObject );
 			Debug.Log( "You collided with ketchup" );
 			break;

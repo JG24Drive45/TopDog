@@ -107,6 +107,7 @@ public class LevelGeneratorScript : MonoBehaviour
     void LoadSounds()
     {
         m_SoundManager = gameObject.GetComponent<SoundManager>() as SoundManager;
+		m_SoundManager.LoadSound("hotdogStep", "HotDogStep", 1);
         m_SoundManager.LoadSound("splat", "splat3",5);
         m_SoundManager.LoadSound("lvlMusic", "level_music_7", 1);
     }
