@@ -1,21 +1,27 @@
-﻿using UnityEngine;
+﻿using System;
 using System.Collections;
-using System;
+using System.Collections.Generic;
+using System.IO;
+using UnityEngine;
 
 public class ScoreScript : MonoBehaviour {
 
-	private int currentLevel;	//holds the current level number
-	private int playerScore;	//stores the player's current score
-	private int playerMoveCount;//number of moves the player has made
-	private float playerTime;	//stores the player's current time
-	private bool timerActive;	//whether or not the timer is currently running
+	private int 	currentLevel;	//holds the current level number
+	private int 	playerScore;	//stores the player's current score
+	private int 	playerMoveCount;//number of moves the player has made
+	private float 	playerTime;		//stores the player's current time
+	private bool 	timerActive;	//whether or not the timer is currently running
+	private string	playerName;		//what name to attribute any high scores earned to
 
 	// Use this for initialization
 	void Start () 
 	{
-		playerScore = 0;
-		playerTime = 0.0f;
-		timerActive = false;
+		currentLevel 	= 0;
+		playerScore 	= 0;
+		playerMoveCount = 0;
+		playerTime 		= 0.0f;
+		timerActive 	= false;
+		playerName		= "mysterious stranger"; 
 	}
 
 	public void OnEnable()
@@ -30,6 +36,7 @@ public class ScoreScript : MonoBehaviour {
 		Messenger<int>.AddListener( "set score", setScore );
 		Messenger<int>.AddListener( "set move count", setPlayerMoveCount );
 		Messenger<float>.AddListener( "set time", setPlayerTime );
+		Messenger<string>.AddListener( "set player name", setPlayerName );
 	}
 
 	public void OnDisable()
@@ -64,6 +71,65 @@ public class ScoreScript : MonoBehaviour {
 		GUI.Label( new Rect(0,0,512,128), "Time: " + iMinutes + ":" + fSeconds + "\n" +
 		          						  "Score: " + playerScore + "\n" +
 		          						  "Moves: " + playerMoveCount);
+	}
+
+	void saveScore(string name)
+	{
+		KeyValuePair<int,string>[] scores = new KeyValuePair<int,string>[11]; //stores the scores and names
+		byte i = 0;	//current entry in the array
+		string filePath = "Assets/Resources/level_" + currentLevel + "_scores.txt"; //location the scores are saved
+
+		//read scores
+		try
+		{
+			StreamReader input = new StreamReader(filePath);
+
+			while (input.EndOfStream == false)
+			{
+				int key = Convert.ToInt32( input.ReadLine() );
+				string value = input.ReadLine();
+
+				scores[i] = new KeyValuePair<int, string>(key,value);
+				i++;
+			}
+
+			input.Close();
+		}
+		catch (FileNotFoundException e)
+		{
+			//if the file does not exist, log warning and continue anyway
+			Debug.LogWarning("ScoreScript.SaveScore: could not find file " + e.FileName);
+		}
+
+		//add new score
+		scores[i] = new KeyValuePair<int, string>(playerScore, name);
+		i++;
+
+		//sort scores using bubble sort
+		bool changed = true;
+		while (changed)
+		{
+			changed = false;
+			for (byte j = 1; j < i; j++)
+				if ( scores[j].Key > scores[j-1].Key )
+				{
+					KeyValuePair<int, string> temp = scores[j-1];
+					scores[j-1] = scores[j];
+					scores[j] = temp;
+				changed = true;
+				}
+		}
+		//write scores
+		StreamWriter output = new StreamWriter(filePath);
+
+		byte stopAt = Math.Min(i, (byte)10); //toss out the 11th entry, if there is one
+		for( i = 0; i < stopAt; i++)
+		{
+			output.WriteLine(scores[i].Key);
+			output.WriteLine(scores[i].Value);
+		}
+
+		output.Close();
 	}
 
 	//-----------messages------------//
@@ -110,6 +176,8 @@ public class ScoreScript : MonoBehaviour {
 
 		if (bHasAllCondiments)
 			playerScore += 100; //100 more if all condiments were collected
+
+		saveScore(playerName);
 	}
 
 	int getScore()
@@ -145,5 +213,10 @@ public class ScoreScript : MonoBehaviour {
 	bool isTimerActive()
 	{
 		return timerActive;
+	}
+
+	void setPlayerName (string name)
+	{
+		playerName = name;
 	}
 }
