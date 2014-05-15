@@ -32,7 +32,7 @@ public class HotDogScript : MonoBehaviour
 	private bool bHasKetchup = false;
 	private bool bHasMustard = false;
 	private bool bHasRelish	 = false;
-	private bool bFullDog	 = false;
+	private bool bFullDog    = false;
 
 	// Materials for Hotdog
 	public Material[] hotdogMaterials;
@@ -51,6 +51,7 @@ public class HotDogScript : MonoBehaviour
 	OrientationState orientationState = OrientationState.NONE;
 
 	private bool bCanMove = true;												// Can the player currently move
+	private char sLastKeyUsed;													// Last arrow button the player used
 
 	private Vector3 v3OriginalPosition;											// Starting position for the level
 	private Vector3 v3OriginalRotation;											// Starting rotation for the level
@@ -90,10 +91,8 @@ public class HotDogScript : MonoBehaviour
 		if( bCanMove )
 		{
 			// MOVEMENT IF THE PLAYER PRESSES <LEFT>, <RIGHT>, <UP>, OR <DOWN>
-			if ( Input.GetKeyDown( KeyCode.DownArrow ) || Input.GetKeyDown( KeyCode.UpArrow ) || 
-			    Input.GetKeyDown( KeyCode.RightArrow ) || Input.GetKeyDown( KeyCode.LeftArrow ) )
+			if( IsMovementKeyDown() )
 			{
-
 				switch( orientationState )
 				{
 				case OrientationState.HORIZONTAL:
@@ -101,19 +100,23 @@ public class HotDogScript : MonoBehaviour
 					{
 						transform.RotateAround( transform.position + RIGHTHORZPIVOTOFFSET, Vector3.back, 90.0f );
 						orientationState = OrientationState.VERTICAL;
+						SetLastKeyUsed( 'R' );
 					}
 					else if( Input.GetKeyDown( KeyCode.LeftArrow ) )
 					{
 						transform.RotateAround( transform.position + LEFTHORZPIVOTOFFSET, Vector3.forward, 90.0f );
 						orientationState = OrientationState.VERTICAL;
+						SetLastKeyUsed( 'L' );
 					}
 					else if( Input.GetKeyDown( KeyCode.UpArrow ) )
 					{
 						transform.RotateAround( transform.position + UPHORZPIVOTOFFSET, Vector3.right, 90.0f );
+						SetLastKeyUsed( 'U' );
 					}
 					else if( Input.GetKeyDown( KeyCode.DownArrow ) )
 					{
 						transform.RotateAround( transform.position + DOWNHORZPIVOTOFFSET, Vector3.left, 90.0f );
+						SetLastKeyUsed( 'D' );
 					}
 
 					//audio.Play();
@@ -124,21 +127,25 @@ public class HotDogScript : MonoBehaviour
 					{
 						transform.RotateAround( transform.position + RIGHTVERTPIVOTOFFSET, Vector3.back, 90.0f );
 						orientationState = OrientationState.HORIZONTAL;
+						SetLastKeyUsed( 'R' );
 					}
 					else if( Input.GetKeyDown( KeyCode.LeftArrow ) )
 					{
 						transform.RotateAround( transform.position + LEFTVERTPIVOTOFFSET, Vector3.forward, 90.0f );
 						orientationState = OrientationState.HORIZONTAL;
+						SetLastKeyUsed( 'L' );
 					}
 					else if( Input.GetKeyDown( KeyCode.UpArrow ) )
 					{
 						transform.RotateAround( transform.position + UPVERTPIVOTOFFSET, Vector3.right, 90.0f );
 						orientationState = OrientationState.VERTANDHORZ;
+						SetLastKeyUsed( 'U' );
 					}
 					else if( Input.GetKeyDown( KeyCode.DownArrow ) )
 					{
 						transform.RotateAround( transform.position + DOWNVERTPIVOTOFFSET, Vector3.left, 90.0f );
 						orientationState = OrientationState.VERTANDHORZ;
+						SetLastKeyUsed( 'D' );
 					}
 
 					//audio.Play();
@@ -148,20 +155,24 @@ public class HotDogScript : MonoBehaviour
 					if( Input.GetKeyDown( KeyCode.RightArrow ) )
 					{
 						transform.RotateAround( transform.position + RIGHTVHPIVOTOFFSET, Vector3.back, 90.0f );
+						SetLastKeyUsed( 'R' );
 					}
 					else if( Input.GetKeyDown( KeyCode.LeftArrow ) )
 					{
 						transform.RotateAround( transform.position + LEFTVHPIVOTOFFSET, Vector3.forward, 90.0f );
+						SetLastKeyUsed( 'L' );
 					}
 					else if( Input.GetKeyDown( KeyCode.UpArrow ) )
 					{
 						transform.RotateAround( transform.position + UPVHPIVOTOFFSET, Vector3.right, 90.0f );
 						orientationState = OrientationState.VERTICAL;
+						SetLastKeyUsed( 'U' );
 					}
 					else if( Input.GetKeyDown( KeyCode.DownArrow ) )
 					{
 						transform.RotateAround( transform.position + DOWNVHPIVOTOFFSET, Vector3.left, 90.0f );
 						orientationState = OrientationState.VERTICAL;
+						SetLastKeyUsed( 'D' );
 					}
 
 					//audio.Play();
@@ -170,6 +181,27 @@ public class HotDogScript : MonoBehaviour
 				}
 			}
 		}
+	}
+
+	void SetLastKeyUsed( char key )
+	{
+		sLastKeyUsed = key;
+	}
+
+	// Tells us if the player has pressed, up, down, left, right, W, A, S, or D
+	bool IsMovementKeyDown()
+	{
+		if( Input.GetKeyDown( KeyCode.LeftArrow ) ||
+		    Input.GetKeyDown( KeyCode.RightArrow ) ||
+		    Input.GetKeyDown( KeyCode.UpArrow ) ||
+		    Input.GetKeyDown( KeyCode.DownArrow ) ||
+		    Input.GetKeyDown( KeyCode.A ) ||
+		    Input.GetKeyDown( KeyCode.D ) ||
+		    Input.GetKeyDown( KeyCode.W ) ||
+		    Input.GetKeyDown( KeyCode.S ) )
+			return true;
+		else
+			return false;
 	}
 
 	public void SetPlayerOrientationState( int orientation )
@@ -189,7 +221,13 @@ public class HotDogScript : MonoBehaviour
 		switch( other.gameObject.tag )
 		{
 		case "EmptyTile":
+			Debug.Log( "Touched empty tile" );
 			bCanMove = false;
+			break;
+
+		case "FallingTile":
+			other.gameObject.SendMessage( "ToggleBeenTouched" );
+			Debug.Log( "Touched falling tile" );
 			break;
 
 		case "Switch":
@@ -260,7 +298,7 @@ public class HotDogScript : MonoBehaviour
 		else if( !bHasKetchup && bHasMustard && bHasRelish )
 			renderer.material = hotdogMaterials[6];
 		// If you have all condiments
-		else if( IsFullDog() )
+		else if( bFullDog )
 			renderer.material = hotdogMaterials[7];
 	}
 

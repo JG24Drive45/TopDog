@@ -16,6 +16,7 @@ public class LevelGeneratorScript : MonoBehaviour
 	public GameObject relish;
 	public GameObject player;
 	public GameObject switchObject;
+	public GameObject coals;
 
     SoundManager m_SoundManager;
 
@@ -47,7 +48,7 @@ public class LevelGeneratorScript : MonoBehaviour
 			for( int j = 0; j < lineLength; j++ )
 			{
 				if( lines[i][j] == 'E' )
-					Instantiate( emptyTile, new Vector3( j * 50, 0.0f, -( i - 2 ) * 50 ), Quaternion.Euler( new Vector3( 90, 0, 0 ) ) );
+					Instantiate( emptyTile, new Vector3( j * 50, 7.5f, -( i - 2 ) * 50 ), Quaternion.Euler( new Vector3( 0, 0, 0 ) ) );
 				else if( lines[i][j] == 'M' )
 					Instantiate( mainTile, new Vector3( j * 50, 0.0f, -( i - 2 ) * 50 ), Quaternion.Euler( new Vector3( 90, 0, 0 ) ) );
 				else if( lines[i][j] == 'G' )
@@ -100,6 +101,9 @@ public class LevelGeneratorScript : MonoBehaviour
 		Debug.Log( "OState is: " + tempState );
 		// Send the message to set the player's orientation state
 		Messenger<int>.Broadcast( "set player orientation state", tempState );
+
+		// Instantiate the coals
+		Instantiate( coals, new Vector3( 0, -250, 250 ), Quaternion.identity );
 
         LoadSounds();
 	}
