@@ -111,9 +111,9 @@ public class LevelGeneratorScript : MonoBehaviour
     void LoadSounds()
     {
         m_SoundManager = gameObject.GetComponent<SoundManager>() as SoundManager;
-		m_SoundManager.LoadSound("hotdogStep", "HotDogStep", 1);
-        m_SoundManager.LoadSound("splat", "splat3",5);
-        m_SoundManager.LoadSound("lvlMusic", "level_music_7", 1);
+		m_SoundManager.LoadSound("hotdogStep", "SFX/HotDogStep", 1);
+        m_SoundManager.LoadSound("splat", "SFX/splat3",5);
+        m_SoundManager.LoadSound("lvlMusic", "Music/level_music_7", 1);
     }
 	
 	// Update is called once per frame
