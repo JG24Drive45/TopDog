@@ -220,6 +220,10 @@ public class HotDogScript : MonoBehaviour
 	{
 		switch( other.gameObject.tag )
 		{
+		case "BridgeTile":
+			Debug.Log( "Touched Bridge" );
+			break;
+
 		case "EmptyTile":
 			Debug.Log( "Touched empty tile" );
 			bCanMove = false;
@@ -231,6 +235,13 @@ public class HotDogScript : MonoBehaviour
 			break;
 
 		case "Switch":
+			Debug.Log( "Touched Switch" );
+			if( other.gameObject.GetComponent<CapsuleCollider>().enabled )
+			{
+				other.gameObject.GetComponent<CapsuleCollider>().enabled = false;
+				Messenger.Broadcast( "set active switch material" );
+				Messenger.Broadcast( "activate bridge" );
+			}
 			break;
 
 		case "Ketchup":
