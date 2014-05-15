@@ -32,21 +32,26 @@ public class BridgeTileScript : MonoBehaviour {
 
 	void ActivateBridge()
 	{
+		Invoke( "CallActivateBridge", 0.5f );
+	}
+
+	void CallActivateBridge()
+	{
 		// Turn off the empty tile that is in the bridge tile's current position
 		GameObject[] tiles = GameObject.FindGameObjectsWithTag( "EmptyTile" );
-
+		
 		int length = tiles.Length;										// Cache the array length
 		int i;
 		for( i = 0; i < length; i++ )									// Find the matching empty tile
 		{
 			if( tiles[i].transform.position.x == this.transform.position.x &&
-			    tiles[i].transform.position.z == this.transform.position.z )
+			   tiles[i].transform.position.z == this.transform.position.z )
 				break;
 		}
-
+		
 		if( i < length )												// Error Checking
 			Destroy( tiles[i] );										// Kill the empty tile
-
+		
 		GetComponent<MeshRenderer>().enabled = true;					// Enable the mesh renderer
 	}
 }

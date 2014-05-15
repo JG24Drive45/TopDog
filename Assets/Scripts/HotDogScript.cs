@@ -236,6 +236,7 @@ public class HotDogScript : MonoBehaviour
 
 		case "Switch":
 			Debug.Log( "Touched Switch" );
+			EventAggregatorManager.Publish( new PlaySoundMessage( "switch", false ) );
 			if( other.gameObject.GetComponent<CapsuleCollider>().enabled )
 			{
 				other.gameObject.GetComponent<CapsuleCollider>().enabled = false;
