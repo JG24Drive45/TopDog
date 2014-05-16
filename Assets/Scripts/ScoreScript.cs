@@ -77,7 +77,7 @@ public class ScoreScript : MonoBehaviour {
 	{
 		KeyValuePair<int,string>[] scores = new KeyValuePair<int,string>[11]; //stores the scores and names
 		byte i = 0;	//current entry in the array
-		string filePath = "Assets/Resources/level_" + currentLevel + "_scores.txt"; //location the scores are saved
+		string filePath = "Assets/Resources/Scores/level_" + currentLevel + "_scores.txt"; //location the scores are saved
 
 		//read scores
 		try
