@@ -48,20 +48,22 @@ public class HotDogScript : MonoBehaviour
 	// Describes how the hotdog is currently oriented.
 	// The pivot point to use depends upon this state.
 	enum OrientationState { NONE, VERTICAL, HORIZONTAL, VERTANDHORZ };
-	OrientationState orientationState = OrientationState.NONE;
+	OrientationState orientationState;
 
 	private bool bCanMove = true;												// Can the player currently move
 	private char sLastKeyUsed;													// Last arrow button the player used
+	private bool bIsTeleporting = false;										// Is the player currently teleporting?
 
 	private Vector3 v3OriginalPosition;											// Starting position for the level
 	private Vector3 v3OriginalRotation;											// Starting rotation for the level
+	private OrientationState oStateOriginal;									// Starting orientation state
 
-	private float fKillHeight = -200.0f;										// Terminating Y-Coordinate value
+	private float fKillHeight = -250.0f;										// Terminating Y-Coordinate value
+	public float fFallSpeed = 50.0f;											// Speed at which the dog falls
 
-	// Use this for initialization
+	#region void Start()
 	void Start () 
 	{
-		//orientationState = OrientationState.NONE;								// Starting state for the hotdog
 		v3OriginalPosition = transform.position;								// Cache original position
 		v3OriginalRotation = transform.rotation.eulerAngles;					// Cache original rotation
 		Physics.gravity *= 5.0f;												// Testing - Increasing the rate of gravity
@@ -69,22 +71,27 @@ public class HotDogScript : MonoBehaviour
 
 		renderer.material = hotdogMaterials[0];									// Give the hotdog the empty material
 	}
+	#endregion
 
+	#region void OnEnable()
 	public void OnEnable()
 	{
 		// Add listeners here
-		Messenger<int>.AddListener( "set player orientation state", SetPlayerOrientationState );
+		Messenger<int>.AddListener( "set player original orientation state", SetPlayerOriginalOrientationState );
 		Messenger<int,int,int>.AddListener( "set player original rotation", SetPlayerOriginalRotation );
 	}
+	#endregion
 
+	#region void OnDisable()
 	public void OnDisable()
 	{
 		// Remove listeners here
-		Messenger<int>.RemoveListener( "set player orientation state", SetPlayerOrientationState );
+		Messenger<int>.RemoveListener( "set player original orientation state", SetPlayerOriginalOrientationState );
 		Messenger<int,int,int>.RemoveListener( "set player original rotation", SetPlayerOriginalRotation );
 	}
+	#endregion
 	
-	// Update is called once per frame
+	#region void Update()
 	void Update () 
 	{
 		// Stop player from moving if they are currently falling
@@ -95,6 +102,7 @@ public class HotDogScript : MonoBehaviour
 			{
 				switch( orientationState )
 				{
+					#region CASE: HORIZONTAL
 				case OrientationState.HORIZONTAL:
 					if( Input.GetKeyDown( KeyCode.RightArrow ) )
 					{
@@ -122,6 +130,9 @@ public class HotDogScript : MonoBehaviour
 					//audio.Play();
 					EventAggregatorManager.Publish(new PlaySoundMessage("hotdogStep", false));
 					break;
+					#endregion
+
+					#region CASE: VERTICAL
 				case OrientationState.VERTICAL:
 					if( Input.GetKeyDown( KeyCode.RightArrow ) )
 					{
@@ -151,6 +162,11 @@ public class HotDogScript : MonoBehaviour
 					//audio.Play();
 					EventAggregatorManager.Publish(new PlaySoundMessage("hotdogStep", false));
 					break;
+
+					#endregion
+
+					#region CASE: VERTICAL & HORIZONTAL
+
 				case OrientationState.VERTANDHORZ:
 					if( Input.GetKeyDown( KeyCode.RightArrow ) )
 					{
@@ -178,16 +194,24 @@ public class HotDogScript : MonoBehaviour
 					//audio.Play();
 					EventAggregatorManager.Publish(new PlaySoundMessage("hotdogStep", false));
 					break;
+
+					#endregion
 				}
 			}
 		}
-	}
 
+		Debug.Log( "O State is: " + orientationState );
+	}
+	#endregion
+
+	#region void SetLastKeyUsed( char key )
 	void SetLastKeyUsed( char key )
 	{
 		sLastKeyUsed = key;
 	}
+	#endregion
 
+	#region bool IsMovementKeyDown()
 	// Tells us if the player has pressed, up, down, left, right, W, A, S, or D
 	bool IsMovementKeyDown()
 	{
@@ -203,25 +227,56 @@ public class HotDogScript : MonoBehaviour
 		else
 			return false;
 	}
+	#endregion
 
-	public void SetPlayerOrientationState( int orientation )
+	#region void SetPlayerOriginalOrientationState( int orientation )
+	public void SetPlayerOriginalOrientationState( int orientation )
 	{
-		orientationState = (OrientationState)orientation;
+		oStateOriginal = orientationState = (OrientationState)orientation;
 	}
+	#endregion
 
+	#region void SetPlayerOriginalRotation( int x, int y, int z )
 	public void SetPlayerOriginalRotation( int x, int y, int z )
 	{
 		v3OriginalRotation.x = x;
 		v3OriginalRotation.y = y;
 		v3OriginalRotation.z = z;
 	}
+	#endregion
 
+	#region void TeleportPlayer( Vector3 tilePosition )
+	void TeleportPlayer( Vector3 tilePosition )
+	{
+		GameObject[] teleporters = GameObject.FindGameObjectsWithTag( "TeleporterTile" );
+		for( int i = 0; i < teleporters.Length; i++ )
+		{
+			if( teleporters[i].transform.position != tilePosition )
+			{
+				// Play the teleport sound
+				EventAggregatorManager.Publish(new PlaySoundMessage("teleport", false));
+				// Set the player's x and z position values to that of the teleporter tile
+				transform.position = new Vector3( teleporters[i].transform.position.x, transform.position.y, teleporters[i].transform.position.z );
+				// Set teleporting to true
+				bIsTeleporting = true;
+				// Break from the loop
+				break;
+			}
+		}
+	}
+	#endregion
+
+	#region void OnTriggerEnter( Collider other )
 	void OnTriggerEnter( Collider other )
 	{
 		switch( other.gameObject.tag )
 		{
-		case "BridgeTile":
-			Debug.Log( "Touched Bridge" );
+		case "TeleporterTile":
+			if( !bIsTeleporting && orientationState == OrientationState.VERTICAL )
+			{
+				Debug.Log( "Touched Teleporter" );
+				TeleportPlayer( other.transform.position );
+			}
 			break;
 
 		case "EmptyTile":
@@ -278,6 +333,21 @@ public class HotDogScript : MonoBehaviour
 
 	}
 
+	#endregion
+
+	#region void OnTriggerExit( Collider other )
+	void OnTriggerExit( Collider other )
+	{
+		switch( other.gameObject.tag )
+		{
+		case "TeleporterTile":
+			bIsTeleporting = false;
+			break;
+		}
+	}
+	#endregion
+
+	#region bool IsFullDog()
 	bool IsFullDog()
 	{
 		if( bHasKetchup && bHasMustard && bHasRelish )
@@ -285,7 +355,19 @@ public class HotDogScript : MonoBehaviour
 		else
 			return false;
 	}
+	#endregion
 
+	#region void ResetPlayer()
+	void ResetPlayer()
+	{
+		transform.rotation = Quaternion.Euler( v3OriginalRotation );					// Reset the player's rotation
+		transform.position = v3OriginalPosition;										// Reset the player's position
+		orientationState = oStateOriginal;												// Reset the player's orientation state
+		bCanMove = true;																// Allow the player to move again
+	}
+	#endregion
+
+	#region void SetMaterial()
 	void SetMaterial()
 	{
 		// If you have no condiments
@@ -313,5 +395,6 @@ public class HotDogScript : MonoBehaviour
 		else if( bFullDog )
 			renderer.material = hotdogMaterials[7];
 	}
+	#endregion
 
 }

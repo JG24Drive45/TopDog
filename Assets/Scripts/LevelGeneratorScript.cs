@@ -30,14 +30,12 @@ public class LevelGeneratorScript : MonoBehaviour
 	// INSTEAD OF GENERATING TILES LIKE BELOW, WE CAN READ DATA IN FROM A TEXT FILE TO GENERATE THE LEVELS
 	void Start () 
 	{
-
         GameEventAggregator.GameMessenger.Subscribe(this);
+
+		#region Load in Level Data
 		sLevel = Application.loadedLevelName;						// Get the name of the current level
-
 		string[] lines;												// Array that stores text file info
-
 		TextAsset data;												// Text file variable
-
 		data = ( TextAsset )Resources.Load( "LevelData/" + sLevel );
 		lines = data.text.Split( "\n"[0] );
 
@@ -100,7 +98,8 @@ public class LevelGeneratorScript : MonoBehaviour
 		int tempState = int.Parse( lines[36] );
 		Debug.Log( "OState is: " + tempState );
 		// Send the message to set the player's orientation state
-		Messenger<int>.Broadcast( "set player orientation state", tempState );
+		Messenger<int>.Broadcast( "set player original orientation state", tempState );
+		#endregion
 
 		// Instantiate the coals
 		Instantiate( coals, new Vector3( 0, -250, 250 ), Quaternion.identity );
@@ -108,18 +107,21 @@ public class LevelGeneratorScript : MonoBehaviour
         LoadSounds();
 	}
 
+	#region void LoadSounds()
     void LoadSounds()
     {
         m_SoundManager = gameObject.GetComponent<SoundManager>() as SoundManager;
 		m_SoundManager.LoadSound( "hotdogStep", "SFX/HotDogStep", 1 );					// Load player movement sound
         m_SoundManager.LoadSound( "splat", "SFX/splat3",5 );							// Load condiment acquired sound
 		m_SoundManager.LoadSound( "switch", "SFX/SwitchActivated", 1 );					// Load the switch sound
+		m_SoundManager.LoadSound( "teleport", "SFX/teleport_Sound", 3 );				// Load the teleport sound
         m_SoundManager.LoadSound( "lvlMusic", "Music/level_music_7", 1 );				// Load some background music
     }
+	#endregion
 	
-	// Update is called once per frame
-	void Update () {
-
+	#region void Update()
+	void Update () 
+	{
         if (Input.GetKeyUp(KeyCode.Keypad1))
         {
             Debug.Log("Key Pressed");
@@ -131,6 +133,6 @@ public class LevelGeneratorScript : MonoBehaviour
             EventAggregatorManager.Publish(new StopSoundLoopMessage("lvlMusic"));
         }
         GameEventAggregator.GameMessenger.Update();
-
 	}
+	#endregion
 }
