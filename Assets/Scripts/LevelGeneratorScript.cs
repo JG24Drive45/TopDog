@@ -125,6 +125,7 @@ public class LevelGeneratorScript : MonoBehaviour
         m_SoundManager.LoadSound( "splat", "SFX/splat3",5 );							// Load condiment acquired sound
 		m_SoundManager.LoadSound( "switch", "SFX/SwitchActivated", 1 );					// Load the switch sound
 		m_SoundManager.LoadSound( "teleport", "SFX/teleport_Sound", 3 );				// Load the teleport sound
+		m_SoundManager.LoadSound( "goal", "SFX/goalSound", 1 );							// Load the goal sound
         m_SoundManager.LoadSound( "lvlMusic", "Music/level_music_7", 1 );				// Load some background music
     }
 	#endregion

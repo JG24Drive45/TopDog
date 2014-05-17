@@ -59,7 +59,7 @@ public class HotDogScript : MonoBehaviour
 	private OrientationState oStateOriginal;									// Starting orientation state
 
 	private float fKillHeight = -250.0f;										// Terminating Y-Coordinate value
-	public float fFallSpeed = 50.0f;											// Speed at which the dog falls
+	private float fFallSpeed = 100.0f;											// Speed at which the dog falls
 
 	#region void Start()
 	void Start () 
@@ -333,9 +333,11 @@ public class HotDogScript : MonoBehaviour
 			if( orientationState == OrientationState.VERTICAL )
 			{
 				Debug.Log( "Hit goal tile!" );
+				EventAggregatorManager.Publish( new PlaySoundMessage( "goal", false ) );// Play the goal sound
 				bCanMove = false;														// Don't allow the player to move now
 				Messenger<bool>.Broadcast( "level complete", IsFullDog() );				// Send message to update complete level score
 				Messenger.Broadcast( "go to next level" );								// Go to the next level
+				StartCoroutine( "FallThroughGoal" );
 			}
 			break;
 		}
@@ -352,6 +354,17 @@ public class HotDogScript : MonoBehaviour
 		case "TeleporterTile":
 			bIsTeleporting = false;
 			break;
+		}
+	}
+	#endregion
+
+	#region IEnumerator FallThroughGoal()
+	IEnumerator FallThroughGoal()
+	{
+		while( true )
+		{
+			transform.position -= new Vector3( 0, fFallSpeed * Time.deltaTime, 0 );
+			yield return null;
 		}
 	}
 	#endregion
