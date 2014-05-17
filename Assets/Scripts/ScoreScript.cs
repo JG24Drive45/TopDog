@@ -70,14 +70,15 @@ public class ScoreScript : MonoBehaviour {
 		//create label
 		GUI.Label( new Rect(0,0,512,128), "Time: " + iMinutes + ":" + fSeconds + "\n" +
 		          						  "Score: " + playerScore + "\n" +
-		          						  "Moves: " + playerMoveCount);
+		          						  "Moves: " + playerMoveCount + "\n" +
+										  "Level: " + currentLevel);
 	}
 
 	void saveScore(string name)
 	{
 		KeyValuePair<int,string>[] scores = new KeyValuePair<int,string>[11]; //stores the scores and names
 		byte i = 0;	//current entry in the array
-		string filePath = "Assets/Resources/level_" + currentLevel + "_scores.txt"; //location the scores are saved
+		string filePath = "Assets/Resources/Scores/level_" + currentLevel + "_scores.txt"; //location the scores are saved
 
 		//read scores
 		try

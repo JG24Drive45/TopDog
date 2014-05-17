@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+﻿	using UnityEngine;
 using System.Collections;
 using System.IO;
 
@@ -21,23 +21,30 @@ public class LevelGeneratorScript : MonoBehaviour
     SoundManager m_SoundManager;
 
 	private string sLevel;											// Name of the current level
+	private int iLevelNum;											// Current level number
 
+	#region Awake()
     void Awake()
     {
         EventAggregatorManager.AddEventAggregator(GameEventAggregator.GameMessenger);
     }
+	#endregion
+
+	#region Start()
 
 	// INSTEAD OF GENERATING TILES LIKE BELOW, WE CAN READ DATA IN FROM A TEXT FILE TO GENERATE THE LEVELS
 	void Start () 
 	{
-
         GameEventAggregator.GameMessenger.Subscribe(this);
+
+		#region Load in Level Data
 		sLevel = Application.loadedLevelName;						// Get the name of the current level
 
+		iLevelNum = int.Parse( sLevel.Substring( 5 ) );				// Level number for the score script
+		Messenger<int>.Broadcast( "set level", iLevelNum );			// Send the level number to the score script
+
 		string[] lines;												// Array that stores text file info
-
 		TextAsset data;												// Text file variable
-
 		data = ( TextAsset )Resources.Load( "LevelData/" + sLevel );
 		lines = data.text.Split( "\n"[0] );
 
@@ -100,26 +107,46 @@ public class LevelGeneratorScript : MonoBehaviour
 		int tempState = int.Parse( lines[36] );
 		Debug.Log( "OState is: " + tempState );
 		// Send the message to set the player's orientation state
-		Messenger<int>.Broadcast( "set player orientation state", tempState );
+		Messenger<int>.Broadcast( "set player original orientation state", tempState );
+		#endregion
 
 		// Instantiate the coals
 		Instantiate( coals, new Vector3( 0, -250, 250 ), Quaternion.identity );
 
         LoadSounds();
 	}
+	#endregion
 
+	#region void LoadSounds()
     void LoadSounds()
     {
         m_SoundManager = gameObject.GetComponent<SoundManager>() as SoundManager;
 		m_SoundManager.LoadSound( "hotdogStep", "SFX/HotDogStep", 1 );					// Load player movement sound
         m_SoundManager.LoadSound( "splat", "SFX/splat3",5 );							// Load condiment acquired sound
 		m_SoundManager.LoadSound( "switch", "SFX/SwitchActivated", 1 );					// Load the switch sound
+		m_SoundManager.LoadSound( "teleport", "SFX/teleport_Sound", 3 );				// Load the teleport sound
+		m_SoundManager.LoadSound( "goal", "SFX/goalSound", 1 );							// Load the goal sound
         m_SoundManager.LoadSound( "lvlMusic", "Music/level_music_7", 1 );				// Load some background music
     }
-	
-	// Update is called once per frame
-	void Update () {
+	#endregion
 
+	#region OnEnable()
+	void OnEnable()
+	{
+		Messenger.AddListener( "go to next level", LoadNextLevel );
+	}
+	#endregion
+
+	#region OnDisable()
+	void OnDisable()
+	{
+		Messenger.RemoveListener( "go to next level", LoadNextLevel );
+	}
+	#endregion
+	
+	#region void Update()
+	void Update () 
+	{
         if (Input.GetKeyUp(KeyCode.Keypad1))
         {
             Debug.Log("Key Pressed");
@@ -131,6 +158,19 @@ public class LevelGeneratorScript : MonoBehaviour
             EventAggregatorManager.Publish(new StopSoundLoopMessage("lvlMusic"));
         }
         GameEventAggregator.GameMessenger.Update();
+	}
+	#endregion
 
+	#region void LoadNextLevel()
+	void LoadNextLevel()
+	{
+		iLevelNum++;
+		Invoke( "LoadNext", 3.0f );
+	}
+	#endregion
+
+	void LoadNext()
+	{
+		Application.LoadLevel( "Level" + iLevelNum.ToString() );
 	}
 }
