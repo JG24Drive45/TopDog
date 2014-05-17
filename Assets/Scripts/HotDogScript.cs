@@ -200,7 +200,6 @@ public class HotDogScript : MonoBehaviour
 			}
 		}
 
-		Debug.Log( "O State is: " + orientationState );
 	}
 	#endregion
 

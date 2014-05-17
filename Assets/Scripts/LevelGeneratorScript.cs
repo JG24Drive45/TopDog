@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+﻿	using UnityEngine;
 using System.Collections;
 using System.IO;
 
@@ -34,6 +34,10 @@ public class LevelGeneratorScript : MonoBehaviour
 
 		#region Load in Level Data
 		sLevel = Application.loadedLevelName;						// Get the name of the current level
+
+		int levelNum = int.Parse( sLevel.Substring( 5 ) );			// Level number for the score script
+		Messenger<int>.Broadcast( "set level", levelNum );			// Send the level number to the score script
+
 		string[] lines;												// Array that stores text file info
 		TextAsset data;												// Text file variable
 		data = ( TextAsset )Resources.Load( "LevelData/" + sLevel );
