@@ -12,3 +12,4 @@ Assets/Resources/Scores
 *.csproj
 *.pidb
 
+ProjectSettings/EditorBuildSettings.asset
