@@ -21,11 +21,16 @@ public class LevelGeneratorScript : MonoBehaviour
     SoundManager m_SoundManager;
 
 	private string sLevel;											// Name of the current level
+	private int iLevelNum;											// Current level number
 
+	#region Awake()
     void Awake()
     {
         EventAggregatorManager.AddEventAggregator(GameEventAggregator.GameMessenger);
     }
+	#endregion
+
+	#region Start()
 
 	// INSTEAD OF GENERATING TILES LIKE BELOW, WE CAN READ DATA IN FROM A TEXT FILE TO GENERATE THE LEVELS
 	void Start () 
@@ -35,8 +40,8 @@ public class LevelGeneratorScript : MonoBehaviour
 		#region Load in Level Data
 		sLevel = Application.loadedLevelName;						// Get the name of the current level
 
-		int levelNum = int.Parse( sLevel.Substring( 5 ) );			// Level number for the score script
-		Messenger<int>.Broadcast( "set level", levelNum );			// Send the level number to the score script
+		iLevelNum = int.Parse( sLevel.Substring( 5 ) );				// Level number for the score script
+		Messenger<int>.Broadcast( "set level", iLevelNum );			// Send the level number to the score script
 
 		string[] lines;												// Array that stores text file info
 		TextAsset data;												// Text file variable
@@ -110,6 +115,7 @@ public class LevelGeneratorScript : MonoBehaviour
 
         LoadSounds();
 	}
+	#endregion
 
 	#region void LoadSounds()
     void LoadSounds()
@@ -121,6 +127,20 @@ public class LevelGeneratorScript : MonoBehaviour
 		m_SoundManager.LoadSound( "teleport", "SFX/teleport_Sound", 3 );				// Load the teleport sound
         m_SoundManager.LoadSound( "lvlMusic", "Music/level_music_7", 1 );				// Load some background music
     }
+	#endregion
+
+	#region OnEnable()
+	void OnEnable()
+	{
+		Messenger.AddListener( "go to next level", LoadNextLevel );
+	}
+	#endregion
+
+	#region OnDisable()
+	void OnDisable()
+	{
+		Messenger.RemoveListener( "go to next level", LoadNextLevel );
+	}
 	#endregion
 	
 	#region void Update()
@@ -139,4 +159,17 @@ public class LevelGeneratorScript : MonoBehaviour
         GameEventAggregator.GameMessenger.Update();
 	}
 	#endregion
+
+	#region void LoadNextLevel()
+	void LoadNextLevel()
+	{
+		iLevelNum++;
+		Invoke( "LoadNext", 3.0f );
+	}
+	#endregion
+
+	void LoadNext()
+	{
+		Application.LoadLevel( "Level" + iLevelNum.ToString() );
+	}
 }

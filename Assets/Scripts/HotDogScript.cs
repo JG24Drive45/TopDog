@@ -328,6 +328,16 @@ public class HotDogScript : MonoBehaviour
 			Destroy( other.gameObject );
 			Debug.Log( "You collided with relish" );
 			break;
+
+		case "GoalTile":
+			if( orientationState == OrientationState.VERTICAL )
+			{
+				Debug.Log( "Hit goal tile!" );
+				bCanMove = false;														// Don't allow the player to move now
+				Messenger<bool>.Broadcast( "level complete", IsFullDog() );				// Send message to update complete level score
+				Messenger.Broadcast( "go to next level" );								// Go to the next level
+			}
+			break;
 		}
 
 	}
