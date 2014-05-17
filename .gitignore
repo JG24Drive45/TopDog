@@ -3,6 +3,7 @@
 Temp/
 Library/
 Build/
+Assets/Resources/Scores
 
 *.svd
 *.userprefs
