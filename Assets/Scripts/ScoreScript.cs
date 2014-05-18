@@ -26,7 +26,8 @@ public class ScoreScript : MonoBehaviour {
 
 	public void OnEnable()
 	{
-		Messenger.AddListener( "acquired condiment", AcquiredCondiment );
+		//Messenger.AddListener( "acquired condiment", AcquiredCondiment );
+		HotDogScript.onCondimentAcquired += AcquiredCondiment;
 		Messenger.AddListener( "increment move count", IncrementMoveCount );
 		Messenger.AddListener( "start timer", StartTimer );
 		Messenger.AddListener( "stop timer", StopTimer );
@@ -41,7 +42,8 @@ public class ScoreScript : MonoBehaviour {
 
 	public void OnDisable()
 	{
-		Messenger.RemoveListener( "acquired condiment", AcquiredCondiment );
+		//Messenger.RemoveListener( "acquired condiment", AcquiredCondiment );
+		HotDogScript.onCondimentAcquired -= AcquiredCondiment;
 		Messenger.RemoveListener( "increment move count", IncrementMoveCount );
 		Messenger.RemoveListener( "start timer", StartTimer );
 		Messenger.RemoveListener( "stop timer", StopTimer );

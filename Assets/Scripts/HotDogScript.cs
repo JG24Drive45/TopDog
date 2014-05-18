@@ -3,6 +3,14 @@ using System.Collections;
 
 public class HotDogScript : MonoBehaviour 
 {
+	#region Delegates
+	public delegate void CondimentHandler();
+	#endregion
+
+	#region Events
+	public static event CondimentHandler onCondimentAcquired;
+	#endregion
+
 	#region Hotdog Movement Offsets
 
 	// Since our object is oblong we cannot rotate around the center.
@@ -300,7 +308,8 @@ public class HotDogScript : MonoBehaviour
 			break;
 
 		case "Ketchup":
-			Messenger.Broadcast( "acquired condiment" );								// Send the message to update the score
+			if( onCondimentAcquired != null )											// If there is a subscriber
+				onCondimentAcquired();														// Send the message out
 			bHasKetchup = true;															// Player has acquired the ketchup
 			bFullDog = IsFullDog();														// Is the dog full?
 			SetMaterial();																// Update the material
@@ -310,7 +319,8 @@ public class HotDogScript : MonoBehaviour
 			break;
 
 		case "Mustard":
-			Messenger.Broadcast( "acquired condiment" );								// Send the message to update the score
+			if( onCondimentAcquired != null )											// If there is a subscriber
+				onCondimentAcquired();														// Send the message out
 			bHasMustard = true;															// Player has acquired the mustard
 			bFullDog = IsFullDog();														// Is the dog full?
 			SetMaterial();																// Update the material
@@ -320,7 +330,8 @@ public class HotDogScript : MonoBehaviour
 			break;
 
 		case "Relish":
-			Messenger.Broadcast( "acquired condiment" );								// Send the message to update the score
+			if( onCondimentAcquired != null )											// If there is a subscriber
+				onCondimentAcquired();														// Send the message out
 			bHasRelish = true;															// Player has acquired the relish
 			bFullDog = IsFullDog();														// Is the dog full?
 			SetMaterial();																// Update the material
