@@ -23,8 +23,8 @@ EEEEEEEEEEEEEEEEE
 450
 500
 ; Placement of switchModel goes here -- X and Z coordinates only -- // Use 'none' if there is not a switch
-7500
-1000
+none
+none
 ; Placement of player goes here - X, Y, AND Z coordinates
 125
 38
