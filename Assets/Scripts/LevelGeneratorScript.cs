@@ -55,21 +55,30 @@ public class LevelGeneratorScript : MonoBehaviour
 			int lineLength = lines[i].Length;
 			for( int j = 0; j < lineLength; j++ )
 			{
-				if( lines[i][j] == 'E' )
+				char temp = lines[i][j];
+				if( temp == 'E' )
 					Instantiate( emptyTile, new Vector3( j * 50, 7.5f, -( i - 2 ) * 50 ), Quaternion.Euler( new Vector3( 0, 0, 0 ) ) );
-				else if( lines[i][j] == 'M' )
+				else if( temp == 'M' )
 					Instantiate( mainTile, new Vector3( j * 50, 0.0f, -( i - 2 ) * 50 ), Quaternion.Euler( new Vector3( 90, 0, 0 ) ) );
-				else if( lines[i][j] == 'G' )
+				else if( temp == 'G' )
 					Instantiate( goalTile, new Vector3( j * 50, 0.0f, -( i - 2 ) * 50 ), Quaternion.Euler( new Vector3( 90, 0, 0 ) ) );
-				else if( lines[i][j] == 'T' )
+				else if( temp == 'T' )
 					Instantiate( teleporterTile, new Vector3( j * 50, 0.0f, -( i - 2 ) * 50 ), Quaternion.Euler( new Vector3( 90, 0, 0 ) ) );
-				else if( lines[i][j] == 'B' )
+				else if( temp == 'B' )
 				{
 					Instantiate( emptyTile, new Vector3( j * 50, 0.0f, -( i - 2 ) * 50 ), Quaternion.Euler( new Vector3( 90, 0, 0 ) ) );
 					Instantiate( bridgeTile, new Vector3( j * 50, 0.0f, -( i - 2 ) * 50 ), Quaternion.Euler( new Vector3( 90, 0, 0 ) ) );
 				}
-				else if( lines[i][j] == 'F' )
+				else if( temp == 'F' )
 					Instantiate( fallingTile, new Vector3( j * 50, 0.0f, -( i - 2 ) * 50 ), Quaternion.Euler( new Vector3( 90, 0, 0 ) ) );
+				else if( temp == '1' )
+					Instantiate( conveyorBelt, new Vector3( j * 50, 15.0f, -( i - 2 ) * 50 ), Quaternion.Euler( new Vector3( 270, 0, 0 ) ) );
+				else if( temp == '2' )
+					Instantiate( conveyorBelt, new Vector3( j * 50, 15.0f, -( i - 2 ) * 50 ), Quaternion.Euler( new Vector3( 270, 90, 0 ) ) );
+				else if( temp == '3' )
+					Instantiate( conveyorBelt, new Vector3( j * 50, 15.0f, -( i - 2 ) * 50 ), Quaternion.Euler( new Vector3( 270, 180, 0 ) ) );
+				else if( temp == '4' )
+					Instantiate( conveyorBelt, new Vector3( j * 50, 15.0f, -( i - 2 ) * 50 ), Quaternion.Euler( new Vector3( 270, 270, 0 ) ) );
 			}
 		}
 

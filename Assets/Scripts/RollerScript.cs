@@ -13,6 +13,6 @@ public class RollerScript : MonoBehaviour {
 	// Update is called once per frame
 	void Update () 
 	{
-		transform.RotateAround( transform.position, Vector3.back, rollerRotSpeed * Time.deltaTime );
+		transform.Rotate( Vector3.back, rollerRotSpeed * Time.deltaTime );
 	}
 }

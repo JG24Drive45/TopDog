@@ -55,12 +55,13 @@ public class HotDogScript : MonoBehaviour
 
 	// Describes how the hotdog is currently oriented.
 	// The pivot point to use depends upon this state.
-	enum OrientationState { NONE, VERTICAL, HORIZONTAL, VERTANDHORZ };
-	OrientationState orientationState;
+	private enum OrientationState { NONE, VERTICAL, HORIZONTAL, VERTANDHORZ };
+	private OrientationState orientationState;
 
 	private bool bCanMove = true;												// Can the player currently move
 	private char sLastKeyUsed;													// Last arrow button the player used
 	private bool bIsTeleporting = false;										// Is the player currently teleporting?
+	private bool bTouchingATile = true;											// Is the player currently touching any tiles?
 
 	private Vector3 v3OriginalPosition;											// Starting position for the level
 	private Vector3 v3OriginalRotation;											// Starting rotation for the level
@@ -68,6 +69,7 @@ public class HotDogScript : MonoBehaviour
 
 	private float fKillHeight = -250.0f;										// Terminating Y-Coordinate value
 	private float fFallSpeed = 100.0f;											// Speed at which the dog falls
+	private int iConveyorSpeed = 2;												// Speed the dog moves while on the conveyor belt
 
 	#region void Start()
 	void Start () 
@@ -135,7 +137,7 @@ public class HotDogScript : MonoBehaviour
 						SetLastKeyUsed( 'D' );
 					}
 
-					//audio.Play();
+					bTouchingATile = false;
 					EventAggregatorManager.Publish(new PlaySoundMessage("hotdogStep", false));
 					break;
 					#endregion
@@ -167,7 +169,7 @@ public class HotDogScript : MonoBehaviour
 						SetLastKeyUsed( 'D' );
 					}
 
-					//audio.Play();
+					bTouchingATile = false;
 					EventAggregatorManager.Publish(new PlaySoundMessage("hotdogStep", false));
 					break;
 
@@ -199,7 +201,7 @@ public class HotDogScript : MonoBehaviour
 						SetLastKeyUsed( 'D' );
 					}
 
-					//audio.Play();
+					bTouchingATile = false;
 					EventAggregatorManager.Publish(new PlaySoundMessage("hotdogStep", false));
 					break;
 
@@ -278,20 +280,28 @@ public class HotDogScript : MonoBehaviour
 	{
 		switch( other.gameObject.tag )
 		{
+		case "MainTile":
+			Debug.Log( "Touching main tile" );
+			bTouchingATile = true;
+			break;
+
 		case "TeleporterTile":
 			if( !bIsTeleporting && orientationState == OrientationState.VERTICAL )
 			{
 				Debug.Log( "Touched Teleporter" );
+				bTouchingATile = true;
 				TeleportPlayer( other.transform.position );
 			}
 			break;
 
 		case "EmptyTile":
 			Debug.Log( "Touched empty tile" );
+			bTouchingATile = true;
 			bCanMove = false;
 			break;
 
 		case "FallingTile":
+			bTouchingATile = true;
 			other.gameObject.SendMessage( "ToggleBeenTouched" );
 			Debug.Log( "Touched falling tile" );
 			break;
@@ -305,6 +315,10 @@ public class HotDogScript : MonoBehaviour
 				Messenger.Broadcast( "set active switch material" );
 				Messenger.Broadcast( "activate bridge" );
 			}
+			break;
+
+		case "BridgeTile":
+			bTouchingATile = true;
 			break;
 
 		case "Ketchup":
@@ -344,6 +358,7 @@ public class HotDogScript : MonoBehaviour
 			if( orientationState == OrientationState.VERTICAL )
 			{
 				Debug.Log( "Hit goal tile!" );
+				bTouchingATile = true;
 				EventAggregatorManager.Publish( new PlaySoundMessage( "goal", false ) );// Play the goal sound
 				bCanMove = false;														// Don't allow the player to move now
 				Messenger<bool>.Broadcast( "level complete", IsFullDog() );				// Send message to update complete level score
@@ -357,6 +372,22 @@ public class HotDogScript : MonoBehaviour
 
 	#endregion
 
+	#region void OnTriggerStay( Collider other )
+	void OnTriggerStay( Collider other )
+	{
+		switch( other.gameObject.tag )
+		{
+		case "Conveyor":
+			Debug.Log( other.transform.rotation.eulerAngles.y );
+			if( bCanMove && !bTouchingATile )
+			{
+				StartCoroutine( MoveDogOnConveyor( other.gameObject ) );
+			}
+			break;
+		}
+	}
+	#endregion
+
 	#region void OnTriggerExit( Collider other )
 	void OnTriggerExit( Collider other )
 	{
@@ -366,6 +397,112 @@ public class HotDogScript : MonoBehaviour
 			bIsTeleporting = false;
 			break;
 		}
+	}
+	#endregion
+
+	#region IEnumerator MoveDogOnConveyor( GameObject other )
+	IEnumerator MoveDogOnConveyor( GameObject other )
+	{
+		bCanMove = false;
+		int step = 0;
+
+		#region If on a conveyor moving right
+		if( other.transform.rotation.eulerAngles.y == 0.0f )
+		{
+			if( orientationState == OrientationState.VERTICAL || orientationState == OrientationState.VERTANDHORZ )
+			{
+				while( step < 25 )
+				{
+					transform.position += new Vector3( iConveyorSpeed, 0, 0 );
+					step++;
+					yield return null;
+				}
+			}
+			else
+			{
+				while( step < 75 )
+				{
+					transform.position += new Vector3( iConveyorSpeed, 0, 0 );
+					step++;
+					yield return null;
+				}
+			}
+		}
+		#endregion
+
+		#region If on a conveyor moving down
+		else if( other.transform.rotation.eulerAngles.y == 90.0f )
+		{
+			if( orientationState == OrientationState.VERTICAL || orientationState == OrientationState.HORIZONTAL )
+			{
+				while( step < 25 )
+				{
+					transform.position -= new Vector3( 0, 0, iConveyorSpeed );
+					step++;
+					yield return null;
+				}
+			}
+			else
+			{
+				while( step < 50 )
+				{
+					transform.position -= new Vector3( 0, 0, iConveyorSpeed );
+					step++;
+					yield return null;
+				}
+			}
+		}
+		#endregion
+
+		#region If on a conveyor moving up
+		else if( other.transform.rotation.eulerAngles.y == 270.0f )
+		{
+			if( orientationState == OrientationState.VERTICAL || orientationState == OrientationState.HORIZONTAL )
+			{
+				while( step < 25 )
+				{
+					transform.position += new Vector3( 0, 0, iConveyorSpeed );
+					step++;
+					yield return null;
+				}
+			}
+			else
+			{
+				while( step < 50 )
+				{
+					transform.position += new Vector3( 0, 0, iConveyorSpeed );
+					step++;
+					yield return null;
+				}
+			}
+		}
+		#endregion
+
+		#region If on a conveyor moving left
+		else
+		{
+			if( orientationState == OrientationState.VERTICAL || orientationState == OrientationState.VERTANDHORZ )
+			{
+				while( step < 25 )
+				{
+					transform.position -= new Vector3( iConveyorSpeed, 0, 0 );
+					step++;
+					yield return null;
+				}
+			}
+			else
+			{
+				while( step < 75 )
+				{
+					transform.position -= new Vector3( iConveyorSpeed, 0, 0 );
+					step++;
+					yield return null;
+				}
+			}
+		}
+		#endregion
+
+		bCanMove = true;
 	}
 	#endregion
 
