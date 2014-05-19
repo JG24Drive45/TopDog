@@ -10,6 +10,7 @@ public class LevelGeneratorScript : MonoBehaviour
 	public GameObject teleporterTile;
 	public GameObject bridgeTile;
 	public GameObject fallingTile;
+	public GameObject conveyorBelt;
 	public GameObject goalTile;
 	public GameObject ketchup;
 	public GameObject mustard;
