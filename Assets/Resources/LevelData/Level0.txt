@@ -1,37 +1,37 @@
-; Level5
+; Level0
 ; Placement of Tiles Goes here
 EEEEEEEEEEEEEEEEE
-EMMMMEEMMMMMMMMEE
-EMMMMEEEEEFEEFEME
-EMMMMEEEEEFEEFEME
-EMMMMMMMMMMMMMMME
-EEEEEEEEEMMMMEEEE
-EEEEEEEEEMMEEEEEE
-EEMBBBBBBMMEEFFGE
-EEMEEEEEEMMFFFFEE
-EEMEEEEEEMMFFFFEE
-EEMMMMEEEMMMMMMME
+EMMMMMMFFMMTMMMME
+EM111111111112MME
+EM4MMMMFFMMMM2MME
+EM4MMMMFFMMMM2MME
+EM4MMMMBBMMMM2MME
+EM4MMMMEEMMMM2MME
+EM4MMMMFFMMMM2MME
+EM4MMMMFFMMMM2MME
+EM433333333333MME
+ETMMMMMFFMMMMMMGE
 EEEEEEEEEEEEEEEEE
 ; Placement of condiments goes here -- only X and Z coordinates needed
 ; Ketchup -- X and Z coordinates only
-350
-50
+500
+250
 ; Mustard -- X and Z coordinates only
 250
-500
+300
 ; Relish -- X and Z coordinates only
 750
-500
+150
 ; Placement of switchModel goes here -- X and Z coordinates only -- // Use 'none' if there is not a switch
-750
-100
+300
+300
 ; Placement of player goes here - X, Y, AND Z coordinates
-175
-38
 50
+38
+75
 ; Player rotation orientation goes here -- X, Y, AND Z values needed
 0
-90
+0
 90
 ; Player orientation state goes here -- 0: None / 1: Vertical / 2: Horizontal / 3: Vertical & Horizontal
-2
+3
