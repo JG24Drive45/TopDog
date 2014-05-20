@@ -6,6 +6,8 @@ using UnityEngine;
 
 public class ScoreScript : MonoBehaviour {
 
+	private const float TIME_PENALTY_MULTIPLIER = 0.9f;
+
 	private int 	currentLevel;	//holds the current level number
 	private int 	playerScore;	//stores the player's current score
 	private int 	playerMoveCount;//number of moves the player has made
@@ -101,7 +103,7 @@ public class ScoreScript : MonoBehaviour {
 		catch (FileNotFoundException e)
 		{
 			//if the file does not exist, log warning and continue anyway
-			Debug.LogWarning("ScoreScript.SaveScore: could not find file " + e.FileName);
+			Debug.LogWarning("ScoreScript.SaveScore: could not find file " + e.FileName + ".  This message SHOULD be harmless: the script continues regardless.");
 		}
 
 		//add new score
@@ -133,6 +135,37 @@ public class ScoreScript : MonoBehaviour {
 		}
 
 		output.Close();
+	}
+
+	public KeyValuePair<int,string>[] readScores()
+	{
+		KeyValuePair<int,string>[] scores = new KeyValuePair<int,string>[11]; //stores the scores and names
+		byte i = 0;	//current entry in the array
+		string filePath = "Assets/Resources/Scores/level_" + currentLevel + "_scores.txt"; //location the scores are saved
+		
+		//read scores
+		try
+		{
+			StreamReader input = new StreamReader(filePath);
+			
+			while (input.EndOfStream == false)
+			{
+				int key = Convert.ToInt32( input.ReadLine() );
+				string value = input.ReadLine();
+				
+				scores[i] = new KeyValuePair<int, string>(key,value);
+				i++;
+			}
+			
+			input.Close();
+		}
+		catch (FileNotFoundException e)
+		{
+			//if the file does not exist, log warning and continue anyway
+			Debug.LogWarning("ScoreScript.SaveScore: could not find file " + e.FileName + ".  This message SHOULD be harmless: the script continues regardless.");
+		}
+
+		return scores;
 	}
 
 	//-----------messages------------//
@@ -179,6 +212,8 @@ public class ScoreScript : MonoBehaviour {
 
 		if (bHasAllCondiments)
 			playerScore += 100; //100 more if all condiments were collected
+
+		playerScore -= (int)( Math.Floor(playerTime) * TIME_PENALTY_MULTIPLIER ); // reduce score based on completion time
 
 		saveScore(playerName);
 	}
