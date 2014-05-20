@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class HotDogScript : MonoBehaviour 
 {
@@ -59,9 +60,10 @@ public class HotDogScript : MonoBehaviour
 	private OrientationState orientationState;
 
 	private bool bCanMove = true;												// Can the player currently move
-	private char sLastKeyUsed;													// Last arrow button the player used
+	public string sLastKeyUsed;													// Last arrow button the player used
 	private bool bIsTeleporting = false;										// Is the player currently teleporting?
 	private bool bTouchingATile = true;											// Is the player currently touching any tiles?
+	public List<GameObject> touchingList;
 
 	private Vector3 v3OriginalPosition;											// Starting position for the level
 	private Vector3 v3OriginalRotation;											// Starting rotation for the level
@@ -70,6 +72,7 @@ public class HotDogScript : MonoBehaviour
 	private float fKillHeight = -250.0f;										// Terminating Y-Coordinate value
 	private float fFallSpeed = 100.0f;											// Speed at which the dog falls
 	private int iConveyorSpeed = 2;												// Speed the dog moves while on the conveyor belt
+	private float fDeadSpeed = 150.0f;
 
 	#region void Start()
 	void Start () 
@@ -118,23 +121,23 @@ public class HotDogScript : MonoBehaviour
 					{
 						transform.RotateAround( transform.position + RIGHTHORZPIVOTOFFSET, Vector3.back, 90.0f );
 						orientationState = OrientationState.VERTICAL;
-						SetLastKeyUsed( 'R' );
+						SetLastKeyUsed( "R" );
 					}
 					else if( Input.GetKeyDown( KeyCode.LeftArrow ) )
 					{
 						transform.RotateAround( transform.position + LEFTHORZPIVOTOFFSET, Vector3.forward, 90.0f );
 						orientationState = OrientationState.VERTICAL;
-						SetLastKeyUsed( 'L' );
+						SetLastKeyUsed( "L" );
 					}
 					else if( Input.GetKeyDown( KeyCode.UpArrow ) )
 					{
 						transform.RotateAround( transform.position + UPHORZPIVOTOFFSET, Vector3.right, 90.0f );
-						SetLastKeyUsed( 'U' );
+						SetLastKeyUsed( "U" );
 					}
 					else if( Input.GetKeyDown( KeyCode.DownArrow ) )
 					{
 						transform.RotateAround( transform.position + DOWNHORZPIVOTOFFSET, Vector3.left, 90.0f );
-						SetLastKeyUsed( 'D' );
+						SetLastKeyUsed( "D" );
 					}
 
 					bTouchingATile = false;
@@ -148,25 +151,25 @@ public class HotDogScript : MonoBehaviour
 					{
 						transform.RotateAround( transform.position + RIGHTVERTPIVOTOFFSET, Vector3.back, 90.0f );
 						orientationState = OrientationState.HORIZONTAL;
-						SetLastKeyUsed( 'R' );
+						SetLastKeyUsed( "R" );
 					}
 					else if( Input.GetKeyDown( KeyCode.LeftArrow ) )
 					{
 						transform.RotateAround( transform.position + LEFTVERTPIVOTOFFSET, Vector3.forward, 90.0f );
 						orientationState = OrientationState.HORIZONTAL;
-						SetLastKeyUsed( 'L' );
+						SetLastKeyUsed( "L" );
 					}
 					else if( Input.GetKeyDown( KeyCode.UpArrow ) )
 					{
 						transform.RotateAround( transform.position + UPVERTPIVOTOFFSET, Vector3.right, 90.0f );
 						orientationState = OrientationState.VERTANDHORZ;
-						SetLastKeyUsed( 'U' );
+						SetLastKeyUsed( "U" );
 					}
 					else if( Input.GetKeyDown( KeyCode.DownArrow ) )
 					{
 						transform.RotateAround( transform.position + DOWNVERTPIVOTOFFSET, Vector3.left, 90.0f );
 						orientationState = OrientationState.VERTANDHORZ;
-						SetLastKeyUsed( 'D' );
+						SetLastKeyUsed( "D" );
 					}
 
 					bTouchingATile = false;
@@ -181,24 +184,24 @@ public class HotDogScript : MonoBehaviour
 					if( Input.GetKeyDown( KeyCode.RightArrow ) )
 					{
 						transform.RotateAround( transform.position + RIGHTVHPIVOTOFFSET, Vector3.back, 90.0f );
-						SetLastKeyUsed( 'R' );
+						SetLastKeyUsed( "R" );
 					}
 					else if( Input.GetKeyDown( KeyCode.LeftArrow ) )
 					{
 						transform.RotateAround( transform.position + LEFTVHPIVOTOFFSET, Vector3.forward, 90.0f );
-						SetLastKeyUsed( 'L' );
+						SetLastKeyUsed( "L" );
 					}
 					else if( Input.GetKeyDown( KeyCode.UpArrow ) )
 					{
 						transform.RotateAround( transform.position + UPVHPIVOTOFFSET, Vector3.right, 90.0f );
 						orientationState = OrientationState.VERTICAL;
-						SetLastKeyUsed( 'U' );
+						SetLastKeyUsed( "U" );
 					}
 					else if( Input.GetKeyDown( KeyCode.DownArrow ) )
 					{
 						transform.RotateAround( transform.position + DOWNVHPIVOTOFFSET, Vector3.left, 90.0f );
 						orientationState = OrientationState.VERTICAL;
-						SetLastKeyUsed( 'D' );
+						SetLastKeyUsed( "D" );
 					}
 
 					bTouchingATile = false;
@@ -207,14 +210,17 @@ public class HotDogScript : MonoBehaviour
 
 					#endregion
 				}
+
+				// Clear the touchingList
+				touchingList.Clear();
 			}
 		}
 
 	}
 	#endregion
 
-	#region void SetLastKeyUsed( char key )
-	void SetLastKeyUsed( char key )
+	#region void SetLastKeyUsed( string key )
+	void SetLastKeyUsed( string key )
 	{
 		sLastKeyUsed = key;
 	}
@@ -283,21 +289,17 @@ public class HotDogScript : MonoBehaviour
 		case "MainTile":
 			Debug.Log( "Touching main tile" );
 			bTouchingATile = true;
+			touchingList.Add( other.gameObject );
 			break;
 
 		case "TeleporterTile":
 			if( !bIsTeleporting && orientationState == OrientationState.VERTICAL )
 			{
 				Debug.Log( "Touched Teleporter" );
-				bTouchingATile = true;
 				TeleportPlayer( other.transform.position );
 			}
-			break;
-
-		case "EmptyTile":
-			Debug.Log( "Touched empty tile" );
 			bTouchingATile = true;
-			bCanMove = false;
+			touchingList.Add( other.gameObject );
 			break;
 
 		case "FallingTile":
@@ -319,6 +321,7 @@ public class HotDogScript : MonoBehaviour
 
 		case "BridgeTile":
 			bTouchingATile = true;
+			touchingList.Add( other.gameObject );
 			break;
 
 		case "Ketchup":
@@ -359,12 +362,24 @@ public class HotDogScript : MonoBehaviour
 			{
 				Debug.Log( "Hit goal tile!" );
 				bTouchingATile = true;
+				touchingList.Add( other.gameObject );
 				EventAggregatorManager.Publish( new PlaySoundMessage( "goal", false ) );// Play the goal sound
 				bCanMove = false;														// Don't allow the player to move now
 				Messenger<bool>.Broadcast( "level complete", IsFullDog() );				// Send message to update complete level score
 				Messenger.Broadcast( "go to next level" );								// Go to the next level
 				StartCoroutine( "FallThroughGoal" );
 			}
+			break;
+
+		case "Conveyor":
+			touchingList.Add( other.gameObject );
+			break;
+
+		case "EmptyTile":
+			Debug.Log( "Touched empty tile" );
+			bTouchingATile = true;
+			bCanMove = false;
+			StartCoroutine( FallOffLevel( other.gameObject, touchingList ) );
 			break;
 		}
 
@@ -517,6 +532,32 @@ public class HotDogScript : MonoBehaviour
 	}
 	#endregion
 
+	#region IEnumerator FallOffLevel( GameObject other, List<GameObject> list )
+	IEnumerator FallOffLevel( GameObject other, List<GameObject> list )
+	{
+		int tempCount = list.Count;
+
+		while( transform.position.y > fKillHeight )
+		{
+			if( sLastKeyUsed == "R" )
+			{
+				if( tempCount == 0 )
+				{
+					transform.position -= new Vector3( 0, fDeadSpeed * Time.deltaTime, 0 );
+					transform.RotateAround( transform.position, Vector3.back, 5.0f );
+
+				}
+			}
+			yield return null;
+		}
+		ResetPlayer();
+		StopAllCoroutines();
+
+			
+		
+	}
+	#endregion
+
 	#region bool IsFullDog()
 	bool IsFullDog()
 	{
@@ -528,7 +569,7 @@ public class HotDogScript : MonoBehaviour
 	#endregion
 
 	#region void ResetPlayer()
-	void ResetPlayer()
+	public void ResetPlayer()
 	{
 		transform.rotation = Quaternion.Euler( v3OriginalRotation );					// Reset the player's rotation
 		transform.position = v3OriginalPosition;										// Reset the player's position
@@ -566,5 +607,4 @@ public class HotDogScript : MonoBehaviour
 			renderer.material = hotdogMaterials[7];
 	}
 	#endregion
-
 }
