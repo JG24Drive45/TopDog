@@ -73,6 +73,9 @@ public class HotDogScript : MonoBehaviour
 	private float fFallSpeed = 100.0f;											// Speed at which the dog falls
 	private int iConveyorSpeed = 2;												// Speed the dog moves while on the conveyor belt
 	private float fDeadSpeed = 150.0f;
+	public bool bFalling = false;
+	public GameObject killTile;
+	private int iControl = 0;
 
 	#region void Start()
 	void Start () 
@@ -215,7 +218,101 @@ public class HotDogScript : MonoBehaviour
 				touchingList.Clear();
 			}
 		}
+	}
+	#endregion
 
+	#region void LateUpdate()
+	void LateUpdate()
+	{
+		if( iControl < 0 )
+		{
+			bFalling = true;
+			iControl++;
+		}
+
+		if( bFalling )
+		{
+			// If you fell on 1 empty tile
+			if( touchingList.Count == 1 )
+			{
+//				if( transform.position.y > fKillHeight )
+//				{
+//					transform.position -= new Vector3( 0, fDeadSpeed * Time.deltaTime, 0 );
+//
+//					// If the tile that your'e still touching is to the right of the killTile
+//					if( touchingList[0].transform.position.x == killTile.transform.position.x + 50 )
+//					{
+//						transform.RotateAround( transform.position, Vector3.forward, 5.0f );
+//					}
+//					// If the tile that you're still touching is below the killTile
+//					// If the tile that you're still touching is to the left of the killTile
+//					else if( touchingList[0].transform.position.x == killTile.transform.position.x - 50 )
+//					{
+//						Debug.Log( "Touching list is: " + touchingList.Count );
+//						transform.RotateAround( transform.position, Vector3.back, 5.0f );
+//					}
+//					// If the tile that you're still touching is above the killTile
+//				}
+//				else
+//				{
+//					ResetPlayer();
+//				}
+			}
+
+			#region If you fell on 2 empty tiles, touchcount would be 0 in this case
+			else
+			{
+				if( sLastKeyUsed == "R" )
+				{
+					if( transform.position.y > fKillHeight )
+					{
+						transform.position -= new Vector3( 0, fDeadSpeed * Time.deltaTime, 0 );
+						transform.RotateAround( transform.position, Vector3.back, 2.5f );
+					}
+					else
+					{
+						ResetPlayer();
+					}
+				}
+				else if( sLastKeyUsed == "L" )
+				{
+					if( transform.position.y > fKillHeight )
+					{
+						transform.position -= new Vector3( 0, fDeadSpeed * Time.deltaTime, 0 );
+						transform.RotateAround( transform.position, Vector3.forward, 2.5f );
+					}
+					else
+					{
+						ResetPlayer();
+					}
+				}
+				else if( sLastKeyUsed == "U" )
+				{
+					if( transform.position.y > fKillHeight )
+					{
+						transform.position -= new Vector3( 0, fDeadSpeed * Time.deltaTime, 0 );
+						transform.RotateAround( transform.position, Vector3.right, 2.5f );
+					}
+					else
+					{
+						ResetPlayer();
+					}
+				}
+				else
+				{
+					if( transform.position.y > fKillHeight )
+					{
+						transform.position -= new Vector3( 0, fDeadSpeed * Time.deltaTime, 0 );
+						transform.RotateAround( transform.position, Vector3.left, 2.5f );
+					}
+					else
+					{
+						ResetPlayer();
+					}
+				}
+			}
+			#endregion
+		}
 	}
 	#endregion
 
@@ -284,12 +381,15 @@ public class HotDogScript : MonoBehaviour
 	#region void OnTriggerEnter( Collider other )
 	void OnTriggerEnter( Collider other )
 	{
+
+
 		switch( other.gameObject.tag )
 		{
 		case "MainTile":
 			Debug.Log( "Touching main tile" );
 			bTouchingATile = true;
-			touchingList.Add( other.gameObject );
+			if( !bFalling )
+				touchingList.Add( other.gameObject );
 			break;
 
 		case "TeleporterTile":
@@ -298,7 +398,8 @@ public class HotDogScript : MonoBehaviour
 				Debug.Log( "Touched Teleporter" );
 				TeleportPlayer( other.transform.position );
 			}
-			bTouchingATile = true;
+			if( !bFalling )
+				bTouchingATile = true;
 			touchingList.Add( other.gameObject );
 			break;
 
@@ -321,7 +422,8 @@ public class HotDogScript : MonoBehaviour
 
 		case "BridgeTile":
 			bTouchingATile = true;
-			touchingList.Add( other.gameObject );
+			if( !bFalling )
+				touchingList.Add( other.gameObject );
 			break;
 
 		case "Ketchup":
@@ -361,25 +463,28 @@ public class HotDogScript : MonoBehaviour
 			if( orientationState == OrientationState.VERTICAL )
 			{
 				Debug.Log( "Hit goal tile!" );
-				bTouchingATile = true;
-				touchingList.Add( other.gameObject );
 				EventAggregatorManager.Publish( new PlaySoundMessage( "goal", false ) );// Play the goal sound
 				bCanMove = false;														// Don't allow the player to move now
 				Messenger<bool>.Broadcast( "level complete", IsFullDog() );				// Send message to update complete level score
 				Messenger.Broadcast( "go to next level" );								// Go to the next level
 				StartCoroutine( "FallThroughGoal" );
 			}
+			if( !bFalling )
+				touchingList.Add( other.gameObject );
+			bTouchingATile = true;
 			break;
 
 		case "Conveyor":
-			touchingList.Add( other.gameObject );
+			if( !bFalling )
+				touchingList.Add( other.gameObject );
 			break;
 
-		case "EmptyTile":
+		case "zEmptyTile":
 			Debug.Log( "Touched empty tile" );
 			bTouchingATile = true;
 			bCanMove = false;
-			StartCoroutine( FallOffLevel( other.gameObject, touchingList ) );
+			killTile = other.gameObject;
+			iControl = -2;
 			break;
 		}
 
@@ -532,32 +637,6 @@ public class HotDogScript : MonoBehaviour
 	}
 	#endregion
 
-	#region IEnumerator FallOffLevel( GameObject other, List<GameObject> list )
-	IEnumerator FallOffLevel( GameObject other, List<GameObject> list )
-	{
-		int tempCount = list.Count;
-
-		while( transform.position.y > fKillHeight )
-		{
-			if( sLastKeyUsed == "R" )
-			{
-				if( tempCount == 0 )
-				{
-					transform.position -= new Vector3( 0, fDeadSpeed * Time.deltaTime, 0 );
-					transform.RotateAround( transform.position, Vector3.back, 5.0f );
-
-				}
-			}
-			yield return null;
-		}
-		ResetPlayer();
-		StopAllCoroutines();
-
-			
-		
-	}
-	#endregion
-
 	#region bool IsFullDog()
 	bool IsFullDog()
 	{
@@ -575,6 +654,7 @@ public class HotDogScript : MonoBehaviour
 		transform.position = v3OriginalPosition;										// Reset the player's position
 		orientationState = oStateOriginal;												// Reset the player's orientation state
 		bCanMove = true;																// Allow the player to move again
+		bFalling = false;
 	}
 	#endregion
 
