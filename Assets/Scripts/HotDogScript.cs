@@ -76,6 +76,7 @@ public class HotDogScript : MonoBehaviour
 	public bool bFalling = false;
 	public GameObject[] allEmptyTiles;
 	public int numTouching = 0;
+	public int counter = 0;
 	#endregion
 
 	#region void Start()
@@ -521,50 +522,65 @@ public class HotDogScript : MonoBehaviour
 	#endregion
 
 	#region IEnumerator FallDown()
-	IEnumerator FallDown()
+	public IEnumerator FallDown()
 	{
 		#region Get the number of empty tiles that the dog is touching
 		numTouching = 0;
 		int oState = (int)orientationState;
+		GameObject[] goList = new GameObject[2];
 		// Check to see how many of the empty tiles the dog is touching
 		if( oState == 1 )
 		{
-			foreach( GameObject go in allEmptyTiles )
+			counter = 0;
+			while( counter < allEmptyTiles.Length )
 			{
-				if( (int)this.transform.position.x == (int)go.transform.position.x &&
-				    (int)this.transform.position.z == (int)go.transform.position.z )
+				if( (int)Mathf.Round(this.transform.position.x) == (int)Mathf.Round(allEmptyTiles[counter].transform.position.x) &&
+				   (int)Mathf.Round(this.transform.position.z) == (int)Mathf.Round(allEmptyTiles[counter].transform.position.z) )
 				{
 					numTouching++;
 					break;
 				}
+				counter += 1;
 			}
 		}
-		else if( oState == 2 )
+		if( oState == 2 )
 		{
-			foreach( GameObject go in allEmptyTiles )
+			counter = 0;
+			while( counter < allEmptyTiles.Length )
 			{
-				if( ( (int)this.transform.position.x == (int)( go.transform.position.x + 25 ) ||
-				      (int)this.transform.position.x == (int)( go.transform.position.x - 25 ) ) &&
-				   	  (int)this.transform.position.z == (int)go.transform.position.z )
+				if( ( (int)Mathf.Round(this.transform.position.x) == (int)(Mathf.Round(allEmptyTiles[counter].transform.position.x) + 25 ) ||
+				     (int)Mathf.Round(this.transform.position.x) == (int)(Mathf.Round(allEmptyTiles[counter].transform.position.x) - 25 ) ) &&
+				   (int)Mathf.Round(this.transform.position.z) == (int)Mathf.Round(allEmptyTiles[counter].transform.position.z) )
 				{
 					numTouching++;
+					if( goList[0] == null )
+						goList[0] = allEmptyTiles[counter];
+					else
+						goList[1] = allEmptyTiles[counter];
 					if( numTouching >= 2 )
 						break;
 				}
+				counter += 1;
 			}
 		}
-		else if( oState == 3 )
+		if( oState == 3 )
 		{
-			foreach( GameObject go in allEmptyTiles )
+			counter = 0;
+			while( counter < allEmptyTiles.Length )
 			{
-				if( (int)this.transform.position.x == (int)go.transform.position.x &&
-				    ( (int)this.transform.position.z == (int)( go.transform.position.z - 25 ) || 
-				      (int)this.transform.position.z == (int)( go.transform.position.z + 25 ) ) )
+				if( (int)Mathf.Round(this.transform.position.x) == (int)Mathf.Round(allEmptyTiles[counter].transform.position.x) &&
+				   ( (int)Mathf.Round(this.transform.position.z) == (int)(Mathf.Round(allEmptyTiles[counter].transform.position.z) - 25 ) || 
+					 (int)Mathf.Round(this.transform.position.z) == (int)(Mathf.Round(allEmptyTiles[counter].transform.position.z) + 25 ) ) )
 				{
 					numTouching++;
+					if( goList[0] == null )
+						goList[0] = allEmptyTiles[counter];
+					else
+						goList[1] = allEmptyTiles[counter];
 					if( numTouching >= 2 )
 						break;
 				}
+				counter += 1;
 			}
 		}
 		#endregion
@@ -599,18 +615,40 @@ public class HotDogScript : MonoBehaviour
 						transform.RotateAround( transform.position, Vector3.right, 2.5f );
 						yield return null;
 					}
+					// If the last key pressed was D
+					else if( sLastKeyUsed == "D" )
+					{
+						transform.position -= new Vector3( 0, fDeadSpeed * Time.deltaTime, 0 );
+						transform.RotateAround( transform.position, Vector3.left, 2.5f );
+						yield return null;
+					}
 				}
 				// If dog is touching 1 empty tile
 				else if( numTouching == 1 )
 				{
-
+					transform.position -= new Vector3( 0, fDeadSpeed * Time.deltaTime, 0 );
+					// If the dogs's x pos is == goList object x pos and dog's z pos == goList object z pos - 25   >> empty above
+					if( (int)Mathf.Round(this.transform.position.x) == (int)Mathf.Round(goList[0].transform.position.x) &&
+					    (int)Mathf.Round(this.transform.position.z) == (int)(Mathf.Round(goList[0].transform.position.z) - 25) )
+					{
+						transform.RotateAround( transform.position, Vector3.right, 2.5f );
+						yield return null;
+					}
+					// If the dog's x pos is == goList object x pos and dog's z pos == goList object z pos + 25  >> empty below
+					else if( (int)Mathf.Round(this.transform.position.x) == (int)Mathf.Round(goList[0].transform.position.x) &&
+					    (int)Mathf.Round(this.transform.position.z) == (int)(Mathf.Round(goList[0].transform.position.z) + 25) )
+					{
+						transform.RotateAround( transform.position, Vector3.left, 2.5f );
+						yield return null;
+					}
+					
 				}
 			}
 			#endregion
 
 			#region Vertical Fall
 			// If the dog's orientation is vertical
-			else if( oState == 1 )
+			if( oState == 1 )
 			{
 				// If the last key pressed was L
 				if( sLastKeyUsed == "L" && numTouching == 1 )

@@ -38,7 +38,7 @@ public class BridgeTileScript : MonoBehaviour {
 	void CallActivateBridge()
 	{
 		// Turn off the empty tile that is in the bridge tile's current position
-		GameObject[] tiles = GameObject.FindGameObjectsWithTag( "EmptyTile" );
+		GameObject[] tiles = GameObject.FindGameObjectsWithTag( "zEmptyTile" );
 		
 		int length = tiles.Length;										// Cache the array length
 		int i;
