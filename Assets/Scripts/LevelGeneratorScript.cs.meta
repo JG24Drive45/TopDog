@@ -2,7 +2,20 @@ fileFormatVersion: 2
 guid: 64451fd4674c96a4ba8f81f738c3ab34
 MonoImporter:
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - mainTile: {fileID: 100000, guid: 70f65135da9bf5143a20aa115ef3c4a0, type: 2}
+  - emptyTile: {fileID: 100000, guid: 9310bb0de1501b447a99bfe577d1c263, type: 2}
+  - teleporterTile: {fileID: 100000, guid: 79a453a55cb36654e86279fc0b0a5fb7, type: 2}
+  - bridgeTile: {fileID: 100000, guid: 88714c7b7ae2f9e4a8379d5ef7d990bc, type: 2}
+  - fallingTile: {fileID: 100000, guid: 5c4b262471baaac4e9c7537d27c91502, type: 2}
+  - conveyorBelt: {fileID: 100008, guid: 6862e30daf93a2141a9ea7144f04e616, type: 2}
+  - goalTile: {fileID: 100000, guid: 63d7e96f70d2b834689adf181555f67c, type: 2}
+  - ketchup: {fileID: 100000, guid: 7c55d58fe1c447d4896cc55ab8d6e13b, type: 2}
+  - mustard: {fileID: 100000, guid: b1ef2ae8c8912594bac23ff916b78c94, type: 2}
+  - relish: {fileID: 100000, guid: eb77ab09047386a4a875c4d58fcb38b3, type: 2}
+  - player: {fileID: 100000, guid: 104ae4c9e7159bb4481dc542ab16365b, type: 2}
+  - switchObject: {fileID: 100000, guid: 6c1f9904a6e7f0a40a82802acef9bca5, type: 2}
+  - coals: {fileID: 100038, guid: 7090d774a6673924687bca109bc44521, type: 2}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

@@ -37,6 +37,7 @@ public class HotDogScript : MonoBehaviour
 
 	#endregion
 
+	#region Data Members
 	// Hotdog Condiment Traits
 	private bool bHasKetchup = false;
 	private bool bHasMustard = false;
@@ -63,7 +64,6 @@ public class HotDogScript : MonoBehaviour
 	public string sLastKeyUsed;													// Last arrow button the player used
 	private bool bIsTeleporting = false;										// Is the player currently teleporting?
 	private bool bTouchingATile = true;											// Is the player currently touching any tiles?
-	public List<GameObject> touchingList;
 
 	private Vector3 v3OriginalPosition;											// Starting position for the level
 	private Vector3 v3OriginalRotation;											// Starting rotation for the level
@@ -74,8 +74,9 @@ public class HotDogScript : MonoBehaviour
 	private int iConveyorSpeed = 2;												// Speed the dog moves while on the conveyor belt
 	private float fDeadSpeed = 150.0f;
 	public bool bFalling = false;
-	public GameObject killTile;
-	private int iControl = 0;
+	public GameObject[] allEmptyTiles;
+	public int numTouching = 0;
+	#endregion
 
 	#region void Start()
 	void Start () 
@@ -86,6 +87,8 @@ public class HotDogScript : MonoBehaviour
 		Debug.Log( Physics.gravity );											// Testing	
 
 		renderer.material = hotdogMaterials[0];									// Give the hotdog the empty material
+
+		allEmptyTiles = GameObject.FindGameObjectsWithTag( "zEmptyTile" );
 	}
 	#endregion
 
@@ -213,109 +216,12 @@ public class HotDogScript : MonoBehaviour
 
 					#endregion
 				}
-
-				// Clear the touchingList
-				touchingList.Clear();
 			}
 		}
+
 	}
 	#endregion
-
-	#region void LateUpdate()
-	void LateUpdate()
-	{
-		if( iControl < 0 )
-		{
-			bFalling = true;
-			iControl++;
-		}
-
-		if( bFalling )
-		{
-			// If you fell on 1 empty tile
-			if( touchingList.Count == 1 )
-			{
-//				if( transform.position.y > fKillHeight )
-//				{
-//					transform.position -= new Vector3( 0, fDeadSpeed * Time.deltaTime, 0 );
-//
-//					// If the tile that your'e still touching is to the right of the killTile
-//					if( touchingList[0].transform.position.x == killTile.transform.position.x + 50 )
-//					{
-//						transform.RotateAround( transform.position, Vector3.forward, 5.0f );
-//					}
-//					// If the tile that you're still touching is below the killTile
-//					// If the tile that you're still touching is to the left of the killTile
-//					else if( touchingList[0].transform.position.x == killTile.transform.position.x - 50 )
-//					{
-//						Debug.Log( "Touching list is: " + touchingList.Count );
-//						transform.RotateAround( transform.position, Vector3.back, 5.0f );
-//					}
-//					// If the tile that you're still touching is above the killTile
-//				}
-//				else
-//				{
-//					ResetPlayer();
-//				}
-			}
-
-			#region If you fell on 2 empty tiles, touchcount would be 0 in this case
-			else
-			{
-				if( sLastKeyUsed == "R" )
-				{
-					if( transform.position.y > fKillHeight )
-					{
-						transform.position -= new Vector3( 0, fDeadSpeed * Time.deltaTime, 0 );
-						transform.RotateAround( transform.position, Vector3.back, 2.5f );
-					}
-					else
-					{
-						ResetPlayer();
-					}
-				}
-				else if( sLastKeyUsed == "L" )
-				{
-					if( transform.position.y > fKillHeight )
-					{
-						transform.position -= new Vector3( 0, fDeadSpeed * Time.deltaTime, 0 );
-						transform.RotateAround( transform.position, Vector3.forward, 2.5f );
-					}
-					else
-					{
-						ResetPlayer();
-					}
-				}
-				else if( sLastKeyUsed == "U" )
-				{
-					if( transform.position.y > fKillHeight )
-					{
-						transform.position -= new Vector3( 0, fDeadSpeed * Time.deltaTime, 0 );
-						transform.RotateAround( transform.position, Vector3.right, 2.5f );
-					}
-					else
-					{
-						ResetPlayer();
-					}
-				}
-				else
-				{
-					if( transform.position.y > fKillHeight )
-					{
-						transform.position -= new Vector3( 0, fDeadSpeed * Time.deltaTime, 0 );
-						transform.RotateAround( transform.position, Vector3.left, 2.5f );
-					}
-					else
-					{
-						ResetPlayer();
-					}
-				}
-			}
-			#endregion
-		}
-	}
-	#endregion
-
+	
 	#region void SetLastKeyUsed( string key )
 	void SetLastKeyUsed( string key )
 	{
@@ -381,113 +287,101 @@ public class HotDogScript : MonoBehaviour
 	#region void OnTriggerEnter( Collider other )
 	void OnTriggerEnter( Collider other )
 	{
-
-
-		switch( other.gameObject.tag )
+		if( !bFalling )
 		{
-		case "MainTile":
-			Debug.Log( "Touching main tile" );
-			bTouchingATile = true;
-			if( !bFalling )
-				touchingList.Add( other.gameObject );
-			break;
-
-		case "TeleporterTile":
-			if( !bIsTeleporting && orientationState == OrientationState.VERTICAL )
+			switch( other.gameObject.tag )
 			{
-				Debug.Log( "Touched Teleporter" );
-				TeleportPlayer( other.transform.position );
-			}
-			if( !bFalling )
+			case "MainTile":
+				Debug.Log( "Touching main tile" );
 				bTouchingATile = true;
-			touchingList.Add( other.gameObject );
-			break;
+				break;
 
-		case "FallingTile":
-			bTouchingATile = true;
-			other.gameObject.SendMessage( "ToggleBeenTouched" );
-			Debug.Log( "Touched falling tile" );
-			break;
+			case "TeleporterTile":
+				if( !bIsTeleporting && orientationState == OrientationState.VERTICAL )
+				{
+					Debug.Log( "Touched Teleporter" );
+					TeleportPlayer( other.transform.position );
+				}
+				if( !bFalling )
+					bTouchingATile = true;
+				break;
 
-		case "Switch":
-			Debug.Log( "Touched Switch" );
-			EventAggregatorManager.Publish( new PlaySoundMessage( "switch", false ) );
-			if( other.gameObject.GetComponent<CapsuleCollider>().enabled )
-			{
-				other.gameObject.GetComponent<CapsuleCollider>().enabled = false;
-				Messenger.Broadcast( "set active switch material" );
-				Messenger.Broadcast( "activate bridge" );
+			case "FallingTile":
+				bTouchingATile = true;
+				other.gameObject.SendMessage( "ToggleBeenTouched" );
+				Debug.Log( "Touched falling tile" );
+				break;
+
+			case "Switch":
+				Debug.Log( "Touched Switch" );
+				EventAggregatorManager.Publish( new PlaySoundMessage( "switch", false ) );
+				if( other.gameObject.GetComponent<CapsuleCollider>().enabled )
+				{
+					other.gameObject.GetComponent<CapsuleCollider>().enabled = false;
+					Messenger.Broadcast( "set active switch material" );
+					Messenger.Broadcast( "activate bridge" );
+				}
+				break;
+
+			case "BridgeTile":
+				bTouchingATile = true;
+				break;
+
+			case "Ketchup":
+				if( onCondimentAcquired != null )											// If there is a subscriber
+					onCondimentAcquired();														// Send the message out
+				bHasKetchup = true;															// Player has acquired the ketchup
+				bFullDog = IsFullDog();														// Is the dog full?
+				SetMaterial();																// Update the material
+				EventAggregatorManager.Publish( new PlaySoundMessage( "splat", false ) );	// Play the splat sound
+				Destroy( other.gameObject );
+				Debug.Log( "You collided with ketchup" );
+				break;
+
+			case "Mustard":
+				if( onCondimentAcquired != null )											// If there is a subscriber
+					onCondimentAcquired();														// Send the message out
+				bHasMustard = true;															// Player has acquired the mustard
+				bFullDog = IsFullDog();														// Is the dog full?
+				SetMaterial();																// Update the material
+				EventAggregatorManager.Publish( new PlaySoundMessage( "splat", false ) );	// Play the splat sound
+				Destroy( other.gameObject );
+				Debug.Log( "You collided with mustard" );
+				break;
+
+			case "Relish":
+				if( onCondimentAcquired != null )											// If there is a subscriber
+					onCondimentAcquired();														// Send the message out
+				bHasRelish = true;															// Player has acquired the relish
+				bFullDog = IsFullDog();														// Is the dog full?
+				SetMaterial();																// Update the material
+				EventAggregatorManager.Publish( new PlaySoundMessage( "splat", false ) );	// Play the splat sound
+				Destroy( other.gameObject );
+				Debug.Log( "You collided with relish" );
+				break;
+
+			case "GoalTile":
+				if( orientationState == OrientationState.VERTICAL )
+				{
+					Debug.Log( "Hit goal tile!" );
+					EventAggregatorManager.Publish( new PlaySoundMessage( "goal", false ) );// Play the goal sound
+					bCanMove = false;														// Don't allow the player to move now
+					Messenger<bool>.Broadcast( "level complete", IsFullDog() );				// Send message to update complete level score
+					Messenger.Broadcast( "go to next level" );								// Go to the next level
+					StartCoroutine( "FallThroughGoal" );
+				}
+				bTouchingATile = true;
+				break;
+
+			case "zEmptyTile":
+				Debug.Log( "Touched empty tile" );
+				bTouchingATile = true;
+				bCanMove = false;
+				bFalling = true;
+				StartCoroutine( FallDown() );
+				break;
 			}
-			break;
-
-		case "BridgeTile":
-			bTouchingATile = true;
-			if( !bFalling )
-				touchingList.Add( other.gameObject );
-			break;
-
-		case "Ketchup":
-			if( onCondimentAcquired != null )											// If there is a subscriber
-				onCondimentAcquired();														// Send the message out
-			bHasKetchup = true;															// Player has acquired the ketchup
-			bFullDog = IsFullDog();														// Is the dog full?
-			SetMaterial();																// Update the material
-			EventAggregatorManager.Publish( new PlaySoundMessage( "splat", false ) );	// Play the splat sound
-			Destroy( other.gameObject );
-			Debug.Log( "You collided with ketchup" );
-			break;
-
-		case "Mustard":
-			if( onCondimentAcquired != null )											// If there is a subscriber
-				onCondimentAcquired();														// Send the message out
-			bHasMustard = true;															// Player has acquired the mustard
-			bFullDog = IsFullDog();														// Is the dog full?
-			SetMaterial();																// Update the material
-			EventAggregatorManager.Publish( new PlaySoundMessage( "splat", false ) );	// Play the splat sound
-			Destroy( other.gameObject );
-			Debug.Log( "You collided with mustard" );
-			break;
-
-		case "Relish":
-			if( onCondimentAcquired != null )											// If there is a subscriber
-				onCondimentAcquired();														// Send the message out
-			bHasRelish = true;															// Player has acquired the relish
-			bFullDog = IsFullDog();														// Is the dog full?
-			SetMaterial();																// Update the material
-			EventAggregatorManager.Publish( new PlaySoundMessage( "splat", false ) );	// Play the splat sound
-			Destroy( other.gameObject );
-			Debug.Log( "You collided with relish" );
-			break;
-
-		case "GoalTile":
-			if( orientationState == OrientationState.VERTICAL )
-			{
-				Debug.Log( "Hit goal tile!" );
-				EventAggregatorManager.Publish( new PlaySoundMessage( "goal", false ) );// Play the goal sound
-				bCanMove = false;														// Don't allow the player to move now
-				Messenger<bool>.Broadcast( "level complete", IsFullDog() );				// Send message to update complete level score
-				Messenger.Broadcast( "go to next level" );								// Go to the next level
-				StartCoroutine( "FallThroughGoal" );
-			}
-			if( !bFalling )
-				touchingList.Add( other.gameObject );
-			bTouchingATile = true;
-			break;
-
-		case "Conveyor":
-			if( !bFalling )
-				touchingList.Add( other.gameObject );
-			break;
-
-		case "zEmptyTile":
-			Debug.Log( "Touched empty tile" );
-			bTouchingATile = true;
-			bCanMove = false;
-			killTile = other.gameObject;
-			iControl = -2;
-			break;
 		}
-
 	}
 
 	#endregion
@@ -626,6 +520,140 @@ public class HotDogScript : MonoBehaviour
 	}
 	#endregion
 
+	#region IEnumerator FallDown()
+	IEnumerator FallDown()
+	{
+		#region Get the number of empty tiles that the dog is touching
+		numTouching = 0;
+		int oState = (int)orientationState;
+		// Check to see how many of the empty tiles the dog is touching
+		if( oState == 1 )
+		{
+			foreach( GameObject go in allEmptyTiles )
+			{
+				if( (int)this.transform.position.x == (int)go.transform.position.x &&
+				    (int)this.transform.position.z == (int)go.transform.position.z )
+				{
+					numTouching++;
+					break;
+				}
+			}
+		}
+		else if( oState == 2 )
+		{
+			foreach( GameObject go in allEmptyTiles )
+			{
+				if( ( (int)this.transform.position.x == (int)( go.transform.position.x + 25 ) ||
+				      (int)this.transform.position.x == (int)( go.transform.position.x - 25 ) ) &&
+				   	  (int)this.transform.position.z == (int)go.transform.position.z )
+				{
+					numTouching++;
+					if( numTouching >= 2 )
+						break;
+				}
+			}
+		}
+		else if( oState == 3 )
+		{
+			foreach( GameObject go in allEmptyTiles )
+			{
+				if( (int)this.transform.position.x == (int)go.transform.position.x &&
+				    ( (int)this.transform.position.z == (int)( go.transform.position.z - 25 ) || 
+				      (int)this.transform.position.z == (int)( go.transform.position.z + 25 ) ) )
+				{
+					numTouching++;
+					if( numTouching >= 2 )
+						break;
+				}
+			}
+		}
+		#endregion
+
+		while( transform.position.y > fKillHeight )
+		{
+			#region Vert / Horz Fall
+			// If the dog's orientation is vert/horz
+			if( oState == 3 )
+			{
+				// If dog is touching 2 empty tiles
+				if( numTouching == 2 )
+				{
+					// If the last key pressed was L
+					if( sLastKeyUsed == "L" )
+					{
+						transform.position -= new Vector3( 0, fDeadSpeed * Time.deltaTime, 0 );
+						transform.RotateAround( transform.position, Vector3.forward, 2.5f );
+						yield return null;
+					}
+					// If the last key pressed was R
+					else if( sLastKeyUsed == "R" )
+					{
+						transform.position -= new Vector3( 0, fDeadSpeed * Time.deltaTime, 0 );
+						transform.RotateAround( transform.position, Vector3.back, 2.5f );
+						yield return null;
+					}
+					// If the last key pressed was U
+					else if( sLastKeyUsed == "U" )
+					{
+						transform.position -= new Vector3( 0, fDeadSpeed * Time.deltaTime, 0 );
+						transform.RotateAround( transform.position, Vector3.right, 2.5f );
+						yield return null;
+					}
+				}
+				// If dog is touching 1 empty tile
+				else if( numTouching == 1 )
+				{
+
+				}
+			}
+			#endregion
+
+			#region Vertical Fall
+			// If the dog's orientation is vertical
+			else if( oState == 1 )
+			{
+				// If the last key pressed was L
+				if( sLastKeyUsed == "L" && numTouching == 1 )
+				{
+					transform.position -= new Vector3( 0, fDeadSpeed * Time.deltaTime, 0 );
+					transform.RotateAround( transform.position, Vector3.forward, 2.5f );
+					yield return null;
+				}
+				// If the last key pressed was R
+				else if( sLastKeyUsed == "R" && numTouching == 1 )
+				{
+					transform.position -= new Vector3( 0, fDeadSpeed * Time.deltaTime, 0 );
+					transform.RotateAround( transform.position, Vector3.back, 2.5f );
+					yield return null;
+				}
+				// If the last key pressed was U
+				else if( sLastKeyUsed == "U" && numTouching == 1 )
+				{
+					transform.position -= new Vector3( 0, fDeadSpeed * Time.deltaTime, 0 );
+					transform.RotateAround( transform.position, Vector3.right, 2.5f );
+					yield return null;
+				}
+				// If the last key pressed was D
+				else if( sLastKeyUsed == "D" && numTouching == 1 )
+				{
+					transform.position -= new Vector3( 0, fDeadSpeed * Time.deltaTime, 0 );
+					transform.RotateAround( transform.position, Vector3.left, 2.5f );
+					yield return null;
+				}
+			}
+			#endregion
+
+			#region Horizontal Fall
+			// If the dog's orientation is horizontal
+
+			#endregion
+		}
+
+		StopAllCoroutines();
+		ResetPlayer();
+	}
+	#endregion
+
 	#region IEnumerator FallThroughGoal()
 	IEnumerator FallThroughGoal()
 	{
@@ -655,6 +683,8 @@ public class HotDogScript : MonoBehaviour
 		orientationState = oStateOriginal;												// Reset the player's orientation state
 		bCanMove = true;																// Allow the player to move again
 		bFalling = false;
+
+		// TODO: Don't forget to reset the level as well, ketchup, mustard, relish - -or just reload the level.
 	}
 	#endregion
 

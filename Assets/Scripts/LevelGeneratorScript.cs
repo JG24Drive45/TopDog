@@ -49,8 +49,8 @@ public class LevelGeneratorScript : MonoBehaviour
 		data = ( TextAsset )Resources.Load( "LevelData/" + sLevel );
 		lines = data.text.Split( "\n"[0] );
 
-		// Read the first 13 lines of text file that make up the tiles
-		for( int i = 2; i < 14; i++ )
+		// Read lines 3 - 16 of text file that make up the tiles
+		for( int i = 2; i < 16; i++ )
 		{
 			int lineLength = lines[i].Length;
 			for( int j = 0; j < lineLength; j++ )
@@ -82,43 +82,43 @@ public class LevelGeneratorScript : MonoBehaviour
 			}
 		}
 
-		// Read lines 17 & 18 to get the ketchup location
-		Vector3 tempPosition = new Vector3( int.Parse( lines[16] ), 12.5f, -int.Parse( lines[17] ) );
+		// Read lines 19 & 20 to get the ketchup location
+		Vector3 tempPosition = new Vector3( int.Parse( lines[18] ), 12.5f, -int.Parse( lines[19] ) );
 		Debug.Log( "Ketchup is at: " + tempPosition );			// For testing
 		Instantiate( ketchup, tempPosition, Quaternion.Euler( new Vector3( 90.0f, 0.0f, 0.0f ) ) );
 
-		// Read lines 20 & 21 to get the mustard location
-		tempPosition = new Vector3( int.Parse( lines[19] ) , 12.5f, -int.Parse( lines[20] ) );
+		// Read lines 22 & 23 to get the mustard location
+		tempPosition = new Vector3( int.Parse( lines[21] ) , 12.5f, -int.Parse( lines[22] ) );
 		Debug.Log( "Mustard is at: " + tempPosition );			// For testing
 		Instantiate( mustard, tempPosition, Quaternion.Euler( new Vector3( 90.0f, 0.0f, 0.0f ) ) );
 
-		// Read lines 23 & 24 to get the relish location
-		tempPosition = new Vector3( int.Parse( lines[22] ), 12.5f, -int.Parse( lines[23] ) );
+		// Read lines 25 & 26 to get the relish location
+		tempPosition = new Vector3( int.Parse( lines[24] ), 12.5f, -int.Parse( lines[25] ) );
 		Debug.Log( "Relish is at: " + tempPosition );			// For testing
 		Instantiate( relish, tempPosition, Quaternion.Euler( new Vector3( 90.0f, 0.0f, 0.0f ) ) );
 
-		// Read lines 26 & 27 to get the switch location
-		if( lines[25] != "none\r" )
+		// Read lines 28 & 29 to get the switch location
+		if( lines[27] != "none\r" )
 		{
-			Debug.Log( "Line 25 is: " + lines[25] );
-			tempPosition = new Vector3( int.Parse( lines[25] ), 12.5f, -int.Parse( lines[26] ) );
+			Debug.Log( "Line 27 is: " + lines[27] );
+			tempPosition = new Vector3( int.Parse( lines[27] ), 12.5f, -int.Parse( lines[28] ) );
 			Debug.Log( "Switch is at: " + tempPosition );
 			Instantiate( switchObject, tempPosition, Quaternion.Euler( new Vector3( 270.0f, 0.0f, 0.0f ) ) );
 		}
 
-		// Read lines 29 - 31 to get the player's (hotdog) location
-		tempPosition = new Vector3( int.Parse( lines[28] ), int.Parse( lines[29] ), -int.Parse( lines[30] ) );
+		// Read lines 31 - 33 to get the player's (hotdog) location
+		tempPosition = new Vector3( int.Parse( lines[30] ), int.Parse( lines[31] ), -int.Parse( lines[32] ) );
 		Debug.Log( "Player is at: " + tempPosition );
-		// Read lines 33 - 35 to get the player's (hotdog) rotation
-		Vector3 tempRotation = new Vector3( int.Parse( lines[32] ), int.Parse( lines[33] ), int.Parse( lines[34] ) );
+		// Read lines 35 - 37 to get the player's (hotdog) rotation
+		Vector3 tempRotation = new Vector3( int.Parse( lines[34] ), int.Parse( lines[35] ), int.Parse( lines[36] ) );
 		Debug.Log( "Player rotation is: " + tempRotation );
 		Instantiate( player, tempPosition, Quaternion.Euler( tempRotation ) );
 
-		// Read line 37 to get the player's orientation state
-		int tempState = int.Parse( lines[36] );
-		Debug.Log( "OState is: " + tempState );
-		// Send the message to set the player's orientation state
-		Messenger<int>.Broadcast( "set player original orientation state", tempState );
+//		// Read line 39 to get the player's orientation state
+//		int tempState = int.Parse( lines[38] );
+//		Debug.Log( "OState is: " + tempState );
+//		// Send the message to set the player's orientation state
+//		Messenger<int>.Broadcast( "set player original orientation state", tempState );
 		#endregion
 
 		// Instantiate the coals
