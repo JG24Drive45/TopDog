@@ -124,6 +124,27 @@ public class LevelGeneratorScript : MonoBehaviour
 		// Instantiate the coals
 		Instantiate( coals, new Vector3( 0, -250, 250 ), Quaternion.identity );
 
+		// Make more empties across top
+		for( int i = 0; i < 19; i++ )
+		{
+			Instantiate( emptyTile, new Vector3( i * 50 - 50, 7.5f, 50 ), Quaternion.Euler( new Vector3( 0, 0, 0 ) ) );
+		}
+		// Make more empties along the bottom
+		for( int i = 0; i < 19; i++ )
+		{
+			Instantiate( emptyTile, new Vector3( i * 50 - 50, 7.5f, -600 ), Quaternion.Euler( new Vector3( 0, 0, 0 ) ) );
+		}
+		// Make more along the left
+		for( int i = 0; i < 12; i++ )
+		{
+			Instantiate( emptyTile, new Vector3( -50, 7.5f, -(i * 50) ), Quaternion.Euler( new Vector3( 0, 0, 0 ) ) );
+		}
+		// Make more along the right
+		for( int i = 0; i < 12; i++ )
+		{
+			Instantiate( emptyTile, new Vector3( 850, 7.5f, -(i * 50) ), Quaternion.Euler( new Vector3( 0, 0, 0 ) ) );
+		}
+
         LoadSounds();
 	}
 	#endregion
@@ -132,12 +153,13 @@ public class LevelGeneratorScript : MonoBehaviour
     void LoadSounds()
     {
         m_SoundManager = gameObject.GetComponent<SoundManager>() as SoundManager;
-		m_SoundManager.LoadSound( "hotdogStep", "SFX/HotDogStep", 1 );					// Load player movement sound
-        m_SoundManager.LoadSound( "splat", "SFX/splat3",5 );							// Load condiment acquired sound
-		m_SoundManager.LoadSound( "switch", "SFX/SwitchActivated", 1 );					// Load the switch sound
-		m_SoundManager.LoadSound( "teleport", "SFX/teleport_Sound", 3 );				// Load the teleport sound
-		m_SoundManager.LoadSound( "goal", "SFX/goalSound", 1 );							// Load the goal sound
-        m_SoundManager.LoadSound( "lvlMusic", "Music/level_music_7", 1 );				// Load some background music
+		m_SoundManager.LoadSound( "hotdogStep", "SFX/hotdogStepSound", 1 );					// Load player movement sound
+        m_SoundManager.LoadSound( "splat", "SFX/condimentSound",5 );						// Load condiment acquired sound
+		m_SoundManager.LoadSound( "switch", "SFX/switchSound", 1 );							// Load the switch sound
+		m_SoundManager.LoadSound( "teleport", "SFX/teleportSound", 3 );						// Load the teleport sound
+		m_SoundManager.LoadSound( "goal", "SFX/goalSound", 1 );								// Load the goal sound
+		m_SoundManager.LoadSound( "death", "SFX/deathSound", 1 );							// Load the death sound
+        m_SoundManager.LoadSound( "lvlMusic", "Music/music1", 1 );							// Load some background music
     }
 	#endregion
 

@@ -8,7 +8,7 @@ public class ScoreScript : MonoBehaviour {
 
 	private const float TIME_PENALTY_MULTIPLIER = 0.9f;
 
-	private int 	currentLevel;	//holds the current level number
+	public int 	currentLevel;	//holds the current level number
 	private int 	playerScore;	//stores the player's current score
 	private int 	playerMoveCount;//number of moves the player has made
 	private float 	playerTime;		//stores the player's current time
@@ -16,7 +16,7 @@ public class ScoreScript : MonoBehaviour {
 	private string	playerName;		//what name to attribute any high scores earned to
 
 	// Use this for initialization
-	void Start () 
+	void Awake()
 	{
 		currentLevel 	= 0;
 		playerScore 	= 0;
@@ -24,6 +24,11 @@ public class ScoreScript : MonoBehaviour {
 		playerTime 		= 0.0f;
 		timerActive 	= false;
 		playerName		= "mysterious stranger"; 
+	}
+
+	void Start () 
+	{
+
 	}
 
 	public void OnEnable()
