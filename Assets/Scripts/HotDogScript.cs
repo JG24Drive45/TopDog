@@ -6,7 +6,7 @@ public class HotDogScript : MonoBehaviour
 {
 	#region Delegates
 	public delegate void CondimentHandler();
-	public delegate void LevelComplete();
+	public delegate void LevelComplete(bool gotAllCondiments);
 	#endregion
 
 	#region Events
@@ -377,12 +377,10 @@ public class HotDogScript : MonoBehaviour
 				if( orientationState == OrientationState.VERTICAL )
 				{
 					if( onLevelComplete != null )
-						onLevelComplete();
+						onLevelComplete(IsFullDog());
 					Debug.Log( "Hit goal tile!" );
 					EventAggregatorManager.Publish( new PlaySoundMessage( "goal", false ) );// Play the goal sound
 					bCanMove = false;														// Don't allow the player to move now
-					Messenger<bool>.Broadcast( "level complete", IsFullDog() );				// Send message to update complete level score
-					Messenger.Broadcast( "go to next level" );								// Go to the next level
 					StartCoroutine( "FallThroughGoal" );
 				}
 				bTouchingATile = true;

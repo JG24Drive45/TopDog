@@ -173,14 +173,14 @@ public class LevelGeneratorScript : MonoBehaviour
 	#region OnEnable()
 	void OnEnable()
 	{
-		Messenger.AddListener( "go to next level", LoadNextLevel );
+		HotDogScript.onLevelComplete += LoadNextLevel;
 	}
 	#endregion
 
 	#region OnDisable()
 	void OnDisable()
 	{
-		Messenger.RemoveListener( "go to next level", LoadNextLevel );
+		HotDogScript.onLevelComplete -= LoadNextLevel;
 	}
 	#endregion
 	
@@ -202,7 +202,7 @@ public class LevelGeneratorScript : MonoBehaviour
 	#endregion
 
 	#region void LoadNextLevel()
-	void LoadNextLevel()
+	void LoadNextLevel(bool b)
 	{
 		iLevelNum++;
 		Invoke( "LoadNext", 3.0f );
