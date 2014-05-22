@@ -66,6 +66,7 @@ public class HotDogScript : MonoBehaviour
 	private string sLastKeyUsed;													// Last arrow button the player used
 	private bool bIsTeleporting = false;										// Is the player currently teleporting?
 	private bool bTouchingATile = true;											// Is the player currently touching any tiles?
+	private bool bOnConveyor = false;
 
 	private Vector3 v3OriginalPosition;											// Starting position for the level
 	private Vector3 v3OriginalRotation;											// Starting rotation for the level
@@ -387,11 +388,14 @@ public class HotDogScript : MonoBehaviour
 				break;
 
 			case "zEmptyTile":
-				Debug.Log( "Touched empty tile" );
-				bTouchingATile = true;
-				bCanMove = false;
-				bFalling = true;
-				StartCoroutine( FallDown() );
+				if( !bOnConveyor )
+				{
+					Debug.Log( "Touched empty tile" );
+					bTouchingATile = true;
+					bCanMove = false;
+					bFalling = true;
+					StartCoroutine( FallDown() );
+				}
 				break;
 			}
 		}
@@ -413,7 +417,7 @@ public class HotDogScript : MonoBehaviour
 			break;
 
 		case "zEmptyTile":
-			if( !bFalling )
+			if( !bFalling && !bOnConveyor )
 			{
 				Debug.Log( "Staying on empty tile" );
 				bTouchingATile = true;
@@ -442,6 +446,7 @@ public class HotDogScript : MonoBehaviour
 	IEnumerator MoveDogOnConveyor( GameObject other )
 	{
 		bCanMove = false;
+		bOnConveyor = true;
 		int step = 0;
 
 		#region If on a conveyor moving right
@@ -458,7 +463,7 @@ public class HotDogScript : MonoBehaviour
 			}
 			else
 			{
-				while( step < 75 )
+				while( step < 25 )
 				{
 					transform.position += new Vector3( iConveyorSpeed, 0, 0 );
 					step++;
@@ -506,7 +511,7 @@ public class HotDogScript : MonoBehaviour
 			}
 			else
 			{
-				while( step < 50 )
+				while( step < 25 )
 				{
 					transform.position += new Vector3( 0, 0, iConveyorSpeed );
 					step++;
@@ -530,7 +535,7 @@ public class HotDogScript : MonoBehaviour
 			}
 			else
 			{
-				while( step < 75 )
+				while( step < 25 )
 				{
 					transform.position -= new Vector3( iConveyorSpeed, 0, 0 );
 					step++;
@@ -540,6 +545,7 @@ public class HotDogScript : MonoBehaviour
 		}
 		#endregion
 
+		bOnConveyor = false;
 		bCanMove = true;
 	}
 	#endregion
