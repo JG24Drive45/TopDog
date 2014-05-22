@@ -220,6 +220,8 @@ public class ScoreScript : MonoBehaviour {
 
 	void LevelComplete(bool bHasAllCondiments)
 	{
+		StopTimer();
+
 		playerScore += 100; //100 points for winning level
 
 		if (bHasAllCondiments)
