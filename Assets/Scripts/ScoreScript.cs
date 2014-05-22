@@ -35,7 +35,7 @@ public class ScoreScript : MonoBehaviour {
 	{
 		HotDogScript.onCondimentAcquired += AcquiredCondiment;
 		LevelGeneratorScript.onLevelStart += StartTimer;
-		HotDogScript.onLevelComplete += StopTimer;
+		HotDogScript.onLevelComplete += LevelComplete;
 
 		Messenger.AddListener( "increment move count", IncrementMoveCount );
 		Messenger<int>.AddListener( "set level", setLevel );
@@ -51,7 +51,7 @@ public class ScoreScript : MonoBehaviour {
 	{
 		HotDogScript.onCondimentAcquired -= AcquiredCondiment;
 		LevelGeneratorScript.onLevelStart -= StartTimer;
-		HotDogScript.onLevelComplete -= StopTimer;
+		HotDogScript.onLevelComplete -= LevelComplete;
 
 		Messenger.RemoveListener( "increment move count", IncrementMoveCount );
 		Messenger<int>.RemoveListener( "set level", setLevel );
@@ -89,6 +89,13 @@ public class ScoreScript : MonoBehaviour {
 		byte i = 0;	//current entry in the array
 		string filePath = "Assets/Resources/Scores/level_" + currentLevel + "_scores.txt"; //location the scores are saved
 
+		Debug.Log(Application.dataPath + "Assets/Resources/Scores/");
+		//make sure score directory exists
+		if (!Directory.Exists(Application.dataPath + "/Resources/Scores/"))
+	 	{
+			Debug.Log("score directory not found.  creating it...");
+			DirectoryInfo test = Directory.CreateDirectory(Application.dataPath + "/Resources/Scores/");
+		}
 		//read scores
 		try
 		{
@@ -108,7 +115,7 @@ public class ScoreScript : MonoBehaviour {
 		catch (FileNotFoundException e)
 		{
 			//if the file does not exist, log warning and continue anyway
-			Debug.LogWarning("ScoreScript.SaveScore: could not find file " + e.FileName + ".  This message SHOULD be harmless: the script continues regardless.");
+			Debug.Log("ScoreScript.SaveScore: could not find file " + e.FileName + ".  This message SHOULD be harmless: the script continues regardless.");
 		}
 
 		//add new score
