@@ -33,11 +33,11 @@ public class ScoreScript : MonoBehaviour {
 
 	public void OnEnable()
 	{
-		//Messenger.AddListener( "acquired condiment", AcquiredCondiment );
 		HotDogScript.onCondimentAcquired += AcquiredCondiment;
+		LevelGeneratorScript.onLevelStart += StartTimer;
+		HotDogScript.onLevelComplete += StopTimer;
+
 		Messenger.AddListener( "increment move count", IncrementMoveCount );
-		Messenger.AddListener( "start timer", StartTimer );
-		Messenger.AddListener( "stop timer", StopTimer );
 		Messenger<int>.AddListener( "set level", setLevel );
 		Messenger<float>.AddListener( "time bonus", TimeBonus );
 		Messenger<bool>.AddListener( "level complete", LevelComplete );
@@ -49,11 +49,11 @@ public class ScoreScript : MonoBehaviour {
 
 	public void OnDisable()
 	{
-		//Messenger.RemoveListener( "acquired condiment", AcquiredCondiment );
 		HotDogScript.onCondimentAcquired -= AcquiredCondiment;
+		LevelGeneratorScript.onLevelStart -= StartTimer;
+		HotDogScript.onLevelComplete -= StopTimer;
+
 		Messenger.RemoveListener( "increment move count", IncrementMoveCount );
-		Messenger.RemoveListener( "start timer", StartTimer );
-		Messenger.RemoveListener( "stop timer", StopTimer );
 		Messenger<int>.RemoveListener( "set level", setLevel );
 		Messenger<float>.RemoveListener( "time bonus", TimeBonus );
 		Messenger<bool>.RemoveListener( "level complete", LevelComplete );

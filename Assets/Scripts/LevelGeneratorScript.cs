@@ -4,6 +4,10 @@ using System.IO;
 
 public class LevelGeneratorScript : MonoBehaviour 
 {
+	
+	public delegate void LevelStart();
+	public static event LevelStart onLevelStart;
+
 	// GameObject variables
 	public GameObject mainTile;
 	public GameObject emptyTile;
@@ -146,6 +150,9 @@ public class LevelGeneratorScript : MonoBehaviour
 		}
 
         LoadSounds();
+
+		if( onLevelStart != null )
+			onLevelStart();
 	}
 	#endregion
 

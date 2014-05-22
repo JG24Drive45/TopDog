@@ -6,10 +6,12 @@ public class HotDogScript : MonoBehaviour
 {
 	#region Delegates
 	public delegate void CondimentHandler();
+	public delegate void LevelComplete();
 	#endregion
 
 	#region Events
 	public static event CondimentHandler onCondimentAcquired;
+	public static event LevelComplete onLevelComplete;
 	#endregion
 
 	#region Hotdog Movement Offsets
@@ -70,12 +72,13 @@ public class HotDogScript : MonoBehaviour
 	private OrientationState oStateOriginal;									// Starting orientation state
 
 	private float fKillHeight = -250.0f;										// Terminating Y-Coordinate value
-	private float fFallSpeed = 100.0f;											// Speed at which the dog falls
+	private float fGoalSpeed = 100.0f;											// Speed at which the dog falls
 	private int iConveyorSpeed = 2;												// Speed the dog moves while on the conveyor belt
 	private float fDeadSpeed = 150.0f;
 	private float fSizzleHeight = -150.0f;
 	private bool bFalling = false;
-	private GameObject[] allEmptyTiles;
+	private GameObject[] empties;
+	public List<GameObject> allEmptyTiles;
 	private int numTouching = 0;
 	private int counter = 0;
 	#endregion
@@ -90,13 +93,20 @@ public class HotDogScript : MonoBehaviour
 
 		renderer.material = hotdogMaterials[0];									// Give the hotdog the empty material
 
-		allEmptyTiles = GameObject.FindGameObjectsWithTag( "zEmptyTile" );
+		empties = GameObject.FindGameObjectsWithTag( "zEmptyTile" );
+		int length = empties.Length;
+		for( int i = 0; i < length; i++ )
+		{
+			allEmptyTiles.Add( empties[i] );
+			empties[i] = null;
+		}
 	}
 	#endregion
 
 	#region void OnEnable()
 	public void OnEnable()
 	{
+		FallingTileScript.onFallingTile += AddEmptyTileToList;
 		// Add listeners here
 		Messenger<int>.AddListener( "set player original orientation state", SetPlayerOriginalOrientationState );
 		Messenger<int,int,int>.AddListener( "set player original rotation", SetPlayerOriginalRotation );
@@ -106,6 +116,7 @@ public class HotDogScript : MonoBehaviour
 	#region void OnDisable()
 	public void OnDisable()
 	{
+		FallingTileScript.onFallingTile -= AddEmptyTileToList;
 		// Remove listeners here
 		Messenger<int>.RemoveListener( "set player original orientation state", SetPlayerOriginalOrientationState );
 		Messenger<int,int,int>.RemoveListener( "set player original rotation", SetPlayerOriginalRotation );
@@ -365,6 +376,8 @@ public class HotDogScript : MonoBehaviour
 			case "GoalTile":
 				if( orientationState == OrientationState.VERTICAL )
 				{
+					if( onLevelComplete != null )
+						onLevelComplete();
 					Debug.Log( "Hit goal tile!" );
 					EventAggregatorManager.Publish( new PlaySoundMessage( "goal", false ) );// Play the goal sound
 					bCanMove = false;														// Don't allow the player to move now
@@ -398,6 +411,17 @@ public class HotDogScript : MonoBehaviour
 			if( bCanMove && !bTouchingATile )
 			{
 				StartCoroutine( MoveDogOnConveyor( other.gameObject ) );
+			}
+			break;
+
+		case "zEmptyTile":
+			if( !bFalling )
+			{
+				Debug.Log( "Staying on empty tile" );
+				bTouchingATile = true;
+				bCanMove = false;
+				bFalling = true;
+				StartCoroutine( FallDown() );
 			}
 			break;
 		}
@@ -533,7 +557,7 @@ public class HotDogScript : MonoBehaviour
 		if( oState == 1 )
 		{
 			counter = 0;
-			while( counter < allEmptyTiles.Length )
+			while( counter < allEmptyTiles.Count )
 			{
 				if( allEmptyTiles[counter] != null )
 				{
@@ -554,7 +578,7 @@ public class HotDogScript : MonoBehaviour
 		if( oState == 2 )
 		{
 			counter = 0;
-			while( counter < allEmptyTiles.Length )
+			while( counter < allEmptyTiles.Count )
 			{
 				if( allEmptyTiles[counter] != null )
 				{
@@ -581,7 +605,7 @@ public class HotDogScript : MonoBehaviour
 		if( oState == 3 )
 		{
 			counter = 0;
-			while( counter < allEmptyTiles.Length )
+			while( counter < allEmptyTiles.Count )
 			{
 				if( allEmptyTiles[counter] != null )
 				{
@@ -611,6 +635,7 @@ public class HotDogScript : MonoBehaviour
 		{
 			if( transform.position.y < fSizzleHeight )
 				EventAggregatorManager.Publish(new PlaySoundMessage("death", false));
+
 			#region Vert / Horz Fall
 			// If the dog's orientation is vert/horz
 			if( oState == 3 )
@@ -778,7 +803,7 @@ public class HotDogScript : MonoBehaviour
 	{
 		while( true )
 		{
-			transform.position -= new Vector3( 0, fFallSpeed * Time.deltaTime, 0 );
+			transform.position -= new Vector3( 0, fGoalSpeed * Time.deltaTime, 0 );
 			yield return null;
 		}
 	}
@@ -802,8 +827,6 @@ public class HotDogScript : MonoBehaviour
 		orientationState = oStateOriginal;												// Reset the player's orientation state
 		bCanMove = true;																// Allow the player to move again
 		bFalling = false;
-
-		// TODO: Don't forget to reset the level as well, ketchup, mustard, relish - -or just reload the level.
 	}
 	#endregion
 
@@ -834,6 +857,63 @@ public class HotDogScript : MonoBehaviour
 		// If you have all condiments
 		else if( bFullDog )
 			renderer.material = hotdogMaterials[7];
+	}
+	#endregion
+
+	#region void AddEmptyTileToList( GameObject tile )
+	void AddEmptyTileToList( GameObject tile )
+	{
+		allEmptyTiles.Add( tile );
+
+		// Check to see if the dog is currently in this position 
+		if( orientationState == OrientationState.VERTICAL )
+		{
+			// Make it fall if it is
+			if( (int)Mathf.Round(transform.position.x) == (int)Mathf.Round(tile.transform.position.x) &&
+			    (int)Mathf.Round(transform.position.z) == (int)Mathf.Round(tile.transform.position.z) )
+			{
+				if( !bFalling )
+				{
+					Debug.Log( "Staying on empty tile" );
+					bTouchingATile = true;
+					bCanMove = false;
+					bFalling = true;
+					StartCoroutine( FallDown() );
+				}
+			}
+		}
+		else if( orientationState == OrientationState.HORIZONTAL )
+		{
+			if( ( (int)Mathf.Round(transform.position.x) == (int)Mathf.Round(tile.transform.position.x + 25) ||
+			      (int)Mathf.Round(transform.position.x) == (int)Mathf.Round(tile.transform.position.x - 25) ) &&
+			      (int)Mathf.Round(transform.position.z) == (int)Mathf.Round(tile.transform.position.z) )
+			{
+				if( !bFalling )
+				{
+					Debug.Log( "Staying on empty tile" );
+					bTouchingATile = true;
+					bCanMove = false;
+					bFalling = true;
+					StartCoroutine( FallDown() );
+				}
+			}
+		}
+		else if( orientationState == OrientationState.VERTANDHORZ )
+		{
+			if( (int)Mathf.Round(transform.position.x) == (int)Mathf.Round(tile.transform.position.x) &&
+			    ( (int)Mathf.Round(transform.position.z) == (int)Mathf.Round(tile.transform.position.z - 25 ) ||
+			 	  (int)Mathf.Round(transform.position.z) == (int)Mathf.Round(tile.transform.position.z + 25 ) ) )
+			{
+				if( !bFalling )
+				{
+					Debug.Log( "Staying on empty tile" );
+					bTouchingATile = true;
+					bCanMove = false;
+					bFalling = true;
+					StartCoroutine( FallDown() );
+				}
+			}
+		}
 	}
 	#endregion
 }

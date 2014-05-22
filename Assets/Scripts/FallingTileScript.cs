@@ -3,10 +3,13 @@ using System.Collections;
 
 public class FallingTileScript : MonoBehaviour 
 {
+	public delegate void FallingTileFell(GameObject tileToAdd);
+	public static event FallingTileFell onFallingTile;
+
 	public bool bBeenTouched = false;										// Has the player touched the falling tile yet
 
 	public float fTimeTilFalling = 3.0f;									// Time until the tile falls once touched by the player
-	public float fFallingSpeed = 50.0f;
+	private float fFallingSpeed = 200.0f;
 	private const float KILLHEIGHT = -300.0f;
 	private bool bGeneratedEmptyTile = false;
 
@@ -40,7 +43,9 @@ public class FallingTileScript : MonoBehaviour
 				{
 					Vector3 tempPosition = this.transform.position;
 					tempPosition += new Vector3( 0, 7.5f, 0 );
-					Instantiate( emptyTile, tempPosition, Quaternion.Euler( new Vector3( 0, 0, 0 ) ) );
+					GameObject tempO = Instantiate( emptyTile, tempPosition, Quaternion.Euler( new Vector3( 0, 0, 0 ) ) ) as GameObject;
+					if( onFallingTile != null )											// If there is a subscriber
+						onFallingTile( tempO );
 					bGeneratedEmptyTile = true;
 				}
 
