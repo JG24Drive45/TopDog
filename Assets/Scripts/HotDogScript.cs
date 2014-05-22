@@ -65,6 +65,7 @@ public class HotDogScript : MonoBehaviour
 	private bool bCanMove = true;												// Can the player currently move
 	private string sLastKeyUsed;													// Last arrow button the player used
 	private bool bIsTeleporting = false;										// Is the player currently teleporting?
+	private Vector3 v3LastTeleportedLocation;
 	private bool bTouchingATile = true;											// Is the player currently touching any tiles?
 	private bool bOnConveyor = false;
 
@@ -281,20 +282,23 @@ public class HotDogScript : MonoBehaviour
 	void TeleportPlayer( Vector3 tilePosition )
 	{
 		GameObject[] teleporters = GameObject.FindGameObjectsWithTag( "TeleporterTile" );
-		for( int i = 0; i < teleporters.Length; i++ )
+		int numTeleporters = teleporters.Length;
+
+		int randomNum = Random.Range(0, numTeleporters);
+
+		while( teleporters[randomNum].transform.position == tilePosition || teleporters[randomNum].transform.position == v3LastTeleportedLocation )
 		{
-			if( teleporters[i].transform.position != tilePosition )
-			{
-				// Play the teleport sound
-				EventAggregatorManager.Publish(new PlaySoundMessage("teleport", false));
-				// Set the player's x and z position values to that of the teleporter tile
-				transform.position = new Vector3( teleporters[i].transform.position.x, transform.position.y, teleporters[i].transform.position.z );
-				// Set teleporting to true
-				bIsTeleporting = true;
-				// Break from the loop
-				break;
-			}
+			randomNum = Random.Range(0, numTeleporters);
 		}
+
+		// Play the teleport sound
+		EventAggregatorManager.Publish(new PlaySoundMessage("teleport", false));
+		// Set the player's x and z position values to that of the teleporter tile
+		transform.position = new Vector3( teleporters[randomNum].transform.position.x, transform.position.y, teleporters[randomNum].transform.position.z );
+		// Set teleporting to true
+		bIsTeleporting = true;
+
+		v3LastTeleportedLocation = tilePosition;
 	}
 	#endregion
 
