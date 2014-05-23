@@ -44,6 +44,7 @@ public class FallingTileScript : MonoBehaviour
 					Vector3 tempPosition = this.transform.position;
 					tempPosition += new Vector3( 0, 7.5f, 0 );
 					GameObject tempO = Instantiate( emptyTile, tempPosition, Quaternion.Euler( new Vector3( 0, 0, 0 ) ) ) as GameObject;
+                    tempO.transform.parent = this.transform;
 					if( onFallingTile != null )											// If there is a subscriber
 						onFallingTile( tempO );
 					bGeneratedEmptyTile = true;

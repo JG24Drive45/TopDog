@@ -82,7 +82,7 @@ public class SoundEffectInstances
                 apObject.transform.position = Vector3.zero;
                 apObject.AddComponent<AudioSource>();
                 AudioSource apAudio = apObject.GetComponent<AudioSource>();
-
+                
                 apAudio.playOnAwake = false;
                 apAudio.rolloffMode = AudioRolloffMode.Linear;
                 apAudio.loop = looping;
@@ -122,9 +122,10 @@ public class SoundManager : MonoBehaviour,
     IHandle<StopSoundLoopMessage>,
     IHandle<PlaySoundMessage>,
     IHandle<PauseSoundMessage>,
-    IHandle<ResumeSoundMessage>
+    IHandle<ResumeSoundMessage>,
+    IHandle<LoadSoundMessage>
 {
-    public Dictionary<string, SoundEffects> m_Sounds = new Dictionary<string, SoundEffects>();
+    private Dictionary<string, SoundEffects> m_Sounds = new Dictionary<string, SoundEffects>();
     private Dictionary<string, SoundEffectInstances> m_PlayingSounds = new Dictionary<string, SoundEffectInstances>();
     private Dictionary<string, LoopingSoundEfectInstances> m_PlayingSoundLoop = new Dictionary<string, LoopingSoundEfectInstances>();
     EventAggregator m_EventAggregator;
@@ -154,7 +155,8 @@ public class SoundManager : MonoBehaviour,
         {
             throw new InvalidOperationException(string.Format("Sound '{0}' has already been loaded", soundName));
         }
-        m_Sounds.Add(soundName, new SoundEffects(clip, 1));
+        else
+            m_Sounds.Add(soundName, new SoundEffects(clip, 1));
     }
 
     public void LoadSound(string soundName, AudioClip clip, float vol)
@@ -163,7 +165,8 @@ public class SoundManager : MonoBehaviour,
         {
             throw new InvalidOperationException(string.Format("Sound '{0}' has already been loaded", soundName));
         }
-        m_Sounds.Add(soundName, new SoundEffects(clip, 1, vol));
+        else
+            m_Sounds.Add(soundName, new SoundEffects(clip, 1, vol));
     }
 
     public void LoadSound(string soundName, AudioClip clip, int instances)
@@ -172,8 +175,8 @@ public class SoundManager : MonoBehaviour,
         {
             throw new InvalidOperationException(string.Format("Sound '{0}' has already been loaded", soundName));
         }
-
-        m_Sounds.Add(soundName, new SoundEffects(clip, instances));
+        else
+            m_Sounds.Add(soundName, new SoundEffects(clip, instances));
     }
 
     public void LoadSound(string soundName, string soundPath)
@@ -182,7 +185,8 @@ public class SoundManager : MonoBehaviour,
         {
             throw new InvalidOperationException(string.Format("Sound '{0}' has already been loaded", soundName));
         }
-        m_Sounds.Add(soundName, new SoundEffects(Resources.Load<AudioClip>(soundPath), 1));
+        else
+            m_Sounds.Add(soundName, new SoundEffects(Resources.Load<AudioClip>(soundPath), 1));
     }
 
     public void LoadSound(string soundName, string soundPath, float vol)
@@ -191,8 +195,8 @@ public class SoundManager : MonoBehaviour,
         {
             throw new InvalidOperationException(string.Format("Sound '{0}' has already been loaded", soundName));
         }
-
-        m_Sounds.Add(soundName, new SoundEffects(Resources.Load<AudioClip>(soundPath), 1, vol));
+        else
+            m_Sounds.Add(soundName, new SoundEffects(Resources.Load<AudioClip>(soundPath), 1, vol));
     }
 
     public void LoadSound(string soundName, string soundPath, int instances)
@@ -201,8 +205,8 @@ public class SoundManager : MonoBehaviour,
         {
             throw new InvalidOperationException(string.Format("Sound '{0}' has already been loaded", soundName));
         }
-
-        m_Sounds.Add(soundName, new SoundEffects(Resources.Load<AudioClip>(soundPath), instances));
+        else
+            m_Sounds.Add(soundName, new SoundEffects(Resources.Load<AudioClip>(soundPath), instances));
     }
 
     public void PlaySound(string soundName, float volume, float pitch, float pan)
@@ -412,7 +416,7 @@ public class SoundManager : MonoBehaviour,
     public void Handle(PlaySoundMessage message)
     {
 
-        Debug.Log("PlaySound Message");
+        //Debug.Log("PlaySound Message");
         if (message.LoopAble)
         {
             if (message.FadeInDuration > 0)
@@ -454,5 +458,10 @@ public class SoundManager : MonoBehaviour,
     public void Handle(ResumeSoundMessage message)
     {
         ResumeSound(message.SoundName);
+    }
+
+    public void Handle(LoadSoundMessage message)
+    {
+        LoadSound(message.SoundName, message.FileName,message.Instances);
     }
 }

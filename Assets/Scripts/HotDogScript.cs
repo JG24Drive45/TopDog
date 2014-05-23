@@ -802,7 +802,9 @@ public class HotDogScript : MonoBehaviour
 		}
 
 		StopAllCoroutines();
-		Application.LoadLevel( Application.loadedLevelName );
+        EventAggregatorManager.Publish(new DestroyLevelMessage(LevelGeneratorScript.sLevel));
+        EventAggregatorManager.Publish(new LoadLevelMessage(LevelGeneratorScript.sLevel));
+
 	}
 	#endregion
 

@@ -1,4 +1,17 @@
 ﻿
+public class LoadSoundMessage
+{
+    public string SoundName;
+    public string FileName;
+    public int Instances;
+    public LoadSoundMessage(string soundName, string fileName, int inst)
+    {
+        SoundName = soundName;
+        FileName = fileName;
+        Instances = inst;
+    }
+}
+
 public class PauseSoundMessage
 {
     public string SoundName { get; set; }

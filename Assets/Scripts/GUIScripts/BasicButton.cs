@@ -16,7 +16,7 @@ public class BasicButton : MonoBehaviour {
 		guiTexture.texture = Normal;
 	}
 	
-	void OnMouseDown(){
-		Application.LoadLevel (LevelToLoad);
+	void OnMouseUp(){
+        EventAggregatorManager.Publish(new LoadLevelMessage(LevelToLoad));
 	}
 }
