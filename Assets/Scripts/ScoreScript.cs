@@ -35,31 +35,33 @@ public class ScoreScript : MonoBehaviour {
 	{
 		HotDogScript.onCondimentAcquired += AcquiredCondiment;
 		LevelGeneratorScript.onLevelStart += StartTimer;
+		LevelGeneratorScript.onSetLevelNum += setLevel;
 		HotDogScript.onLevelComplete += LevelComplete;
 
-		Messenger.AddListener( "increment move count", IncrementMoveCount );
-		Messenger<int>.AddListener( "set level", setLevel );
-		Messenger<float>.AddListener( "time bonus", TimeBonus );
-		Messenger<bool>.AddListener( "level complete", LevelComplete );
-		Messenger<int>.AddListener( "set score", setScore );
-		Messenger<int>.AddListener( "set move count", setPlayerMoveCount );
-		Messenger<float>.AddListener( "set time", setPlayerTime );
-		Messenger<string>.AddListener( "set player name", setPlayerName );
+//		Messenger.AddListener( "increment move count", IncrementMoveCount );
+//		Messenger<int>.AddListener( "set level", setLevel );
+//		Messenger<float>.AddListener( "time bonus", TimeBonus );
+//		Messenger<bool>.AddListener( "level complete", LevelComplete );
+//		Messenger<int>.AddListener( "set score", setScore );
+//		Messenger<int>.AddListener( "set move count", setPlayerMoveCount );
+//		Messenger<float>.AddListener( "set time", setPlayerTime );
+//		Messenger<string>.AddListener( "set player name", setPlayerName );
 	}
 
 	public void OnDisable()
 	{
 		HotDogScript.onCondimentAcquired -= AcquiredCondiment;
 		LevelGeneratorScript.onLevelStart -= StartTimer;
+		LevelGeneratorScript.onSetLevelNum -= setLevel;
 		HotDogScript.onLevelComplete -= LevelComplete;
 
-		Messenger.RemoveListener( "increment move count", IncrementMoveCount );
-		Messenger<int>.RemoveListener( "set level", setLevel );
-		Messenger<float>.RemoveListener( "time bonus", TimeBonus );
-		Messenger<bool>.RemoveListener( "level complete", LevelComplete );
-		Messenger<int>.RemoveListener( "set score", setScore );
-		Messenger<int>.RemoveListener( "set move count", setPlayerMoveCount );
-		Messenger<float>.RemoveListener( "set time", setPlayerTime );
+//		Messenger.RemoveListener( "increment move count", IncrementMoveCount );
+//		Messenger<int>.RemoveListener( "set level", setLevel );
+//		Messenger<float>.RemoveListener( "time bonus", TimeBonus );
+//		Messenger<bool>.RemoveListener( "level complete", LevelComplete );
+//		Messenger<int>.RemoveListener( "set score", setScore );
+//		Messenger<int>.RemoveListener( "set move count", setPlayerMoveCount );
+//		Messenger<float>.RemoveListener( "set time", setPlayerTime );
 	}
 	
 	// Update is called once per frame
