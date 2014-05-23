@@ -816,7 +816,6 @@ public class HotDogScript : MonoBehaviour
 			transform.position -= new Vector3( 0, fGoalSpeed * Time.deltaTime, 0 );
 			yield return null;
 		}
-		Debug.Log( "Testing" );
 	}
 	#endregion
 

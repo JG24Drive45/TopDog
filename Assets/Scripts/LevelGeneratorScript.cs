@@ -8,7 +8,11 @@ public class LevelGeneratorScript : MonoBehaviour,
 {
 	
 	public delegate void LevelStart();
+	public delegate void SetLevelNum( int num );
+
 	public static event LevelStart onLevelStart;
+	public static event SetLevelNum onSetLevelNum;
+
 
 	// GameObject variables
 	public GameObject mainTile;
@@ -49,8 +53,9 @@ public class LevelGeneratorScript : MonoBehaviour,
         //sLevel = System.IO.Path.GetFileNameWithoutExtension(EditorApplication.currentScene);						// Get the name of the current level
         Debug.Log(sLevel);
 		iLevelNum = int.Parse( sLevel.Substring( 5 ) );				// Level number for the score script
-        Debug.Log(iLevelNum);
-		Messenger<int>.Broadcast( "set level", iLevelNum );			// Send the level number to the score script
+
+		if( onSetLevelNum != null )
+			onSetLevelNum( iLevelNum );
 
 		string[] lines;												// Array that stores text file info
 		TextAsset data;												// Text file variable
@@ -159,6 +164,7 @@ public class LevelGeneratorScript : MonoBehaviour,
 		if( onLevelStart != null )
 			onLevelStart();
 	}
+	#endregion
 
     void OnDestroy()
     {
@@ -171,7 +177,7 @@ public class LevelGeneratorScript : MonoBehaviour,
     }
 
 
-	#endregion
+
 
 	#region OnEnable()
 	void OnEnable()
