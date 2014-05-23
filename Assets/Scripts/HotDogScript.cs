@@ -296,15 +296,26 @@ public class HotDogScript : MonoBehaviour
 
 		int randomNum = Random.Range(0, numTeleporters);
 
-		while( teleporters[randomNum].transform.position == tilePosition || teleporters[randomNum].transform.position == v3LastTeleportedLocation )
+		if( numTeleporters == 2 )
 		{
-			randomNum = Random.Range(0, numTeleporters);
+			if( teleporters[0].transform.position == tilePosition )
+				transform.position = new Vector3( teleporters[1].transform.position.x, transform.position.y, teleporters[1].transform.position.z );
+			else
+				transform.position = new Vector3( teleporters[0].transform.position.x, transform.position.y, teleporters[0].transform.position.z );
+		}
+		else
+		{
+			while( teleporters[randomNum].transform.position == tilePosition || teleporters[randomNum].transform.position == v3LastTeleportedLocation )
+			{
+				randomNum = Random.Range(0, numTeleporters);
+			}
+
+			// Set the player's x and z position values to that of the teleporter tile
+			transform.position = new Vector3( teleporters[randomNum].transform.position.x, transform.position.y, teleporters[randomNum].transform.position.z );
 		}
 
 		// Play the teleport sound
 		EventAggregatorManager.Publish(new PlaySoundMessage("teleport", false));
-		// Set the player's x and z position values to that of the teleporter tile
-		transform.position = new Vector3( teleporters[randomNum].transform.position.x, transform.position.y, teleporters[randomNum].transform.position.z );
 		// Set teleporting to true
 		bIsTeleporting = true;
 
@@ -430,7 +441,6 @@ public class HotDogScript : MonoBehaviour
 		switch( other.gameObject.tag )
 		{
 		case "Conveyor":
-			Debug.Log( other.transform.rotation.eulerAngles.y );
 			if( bCanMove && !bTouchingATile )
 			{
 				StartCoroutine( MoveDogOnConveyor( other.gameObject ) );
