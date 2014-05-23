@@ -816,6 +816,7 @@ public class HotDogScript : MonoBehaviour
 			transform.position -= new Vector3( 0, fGoalSpeed * Time.deltaTime, 0 );
 			yield return null;
 		}
+		Debug.Log( "Testing" );
 	}
 	#endregion
 
@@ -873,6 +874,8 @@ public class HotDogScript : MonoBehaviour
 	#region void AddEmptyTileToList( GameObject tile )
 	void AddEmptyTileToList( GameObject tile )
 	{
+		GameObject levGen = GameObject.FindGameObjectWithTag("LevelGenerator");
+		tile.transform.parent = levGen.transform;
 		allEmptyTiles.Add( tile );
 
 		// Check to see if the dog is currently in this position 
