@@ -15,12 +15,14 @@ public class SwitchScript : MonoBehaviour
 
 	void OnEnable()
 	{
-		Messenger.AddListener( "set active switch material", SetActiveMaterial );
+		//Messenger.AddListener( "set active switch material", SetActiveMaterial );
+		HotDogScript.onActivateSwitch += SetActiveMaterial;
 	}
 
 	void OnDisable()
 	{
-		Messenger.RemoveListener( "set active switch material", SetActiveMaterial );
+		//Messenger.RemoveListener( "set active switch material", SetActiveMaterial );
+		HotDogScript.onActivateSwitch -= SetActiveMaterial;
 	}
 	
 	// Update is called once per frame

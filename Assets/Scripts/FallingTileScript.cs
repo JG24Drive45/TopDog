@@ -17,12 +17,14 @@ public class FallingTileScript : MonoBehaviour
 
 	public void OnEnable()
 	{
-		Messenger.AddListener( "falling tile touched", ToggleBeenTouched );
+		//Messenger.AddListener( "falling tile touched", ToggleBeenTouched );
+		HotDogScript.onFallingTileTouched += ToggleBeenTouched;
 	}
 
 	public void OnDisable()
 	{
-		Messenger.RemoveListener( "falling tile touched", ToggleBeenTouched );
+		//Messenger.RemoveListener( "falling tile touched", ToggleBeenTouched );
+		HotDogScript.onFallingTileTouched -= ToggleBeenTouched;
 	}
 
 	// Use this for initialization
@@ -69,12 +71,14 @@ public class FallingTileScript : MonoBehaviour
 		}
 	}
 
-	public void ToggleBeenTouched()
+	public void ToggleBeenTouched( GameObject go )
 	{
-		if( !bBeenTouched )
+		if( this.gameObject == go && !bBeenTouched )
+		{
 			bBeenTouched = true;
 
-		// Turn off the box collider
-		GetComponent<BoxCollider>().enabled = false;
+			// Turn off the box collider
+			GetComponent<BoxCollider>().enabled = false;
+		}
 	}
 }

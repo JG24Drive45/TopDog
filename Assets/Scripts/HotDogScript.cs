@@ -7,11 +7,17 @@ public class HotDogScript : MonoBehaviour
 	#region Delegates
 	public delegate void CondimentHandler();
 	public delegate void LevelComplete(bool gotAllCondiments);
+	public delegate void ActivateSwitch();
+	public delegate void ActivateBridge();
+	public delegate void FallingTileTouched( GameObject go );
 	#endregion
 
 	#region Events
 	public static event CondimentHandler onCondimentAcquired;
 	public static event LevelComplete onLevelComplete;
+	public static event ActivateSwitch onActivateSwitch;
+	public static event ActivateBridge onActivateBridge;
+	public static event FallingTileTouched onFallingTileTouched;
 	#endregion
 
 	#region Hotdog Movement Offsets
@@ -109,9 +115,11 @@ public class HotDogScript : MonoBehaviour
 	public void OnEnable()
 	{
 		FallingTileScript.onFallingTile += AddEmptyTileToList;
+		LevelGeneratorScript.onSetOState += SetPlayerOriginalOrientationState;
+
 		// Add listeners here
-		Messenger<int>.AddListener( "set player original orientation state", SetPlayerOriginalOrientationState );
-		Messenger<int,int,int>.AddListener( "set player original rotation", SetPlayerOriginalRotation );
+		//Messenger<int>.AddListener( "set player original orientation state", SetPlayerOriginalOrientationState );
+		//Messenger<int,int,int>.AddListener( "set player original rotation", SetPlayerOriginalRotation );
 	}
 	#endregion
 
@@ -119,9 +127,11 @@ public class HotDogScript : MonoBehaviour
 	public void OnDisable()
 	{
 		FallingTileScript.onFallingTile -= AddEmptyTileToList;
+		LevelGeneratorScript.onSetOState -= SetPlayerOriginalOrientationState;
+
 		// Remove listeners here
-		Messenger<int>.RemoveListener( "set player original orientation state", SetPlayerOriginalOrientationState );
-		Messenger<int,int,int>.RemoveListener( "set player original rotation", SetPlayerOriginalRotation );
+		//Messenger<int>.RemoveListener( "set player original orientation state", SetPlayerOriginalOrientationState );
+		//Messenger<int,int,int>.RemoveListener( "set player original rotation", SetPlayerOriginalRotation );
 	}
 	#endregion
 	
@@ -326,7 +336,10 @@ public class HotDogScript : MonoBehaviour
 
 			case "FallingTile":
 				bTouchingATile = true;
-				other.gameObject.SendMessage( "ToggleBeenTouched" );
+				//other.gameObject.SendMessage( "ToggleBeenTouched" );
+				if( onFallingTileTouched != null )
+					onFallingTileTouched( other.gameObject );
+
 				Debug.Log( "Touched falling tile" );
 				break;
 
@@ -336,8 +349,12 @@ public class HotDogScript : MonoBehaviour
 				if( other.gameObject.GetComponent<CapsuleCollider>().enabled )
 				{
 					other.gameObject.GetComponent<CapsuleCollider>().enabled = false;
-					Messenger.Broadcast( "set active switch material" );
-					Messenger.Broadcast( "activate bridge" );
+					//Messenger.Broadcast( "set active switch material" );
+					if( onActivateSwitch != null )
+						onActivateSwitch();
+					//Messenger.Broadcast( "activate bridge" );
+					if( onActivateBridge != null )
+						onActivateBridge();
 				}
 				break;
 

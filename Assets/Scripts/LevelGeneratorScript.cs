@@ -9,9 +9,11 @@ public class LevelGeneratorScript : MonoBehaviour,
 	
 	public delegate void LevelStart();
 	public delegate void SetLevelNum( int num );
+	public delegate void SetPlayerOrientationState( int state );
 
 	public static event LevelStart onLevelStart;
 	public static event SetLevelNum onSetLevelNum;
+	public static event SetPlayerOrientationState onSetOState;
 
 
 	// GameObject variables
@@ -132,7 +134,9 @@ public class LevelGeneratorScript : MonoBehaviour,
 		int tempState = int.Parse( lines[36] );
 		//Debug.Log( "OState is: " + tempState );
 		// Send the message to set the player's orientation state
-		Messenger<int>.Broadcast( "set player original orientation state", tempState );
+		//Messenger<int>.Broadcast( "set player original orientation state", tempState );
+		if( onSetOState != null )
+			onSetOState( tempState );
 		#endregion
 
 		// Instantiate the coals

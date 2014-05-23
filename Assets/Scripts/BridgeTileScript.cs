@@ -11,12 +11,14 @@ public class BridgeTileScript : MonoBehaviour {
 
 	void OnEnable()
 	{
-		Messenger.AddListener( "activate bridge", ActivateBridge );
+		//Messenger.AddListener( "activate bridge", ActivateBridge );
+		HotDogScript.onActivateBridge += ActivateBridge;
 	}
 
 	void OnDisable()
 	{
-		Messenger.RemoveListener( "activate bridge", ActivateBridge );
+		//Messenger.RemoveListener( "activate bridge", ActivateBridge );
+		HotDogScript.onActivateBridge -= ActivateBridge;
 	}
 
 	// Use this for initialization
