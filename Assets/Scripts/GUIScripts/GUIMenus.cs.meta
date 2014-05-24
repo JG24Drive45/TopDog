@@ -1,0 +1,22 @@
+fileFormatVersion: 2
+guid: edeb50938ab2843449387cecf67817f0
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences:
+  - mainMenu: {instanceID: 0}
+  - instructions: {instanceID: 0}
+  - highscores: {instanceID: 0}
+  - credits: {instanceID: 0}
+  - options: {instanceID: 0}
+  - title: {instanceID: 0}
+  - background: {instanceID: 0}
+  - playBtn: {instanceID: 0}
+  - instructionsBtn: {instanceID: 0}
+  - highScoresBtn: {instanceID: 0}
+  - creditsBtn: {instanceID: 0}
+  - optionsBtn: {instanceID: 0}
+  - exitBtn: {instanceID: 0}
+  - backBtn: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 

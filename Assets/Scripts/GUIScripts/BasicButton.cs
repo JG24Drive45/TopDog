@@ -3,10 +3,10 @@ using System.Collections;
 
 public class BasicButton : MonoBehaviour {
 
-	
+//	public enum GUIState{ TITLE, MAINMENU, INSTRUCTIONS, HIGHSCORES, CREDITS, OPTIONS };	
 	public Texture2D Normal ;
 	public Texture2D Hover;
-	public string LevelToLoad ;
+	public string state ;
 
 	void OnMouseEnter(){
 		guiTexture.texture = Hover;
@@ -15,8 +15,24 @@ public class BasicButton : MonoBehaviour {
 	void OnMouseExit(){
 		guiTexture.texture = Normal;
 	}
-	
+
 	void OnMouseUp(){
-        EventAggregatorManager.Publish(new LoadLevelMessage(LevelToLoad));
+		if (state == "CREDITS") {
+						GUIMenus.menuState = GUIMenus.GUIState.CREDITS;
+				}
+		else if (state == "INSTRUCTIONS") {
+			GUIMenus.menuState = GUIMenus.GUIState.INSTRUCTIONS;
+		}
+		else if (state == "HIGHSCORES") {
+			GUIMenus.menuState = GUIMenus.GUIState.HIGHSCORES;
+		}
+		else if (state == "OPTIONS") {
+			GUIMenus.menuState = GUIMenus.GUIState.OPTIONS;
+		}
+		else if (state == "MAINMENU") {
+			GUIMenus.menuState = GUIMenus.GUIState.MAINMENU;
+		}
+		guiTexture.texture = Normal;
 	}
+
 }
