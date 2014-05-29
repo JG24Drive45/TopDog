@@ -30,6 +30,8 @@ public class LevelGeneratorScript : MonoBehaviour,
 	public GameObject player;
 	public GameObject switchObject;
 	public GameObject coals;
+	public GameObject pauseMenu;
+	public GameObject levelCompleteMenu;
 
     void SetParents()
     {
@@ -162,6 +164,9 @@ public class LevelGeneratorScript : MonoBehaviour,
 		{
 			(Instantiate( emptyTile, new Vector3( 850, 7.5f, -(i * 50) ), Quaternion.Euler( new Vector3( 0, 0, 0 ) ) )as GameObject).transform.parent = this.transform;
 		}
+
+		(Instantiate( pauseMenu, new Vector3( 0, 0, 0), Quaternion.identity) as GameObject).transform.parent = this.transform;
+		(Instantiate( levelCompleteMenu, new Vector3( 0, 0, 0), Quaternion.identity) as GameObject ).transform.parent = this.transform;
         
         //LoadSounds();
 
@@ -186,14 +191,17 @@ public class LevelGeneratorScript : MonoBehaviour,
 	#region OnEnable()
 	void OnEnable()
 	{
-		HotDogScript.onLevelComplete += LoadNextLevel;
+		InGameButton.onNextLevel += LoadNextLevel;
+		InGameButton.onMainMenu += LoadMainMenu;
+		//HotDogScript.onLevelComplete += LoadNextLevel;
 	}
 	#endregion
 
 	#region OnDisable()
 	void OnDisable()
 	{
-		HotDogScript.onLevelComplete -= LoadNextLevel;
+		InGameButton.onNextLevel -= LoadNextLevel;
+		InGameButton.onMainMenu -= LoadMainMenu;
 	}
 	#endregion
 	
@@ -210,21 +218,26 @@ public class LevelGeneratorScript : MonoBehaviour,
             //Debug.Log("Key Pressed");
             EventAggregatorManager.Publish(new StopSoundLoopMessage("lvlMusic"));
         }
+
 	}
 	#endregion
 
 	#region void LoadNextLevel()
-	void LoadNextLevel(bool b)
+	void LoadNextLevel()
 	{
 		iLevelNum++;
-		Invoke( "LoadNext", 3.0f );
+		//Invoke( "LoadNext", 3.0f );
+		EventAggregatorManager.Publish(new LoadLevelMessage("Level" + iLevelNum.ToString()));
+		Destroy(transform.gameObject);
 	}
 	#endregion
 
-	void LoadNext()
+	void LoadMainMenu()
 	{
-        EventAggregatorManager.Publish(new LoadLevelMessage("Level" + iLevelNum.ToString()));
+        //EventAggregatorManager.Publish(new LoadLevelMessage("Level" + iLevelNum.ToString()));
         Destroy(transform.gameObject);
+		GUIMenus.menuState = GUIMenus.GUIState.MAINMENU;
+		Application.LoadLevel( "MenuScreen" );
 	}
 
     public void Handle(DestroyLevelMessage message)

@@ -37,6 +37,7 @@ public class ScoreScript : MonoBehaviour {
 		LevelGeneratorScript.onLevelStart += StartTimer;
 		LevelGeneratorScript.onSetLevelNum += setLevel;
 		HotDogScript.onLevelComplete += LevelComplete;
+		LevelCompleteScript.onNeedScore += getScore;
 
 //		Messenger.AddListener( "increment move count", IncrementMoveCount );
 //		Messenger<int>.AddListener( "set level", setLevel );
@@ -54,6 +55,7 @@ public class ScoreScript : MonoBehaviour {
 		LevelGeneratorScript.onLevelStart -= StartTimer;
 		LevelGeneratorScript.onSetLevelNum -= setLevel;
 		HotDogScript.onLevelComplete -= LevelComplete;
+		LevelCompleteScript.onNeedScore -= getScore;
 
 //		Messenger.RemoveListener( "increment move count", IncrementMoveCount );
 //		Messenger<int>.RemoveListener( "set level", setLevel );

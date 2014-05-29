@@ -838,7 +838,7 @@ public class HotDogScript : MonoBehaviour
 	#region IEnumerator FallThroughGoal()
 	IEnumerator FallThroughGoal()
 	{
-		while( true )
+		while( transform.position.y >= fKillHeight )
 		{
 			transform.position -= new Vector3( 0, fGoalSpeed * Time.deltaTime, 0 );
 			yield return null;
