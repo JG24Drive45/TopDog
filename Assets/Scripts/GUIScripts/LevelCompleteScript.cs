@@ -6,6 +6,7 @@ public class LevelCompleteScript : MonoBehaviour
 	public delegate int NeedScore();
 	public static event NeedScore onNeedScore;
 
+
 	int score = 0;
 
 	void Awake()
@@ -54,8 +55,9 @@ public class LevelCompleteScript : MonoBehaviour
 	}
 	
 	// Update is called once per frame
-	void Update () {
-	
+	void Update () 
+	{
+
 	}
 
 	void OnGUI()

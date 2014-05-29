@@ -172,6 +172,8 @@ public class LevelGeneratorScript : MonoBehaviour,
 
 		if( onLevelStart != null )
 			onLevelStart();
+
+		Time.timeScale = 1.0f;
 	}
 	#endregion
 
@@ -184,16 +186,13 @@ public class LevelGeneratorScript : MonoBehaviour,
             EventAggregatorManager.Publish(new LoadLevelMessage(sLevel));
 
     }
-
-
-
+	
 
 	#region OnEnable()
 	void OnEnable()
 	{
 		InGameButton.onNextLevel += LoadNextLevel;
 		InGameButton.onMainMenu += LoadMainMenu;
-		//HotDogScript.onLevelComplete += LoadNextLevel;
 	}
 	#endregion
 

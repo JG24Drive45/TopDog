@@ -9,9 +9,17 @@ public class InGameButton : MonoBehaviour
 	public delegate void MainMenu();
 	public static event MainMenu onMainMenu;
 
+	public delegate void Unpause();
+	public static event Unpause onUnpause;
+
 	public Texture2D Normal ;
 	public Texture2D Hover;
-	
+
+
+	void Update()
+	{
+	}
+
 	void OnMouseEnter(){
 		guiTexture.texture = Hover;
 	}
@@ -28,9 +36,15 @@ public class InGameButton : MonoBehaviour
 			if( onNextLevel != null )
 				onNextLevel();
 			break;
+
 		case "MainMenu":
 			if( onMainMenu != null )
 				onMainMenu();
+			break;
+
+		case "Continue":
+			if( onUnpause != null )
+				onUnpause();
 			break;
 		}
 	}

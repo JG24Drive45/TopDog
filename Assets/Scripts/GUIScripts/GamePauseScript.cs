@@ -1,7 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class GamePauseScript : MonoBehaviour {
+public class GamePauseScript : MonoBehaviour 
+{
+	public delegate void EscapeToUnpause();
+	public static event EscapeToUnpause onEscapeToUnpause;
 
 	// Use this for initialization
 	void Awake () 
@@ -34,6 +37,9 @@ public class GamePauseScript : MonoBehaviour {
 		
 		this.GetComponentInChildren<GUIText>().pixelOffset = new Vector2( sWidth * 0.5f, sHeight * 0.5f + 20.0f );
 		this.gameObject.SetActive( false );
+
+		HotDogScript.onGamePaused += Activate;
+		InGameButton.onUnpause += DeActivate;
 	}
 
 	void Start()
@@ -42,7 +48,32 @@ public class GamePauseScript : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void Update () {
-	
+	void Update () 
+	{
+		if( Input.GetKeyDown( KeyCode.Escape ) )
+		{
+			if( onEscapeToUnpause != null )
+				onEscapeToUnpause();
+			Time.timeScale = 1.0f;
+			this.gameObject.SetActive( false );
+		}
+	}
+
+	void OnDestroy()
+	{
+		HotDogScript.onGamePaused -= Activate;
+		InGameButton.onUnpause -= DeActivate;
+	}
+
+	void Activate()
+	{
+		Time.timeScale = 0.0f;
+		this.gameObject.SetActive( true );
+	}
+
+	void DeActivate()
+	{
+		Time.timeScale = 1.0f;
+		this.gameObject.SetActive( false );
 	}
 }

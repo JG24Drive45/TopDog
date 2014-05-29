@@ -10,6 +10,7 @@ public class HotDogScript : MonoBehaviour
 	public delegate void ActivateSwitch();
 	public delegate void ActivateBridge();
 	public delegate void FallingTileTouched( GameObject go );
+	public delegate void GamePaused();
 	#endregion
 
 	#region Events
@@ -18,6 +19,7 @@ public class HotDogScript : MonoBehaviour
 	public static event ActivateSwitch onActivateSwitch;
 	public static event ActivateBridge onActivateBridge;
 	public static event FallingTileTouched onFallingTileTouched;
+	public static event GamePaused onGamePaused;
 	#endregion
 
 	#region Hotdog Movement Offsets
@@ -68,6 +70,9 @@ public class HotDogScript : MonoBehaviour
 	private enum OrientationState { NONE, VERTICAL, HORIZONTAL, VERTANDHORZ };
 	private OrientationState orientationState;
 
+	private bool bLevelComplete = false;										// Is the level complete?
+
+	private bool bGamePaused = false;											// Is the game currently paused?
 	private bool bCanMove = true;												// Can the player currently move
 	private string sLastKeyUsed;													// Last arrow button the player used
 	private bool bIsTeleporting = false;										// Is the player currently teleporting?
@@ -116,10 +121,8 @@ public class HotDogScript : MonoBehaviour
 	{
 		FallingTileScript.onFallingTile += AddEmptyTileToList;
 		LevelGeneratorScript.onSetOState += SetPlayerOriginalOrientationState;
-
-		// Add listeners here
-		//Messenger<int>.AddListener( "set player original orientation state", SetPlayerOriginalOrientationState );
-		//Messenger<int,int,int>.AddListener( "set player original rotation", SetPlayerOriginalRotation );
+		InGameButton.onUnpause += UnPauseGame;
+		GamePauseScript.onEscapeToUnpause += UnPauseGame;
 	}
 	#endregion
 
@@ -128,18 +131,23 @@ public class HotDogScript : MonoBehaviour
 	{
 		FallingTileScript.onFallingTile -= AddEmptyTileToList;
 		LevelGeneratorScript.onSetOState -= SetPlayerOriginalOrientationState;
-
-		// Remove listeners here
-		//Messenger<int>.RemoveListener( "set player original orientation state", SetPlayerOriginalOrientationState );
-		//Messenger<int,int,int>.RemoveListener( "set player original rotation", SetPlayerOriginalRotation );
+		InGameButton.onUnpause -= UnPauseGame;
+		GamePauseScript.onEscapeToUnpause -= UnPauseGame;
 	}
 	#endregion
 	
 	#region void Update()
 	void Update () 
 	{
-		// Stop player from moving if they are currently falling
-		if( bCanMove )
+		if( Input.GetKeyDown( KeyCode.Escape ) && !bGamePaused && !bLevelComplete )
+		{
+			bGamePaused = true;
+			if( onGamePaused != null )
+				onGamePaused();
+		}
+
+		// Stop player from moving if they are currently falling or if the game is paused
+		if( bCanMove && !bGamePaused )
 		{
 			// MOVEMENT IF THE PLAYER PRESSES <LEFT>, <RIGHT>, <UP>, OR <DOWN>
 			if( IsMovementKeyDown() )
@@ -243,7 +251,6 @@ public class HotDogScript : MonoBehaviour
 				}
 			}
 		}
-
 	}
 	#endregion
 	
@@ -409,6 +416,7 @@ public class HotDogScript : MonoBehaviour
 			case "GoalTile":
 				if( orientationState == OrientationState.VERTICAL )
 				{
+					bLevelComplete = true;
 					if( onLevelComplete != null )
 						onLevelComplete(IsFullDog());
 					Debug.Log( "Hit goal tile!" );
@@ -953,6 +961,13 @@ public class HotDogScript : MonoBehaviour
 				}
 			}
 		}
+	}
+	#endregion
+
+	#region void UnPauseGame()
+	void UnPauseGame()
+	{
+		bGamePaused = false;
 	}
 	#endregion
 }
