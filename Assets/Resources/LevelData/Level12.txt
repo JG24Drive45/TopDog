@@ -1,16 +1,16 @@
 ; Level12  E - EmptyTile / M - MainTile / F - FallingTile / B - BridgeTile / T - TeleporterTile / G - GoalTile / 1 - ConveyorRight / 2 - ConveyorDown / 3 - ConveyorLeft / 4 - ConveyorUp
 ; Placement of Tiles Goes here - 12 rows by 17 columns - Replace ONLY the X's
 EEEEEEEEEEEEEEEEE
-EM111111M111FFFME
+EM11111MM111FFFME
 EMEEEEEEMEEEFFFBE
 EMEEEEEEMEEEFFFBE
 EMFFEEEETFFEEFFBE
 EBFFFFFFFFFFFFFME
 EBEEEEEEEEEEEEEEE
 EBEEEEEEEEEEEEEEE
-EMEEMMEEGBBBBFBME
-EEEEFFFEFFFFFFTBE
-EEEEFFFFFFFFFFFFE
+EMEEMMFEFFFGBFFME
+EEEEFFFEBFBFFTFBE
+EEEEFFFFMMMFFFFFE
 EEEEEEEEEEEEEEEEE
 ; Placement of condiments goes here -- only X and Z coordinates needed
 ; Ketchup -- X and Z coordinates only   // Increments of 50

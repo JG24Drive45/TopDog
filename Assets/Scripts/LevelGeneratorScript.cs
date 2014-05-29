@@ -56,7 +56,7 @@ public class LevelGeneratorScript : MonoBehaviour,
 		#region Load in Level Data
         //sLevel = System.IO.Path.GetFileNameWithoutExtension(EditorApplication.currentScene);						// Get the name of the current level
         Debug.Log(sLevel);
-		iLevelNum = int.Parse( sLevel.Substring( 5 ) );				// Level number for the score script
+        iLevelNum = int.Parse(sLevel.Substring(5));				// Level number for the score script
 
 		if( onSetLevelNum != null )
 			onSetLevelNum( iLevelNum );
