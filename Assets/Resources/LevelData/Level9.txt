@@ -1,32 +1,32 @@
-; Level23  E - EmptyTile / M - MainTile / F - FallingTile / B - BridgeTile / T - TeleporterTile / G - GoalTile / 1 - ConveyorRight / 2 - ConveyorDown / 3 - ConveyorLeft / 4 - ConveyorUp
+; Level21  E - EmptyTile / M - MainTile / F - FallingTile / B - BridgeTile / T - TeleporterTile / G - GoalTile / 1 - ConveyorRight / 2 - ConveyorDown / 3 - ConveyorLeft / 4 - ConveyorUp
 ; Placement of Tiles Goes here - 12 rows by 17 columns - Replace ONLY the X's
 EEEEEEEEEEEEEEEEE
-EEEEEEMFFEEETMMME
-EMMMBBBFFMMMMMMBE
-EEEMEEBBBMEEEEEBE
-EEEMEEBBBMEEEEEBE
-EEEFFFFFFFEEMEEBE
-EEEEEEEEEEEFFFFBE
-EMMEEEEEEEEFFFFBE
-EMMMFFFFFGEEEEEBE
-ETMMEEFFEEEEEMMTE
-EMEEEEFFEEMMMMMEE
+EMBBBBBBBBBBBBBTE
+EEEEEEBEEEEEFEEFE
+EEEEEEBEEEEEFEEFE
+EMMMMBBEEEMFFFFFE
+EMMMMEEEEEEEEEEEE
+EMBBFFFEEEEEEEEEE
+EMEEEFFFFFFFFFMEE
+EMEEBBEEMBEFFFEEE
+EMMMBBBBMBEFFFTEE
+EMMMMMMBBBMBBBBGE
 EEEEEEEEEEEEEEEEE
 ; Placement of condiments goes here -- only X and Z coordinates needed
 ; Ketchup -- X and Z coordinates only   // Increments of 50
-300
-50
-; Mustard -- X and Z coordinates only	// Increments of 50
-600
-250
-; Relish -- X and Z coordinates only	// Increments of 50
-50
 500
-; Placement of switchModel goes here -- X and Z coordinates only -- // Increments of 50 - Use 'none' if there is not a switch object in the level
+200
+; Mustard -- X and Z coordinates only	// Increments of 50
 50
-100
+50
+; Relish -- X and Z coordinates only	// Increments of 50
+400
+400
+; Placement of switchModel goes here -- X and Z coordinates only -- // Increments of 50 - Use 'none' if there is not a switch object in the level
+700
+350
 ; Placement of player goes here - X, Y, AND Z coordinates	// Increments of 50
-525
+275
 38
 500
 ; Player rotation orientation goes here -- X, Y, AND Z values needed	// Increments of 90
