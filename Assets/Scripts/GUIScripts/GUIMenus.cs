@@ -16,6 +16,7 @@ public class GUIMenus : MonoBehaviour {
 	public GameObject playBtn;
 	public GameObject instructionsBtn;
 	public GameObject highScoresBtn;
+	public GameObject highScoresObject;
 	public GameObject creditsBtn;
 	public GameObject optionsBtn;
 	public GameObject exitBtn;
@@ -26,11 +27,12 @@ public class GUIMenus : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 
-		menuState = GUIState.TITLE;
+//		menuState = GUIState.TITLE;
 		background.guiTexture.texture = title;
 		playBtn.SetActive (false);
 		instructionsBtn.SetActive (false);
 		highScoresBtn.SetActive (false);
+		highScoresObject.SetActive (false);
 		creditsBtn.SetActive (false);
 		optionsBtn.SetActive (false);
 		exitBtn.SetActive (false);
@@ -48,6 +50,7 @@ public class GUIMenus : MonoBehaviour {
 			playBtn.SetActive (false);
 			instructionsBtn.SetActive (false);
 			highScoresBtn.SetActive (false);
+			highScoresObject.SetActive (false);
 			creditsBtn.SetActive (false);
 			optionsBtn.SetActive (false);
 			exitBtn.SetActive (false);
@@ -61,6 +64,7 @@ public class GUIMenus : MonoBehaviour {
 			playBtn.SetActive (false);
 			instructionsBtn.SetActive (false);
 			highScoresBtn.SetActive (false);
+			highScoresObject.SetActive (true);
 			creditsBtn.SetActive (false);
 			optionsBtn.SetActive (false);
 			exitBtn.SetActive (false);
@@ -74,6 +78,7 @@ public class GUIMenus : MonoBehaviour {
 			playBtn.SetActive (false);
 			instructionsBtn.SetActive (false);
 			highScoresBtn.SetActive (false);
+			highScoresObject.SetActive (false);
 			creditsBtn.SetActive (false);
 			optionsBtn.SetActive (false);
 			exitBtn.SetActive (false);
@@ -87,6 +92,7 @@ public class GUIMenus : MonoBehaviour {
 			playBtn.SetActive (true);
 			instructionsBtn.SetActive (true);
 			highScoresBtn.SetActive (true);
+			highScoresObject.SetActive (false);
 			creditsBtn.SetActive (true);
 			optionsBtn.SetActive (true);
 			exitBtn.SetActive (true);
@@ -100,6 +106,7 @@ public class GUIMenus : MonoBehaviour {
 			playBtn.SetActive (false);
 			instructionsBtn.SetActive (false);
 			highScoresBtn.SetActive (false);
+			highScoresObject.SetActive (false);
 			creditsBtn.SetActive (false);
 			optionsBtn.SetActive (false);
 			exitBtn.SetActive (false);
