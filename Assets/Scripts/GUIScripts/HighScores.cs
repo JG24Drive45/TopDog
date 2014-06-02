@@ -37,7 +37,7 @@ public class HighScores : MonoBehaviour {
 		{
 			scores = new KeyValuePair<int,string>[11]; //stores the scores and names
 			byte i = 0;	//current entry in the array
-			string filePath = "Assets/Resources/Scores/level_" + currentLevel + "_scores.txt"; //location the scores are saved
+			string filePath = Application.dataPath + "/Resources/Scores/level_" + currentLevel + "_scores.txt"; //location the scores are saved
 			
 			//read scores
 			try
@@ -60,6 +60,12 @@ public class HighScores : MonoBehaviour {
 				//if the file does not exist, log warning and continue anyway
 				Debug.LogWarning("ScoreScript.SaveScore: could not find file " + e.FileName + ".  This message SHOULD be harmless: the script continues regardless.");
 			}
+			catch (System.IO.IsolatedStorage.IsolatedStorageException e)
+			{
+				//if the file does not exist, log warning and continue anyway
+				Debug.LogWarning("ScoreScript.SaveScore: could not find file " + e.Data + ".  This message SHOULD be harmless: the script continues regardless.");
+			}
+
 			currentLevel++;
 			string temp ;
 			temp = scores [0].ToString ();
