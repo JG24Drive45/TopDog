@@ -1,7 +1,7 @@
-﻿	using UnityEngine;
+﻿using UnityEngine;
 using System.Collections;
 using System.IO;
-using UnityEditor;
+//using UnityEditor;
 
 public class LevelGeneratorScript : MonoBehaviour,
     IHandle<DestroyLevelMessage>
@@ -226,8 +226,16 @@ public class LevelGeneratorScript : MonoBehaviour,
 	{
 		iLevelNum++;
 		//Invoke( "LoadNext", 3.0f );
-		EventAggregatorManager.Publish(new LoadLevelMessage("Level" + iLevelNum.ToString()));
-		Destroy(transform.gameObject);
+		if( iLevelNum < Application.levelCount )
+		{
+			EventAggregatorManager.Publish(new LoadLevelMessage("Level" + iLevelNum.ToString()));
+			Destroy(transform.gameObject);
+		}
+		else
+		{
+			EventAggregatorManager.Publish(new LoadLevelMessage("MenuScreen"));
+			Destroy(transform.gameObject);
+		}
 	}
 	#endregion
 

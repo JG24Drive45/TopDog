@@ -156,24 +156,24 @@ public class HotDogScript : MonoBehaviour
 				{
 					#region CASE: HORIZONTAL
 				case OrientationState.HORIZONTAL:
-					if( Input.GetKeyDown( KeyCode.RightArrow ) )
+					if( Input.GetKeyDown( KeyCode.RightArrow ) || Input.GetKeyDown( KeyCode.D ) )
 					{
 						transform.RotateAround( transform.position + RIGHTHORZPIVOTOFFSET, Vector3.back, 90.0f );
 						orientationState = OrientationState.VERTICAL;
 						SetLastKeyUsed( "R" );
 					}
-					else if( Input.GetKeyDown( KeyCode.LeftArrow ) )
+					else if( Input.GetKeyDown( KeyCode.LeftArrow ) || Input.GetKeyDown( KeyCode.A ) )
 					{
 						transform.RotateAround( transform.position + LEFTHORZPIVOTOFFSET, Vector3.forward, 90.0f );
 						orientationState = OrientationState.VERTICAL;
 						SetLastKeyUsed( "L" );
 					}
-					else if( Input.GetKeyDown( KeyCode.UpArrow ) )
+					else if( Input.GetKeyDown( KeyCode.UpArrow ) || Input.GetKeyDown( KeyCode.W ) )
 					{
 						transform.RotateAround( transform.position + UPHORZPIVOTOFFSET, Vector3.right, 90.0f );
 						SetLastKeyUsed( "U" );
 					}
-					else if( Input.GetKeyDown( KeyCode.DownArrow ) )
+					else if( Input.GetKeyDown( KeyCode.DownArrow ) || Input.GetKeyDown( KeyCode.S ) )
 					{
 						transform.RotateAround( transform.position + DOWNHORZPIVOTOFFSET, Vector3.left, 90.0f );
 						SetLastKeyUsed( "D" );
@@ -186,25 +186,25 @@ public class HotDogScript : MonoBehaviour
 
 					#region CASE: VERTICAL
 				case OrientationState.VERTICAL:
-					if( Input.GetKeyDown( KeyCode.RightArrow ) )
+					if( Input.GetKeyDown( KeyCode.RightArrow ) || Input.GetKeyDown( KeyCode.D ) )
 					{
 						transform.RotateAround( transform.position + RIGHTVERTPIVOTOFFSET, Vector3.back, 90.0f );
 						orientationState = OrientationState.HORIZONTAL;
 						SetLastKeyUsed( "R" );
 					}
-					else if( Input.GetKeyDown( KeyCode.LeftArrow ) )
+					else if( Input.GetKeyDown( KeyCode.LeftArrow ) || Input.GetKeyDown( KeyCode.A ) )
 					{
 						transform.RotateAround( transform.position + LEFTVERTPIVOTOFFSET, Vector3.forward, 90.0f );
 						orientationState = OrientationState.HORIZONTAL;
 						SetLastKeyUsed( "L" );
 					}
-					else if( Input.GetKeyDown( KeyCode.UpArrow ) )
+					else if( Input.GetKeyDown( KeyCode.UpArrow ) || Input.GetKeyDown( KeyCode.W ) )
 					{
 						transform.RotateAround( transform.position + UPVERTPIVOTOFFSET, Vector3.right, 90.0f );
 						orientationState = OrientationState.VERTANDHORZ;
 						SetLastKeyUsed( "U" );
 					}
-					else if( Input.GetKeyDown( KeyCode.DownArrow ) )
+					else if( Input.GetKeyDown( KeyCode.DownArrow ) || Input.GetKeyDown( KeyCode.S ) )
 					{
 						transform.RotateAround( transform.position + DOWNVERTPIVOTOFFSET, Vector3.left, 90.0f );
 						orientationState = OrientationState.VERTANDHORZ;
@@ -220,23 +220,23 @@ public class HotDogScript : MonoBehaviour
 					#region CASE: VERTICAL & HORIZONTAL
 
 				case OrientationState.VERTANDHORZ:
-					if( Input.GetKeyDown( KeyCode.RightArrow ) )
+					if( Input.GetKeyDown( KeyCode.RightArrow ) || Input.GetKeyDown( KeyCode.D ) )
 					{
 						transform.RotateAround( transform.position + RIGHTVHPIVOTOFFSET, Vector3.back, 90.0f );
 						SetLastKeyUsed( "R" );
 					}
-					else if( Input.GetKeyDown( KeyCode.LeftArrow ) )
+					else if( Input.GetKeyDown( KeyCode.LeftArrow ) || Input.GetKeyDown( KeyCode.A ) )
 					{
 						transform.RotateAround( transform.position + LEFTVHPIVOTOFFSET, Vector3.forward, 90.0f );
 						SetLastKeyUsed( "L" );
 					}
-					else if( Input.GetKeyDown( KeyCode.UpArrow ) )
+					else if( Input.GetKeyDown( KeyCode.UpArrow ) || Input.GetKeyDown( KeyCode.W ) )
 					{
 						transform.RotateAround( transform.position + UPVHPIVOTOFFSET, Vector3.right, 90.0f );
 						orientationState = OrientationState.VERTICAL;
 						SetLastKeyUsed( "U" );
 					}
-					else if( Input.GetKeyDown( KeyCode.DownArrow ) )
+					else if( Input.GetKeyDown( KeyCode.DownArrow ) || Input.GetKeyDown( KeyCode.S ) )
 					{
 						transform.RotateAround( transform.position + DOWNVHPIVOTOFFSET, Vector3.left, 90.0f );
 						orientationState = OrientationState.VERTICAL;
