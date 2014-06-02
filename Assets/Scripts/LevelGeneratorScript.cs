@@ -192,6 +192,7 @@ public class LevelGeneratorScript : MonoBehaviour,
 	void OnEnable()
 	{
 		InGameButton.onNextLevel += LoadNextLevel;
+		InGameButton.onSpaceDown += LoadNextLevel;
 		InGameButton.onMainMenu += LoadMainMenu;
 	}
 	#endregion
