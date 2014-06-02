@@ -91,8 +91,7 @@ public class ScoreScript : MonoBehaviour {
 	{
 		KeyValuePair<int,string>[] scores = new KeyValuePair<int,string>[11]; //stores the scores and names
 		byte i = 0;	//current entry in the array
-		string filePath = "Assets/Resources/Scores/level_" + currentLevel + "_scores.txt"; //location the scores are saved
-
+		string filePath = Application.dataPath + "/Resources/Scores/level_" + currentLevel + "_scores.txt"; //location the scores are saved
 		Debug.Log(Application.dataPath + "Assets/Resources/Scores/");
 		//make sure score directory exists
 		if (!Directory.Exists(Application.dataPath + "/Resources/Scores/"))
@@ -120,6 +119,11 @@ public class ScoreScript : MonoBehaviour {
 		{
 			//if the file does not exist, log warning and continue anyway
 			Debug.Log("ScoreScript.SaveScore: could not find file " + e.FileName + ".  This message SHOULD be harmless: the script continues regardless.");
+		}
+		catch (System.IO.IsolatedStorage.IsolatedStorageException e)
+		{
+			//if the file does not exist, log warning and continue anyway
+			Debug.Log("ScoreScript.SaveScore: could not find file " + e.Data + ".  This message SHOULD be harmless: the script continues regardless.");
 		}
 
 		//add new score
@@ -157,7 +161,7 @@ public class ScoreScript : MonoBehaviour {
 	{
 		KeyValuePair<int,string>[] scores = new KeyValuePair<int,string>[11]; //stores the scores and names
 		byte i = 0;	//current entry in the array
-		string filePath = "Assets/Resources/Scores/level_" + currentLevel + "_scores.txt"; //location the scores are saved
+		string filePath = Application.dataPath + "/Resources/Scores/level_" + currentLevel + "_scores.txt"; //location the scores are saved
 		
 		//read scores
 		try
@@ -179,6 +183,11 @@ public class ScoreScript : MonoBehaviour {
 		{
 			//if the file does not exist, log warning and continue anyway
 			Debug.LogWarning("ScoreScript.SaveScore: could not find file " + e.FileName + ".  This message SHOULD be harmless: the script continues regardless.");
+		}
+		catch (System.IO.IsolatedStorage.IsolatedStorageException e)
+		{
+			//if the file does not exist, log warning and continue anyway
+			Debug.Log("ScoreScript.SaveScore: could not find file " + e.Data + ".  This message SHOULD be harmless: the script continues regardless.");
 		}
 
 		return scores;
