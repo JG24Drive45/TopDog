@@ -18,6 +18,13 @@ public class InGameButton : MonoBehaviour
 
 	void Update()
 	{
+		if( Input.GetKeyDown( KeyCode.Space ) )
+		{
+			if( onNextLevel != null )
+			{
+				onNextLevel();
+			}
+		}
 	}
 
 	void OnMouseEnter(){

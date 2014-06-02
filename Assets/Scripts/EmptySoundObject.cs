@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿// Created by Matthew Montgomery
+
+using UnityEngine;
 using System.Collections;
 
 public class EmptySoundObject : MonoBehaviour,
