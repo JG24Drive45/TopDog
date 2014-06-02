@@ -1,37 +1,37 @@
-; Level1
-; Placement of Tiles Goes here
+; Level12  E - EmptyTile / M - MainTile / F - FallingTile / B - BridgeTile / T - TeleporterTile / G - GoalTile / 1 - ConveyorRight / 2 - ConveyorDown / 3 - ConveyorLeft / 4 - ConveyorUp
+; Placement of Tiles Goes here - 12 rows by 17 columns - Replace ONLY the X's
 EEEEEEEEEEEEEEEEE
-EFFFFFGEEFFFFFFME
-EFFFEEEEMFFFFFFBE
-EFFFFEEEEEFFFFFBE
-EEEBBBBBMFFFFFEBE
-EEEEEEEEMFFFFFEBE
-EEEEEEEE4EEEEEEBE
-ETFFMEEE4EEEEMEBE
-EFFFEEEE4EEETFFFE
-EFFFEEEE4EEEEFFFE
-EFFFFFFFFEEEEFFFE
+EM11111MM111FFFME
+EMEEEEEEMEEEFFFBE
+EMEEEEEEMEEEFFFBE
+EMFFEEEETFFEEFFBE
+EBFFFFFFFFFFFFFME
+EBEEEEEEEEEEEEEEE
+EBEEEEEEEEEEEEEEE
+EMEEMMFEFFFGBFFME
+EEEEFFFEBFBFFTFBE
+EEEEFFFFMMMFFFFFE
 EEEEEEEEEEEEEEEEE
 ; Placement of condiments goes here -- only X and Z coordinates needed
-; Ketchup -- X and Z coordinates only
-400
-100
-; Mustard -- X and Z coordinates only
-650
-350
-; Relish -- X and Z coordinates only
-200
-350
-; Placement of switchModel goes here -- X and Z coordinates only -- // Use 'none' if there is not a switch
+; Ketchup -- X and Z coordinates only   // Increments of 50
 750
 50
-; Placement of player goes here - X, Y, AND Z coordinates
+; Mustard -- X and Z coordinates only	// Increments of 50
+50
 400
-38
+; Relish -- X and Z coordinates only	// Increments of 50
+750
+400
+; Placement of switchModel goes here -- X and Z coordinates only -- // Increments of 50 - Use 'none' if there is not a switch object in the level
+750
+250
+; Placement of player goes here - X, Y, AND Z coordinates	// Increments of 50
 225
-; Player rotation orientation goes here -- X, Y, AND Z values needed
-0
+38
+400
+; Player rotation orientation goes here -- X, Y, AND Z values needed	// Increments of 90
 0
 90
-; Player orientation state goes here -- 0: None / 1: Vertical / 2: Horizontal / 3: Vertical & Horizontal
-3
+0
+; Player orientation state goes here -- 1: Vertical / 2: Horizontal / 3: Vertical & Horizontal
+2
