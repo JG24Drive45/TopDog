@@ -5,7 +5,6 @@ public class InGameButton : MonoBehaviour
 {
 	public delegate void NextLevel();
 	public static event NextLevel onNextLevel;
-	public static event NextLevel onSpaceDown;
 
 	public delegate void MainMenu();
 	public static event MainMenu onMainMenu;
@@ -19,15 +18,7 @@ public class InGameButton : MonoBehaviour
 
 	void Update()
 	{
-		if( Input.GetKeyDown( KeyCode.Space ) )
-		{
-			if( onNextLevel != null )
-			{
-				onNextLevel();
-			}
-			else
-				Debug.Log("null delegate in InGameButton.cs.");
-		}
+
 	}
 
 	void OnMouseEnter(){
@@ -45,8 +36,6 @@ public class InGameButton : MonoBehaviour
 		case "NextLevel":
 			if( onNextLevel != null )
 				onNextLevel();
-			else
-				Debug.Log("null delegate in InGameButton.cs.");
 			break;
 
 		case "MainMenu":

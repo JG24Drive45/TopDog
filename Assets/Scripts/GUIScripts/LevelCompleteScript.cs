@@ -6,6 +6,9 @@ public class LevelCompleteScript : MonoBehaviour
 	public delegate int NeedScore();
 	public static event NeedScore onNeedScore;
 
+	public delegate void NextLevel();
+	public static event NextLevel onSpace;
+
 
 	int score = 0;
 
@@ -57,7 +60,18 @@ public class LevelCompleteScript : MonoBehaviour
 	// Update is called once per frame
 	void Update () 
 	{
-
+		if( Input.GetKeyDown( KeyCode.Space ) )
+		{
+			Debug.Log( "Blah" );
+			if( onSpace != null )
+			{
+				Debug.Log( "Good Del" );
+				LevelGeneratorScript.CallLoadLevelMessage = true;
+				onSpace();
+			}
+			else
+				Debug.Log("null delegate in InGameButton.cs.");
+		}
 	}
 
 	void OnGUI()

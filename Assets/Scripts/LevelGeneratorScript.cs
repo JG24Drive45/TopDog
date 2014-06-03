@@ -183,8 +183,10 @@ public class LevelGeneratorScript : MonoBehaviour,
         Debug.Log("Destroyed Level");
         EventAggregatorManager.Publish(new LevelIsDestroyedMessage());
         if(CallLoadLevelMessage)
-            EventAggregatorManager.Publish(new LoadLevelMessage(sLevel));
-
+		{
+            EventAggregatorManager.Publish(new LoadLevelMessage("Level" + iLevelNum.ToString() ));
+			Debug.Log( "Got to here" );
+		}
     }
 	
 
@@ -192,8 +194,9 @@ public class LevelGeneratorScript : MonoBehaviour,
 	void OnEnable()
 	{
 		InGameButton.onNextLevel += LoadNextLevel;
-		InGameButton.onSpaceDown += LoadNextLevel;
 		InGameButton.onMainMenu += LoadMainMenu;
+
+		LevelCompleteScript.onSpace += LoadNextLevel;
 	}
 	#endregion
 
@@ -202,6 +205,8 @@ public class LevelGeneratorScript : MonoBehaviour,
 	{
 		InGameButton.onNextLevel -= LoadNextLevel;
 		InGameButton.onMainMenu -= LoadMainMenu;
+
+		LevelCompleteScript.onSpace -= LoadNextLevel;
 	}
 	#endregion
 	
@@ -226,7 +231,6 @@ public class LevelGeneratorScript : MonoBehaviour,
 	void LoadNextLevel()
 	{
 		iLevelNum++;
-		//Invoke( "LoadNext", 3.0f );
 		if( iLevelNum < Application.levelCount )
 		{
 			EventAggregatorManager.Publish(new LoadLevelMessage("Level" + iLevelNum.ToString()));
