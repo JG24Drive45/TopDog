@@ -19,23 +19,34 @@ public class GamePauseScript : MonoBehaviour
 		{
 			if( tex.name == "Background" )
 			{
-				tex.pixelInset = new Rect( sWidth * 0.5f - tex.texture.width * 0.5f, 
-				                          sHeight * 0.5f - tex.texture.height * 0.5f, 
-				                          tex.texture.width, tex.texture.height );
+				float texWid = sWidth * 0.25f;
+				float texHei = sHeight * 0.2f;
+				tex.pixelInset = new Rect( sWidth * 0.5f - texWid * 0.5f,
+				                          sHeight * 0.5f - texHei * 0.5f, 
+				                          sWidth * 0.25f, sHeight * 0.2f );
 			}
 			else if( tex.name == "Continue" )
 			{
-				tex.pixelInset = new Rect( sWidth * 0.5f - tex.texture.width * 0.5f - 5.0f,
-				                          sHeight * 0.43f, tex.texture.width * 0.5f, tex.texture.height * 0.5f );
+				float texWid = sWidth * 0.125f;
+				float texHei = sHeight * 0.05f;
+				tex.pixelInset = new Rect( sWidth * 0.5f - texWid,
+				                          sHeight * 0.43f, 
+				                          texWid, texHei );
 			}
 			else
 			{
-				tex.pixelInset = new Rect( sWidth * 0.5f - 5.0f,
-				                          sHeight * 0.43f, tex.texture.width * 0.5f, tex.texture.height * 0.5f );
+				float texWid = sWidth * 0.125f;
+				float texHei = sHeight * 0.05f;
+				tex.pixelInset = new Rect( sWidth * 0.5f,
+				                          sHeight * 0.43f, 
+				                          texWid, texHei );
 			}
 		}
 		
-		this.GetComponentInChildren<GUIText>().pixelOffset = new Vector2( sWidth * 0.5f, sHeight * 0.5f + 20.0f );
+		GUIText gText = GetComponentInChildren<GUIText>();
+		gText.pixelOffset = new Vector2( sWidth * 0.5f, sHeight * 0.53f );
+		int textSize = sWidth / 30;
+		gText.fontSize = textSize;
 		this.gameObject.SetActive( false );
 
 		HotDogScript.onGamePaused += Activate;

@@ -719,21 +719,28 @@ public class HotDogScript : MonoBehaviour
 				else if( numTouching == 1 )
 				{
 					transform.position -= new Vector3( 0, fDeadSpeed * Time.deltaTime, 0 );
-					// If the dogs's x pos is == goList object x pos and dog's z pos == goList object z pos - 25   >> empty above
-					if( (int)Mathf.Round(this.transform.position.x) == (int)Mathf.Round(goList[0].transform.position.x) &&
-					    (int)Mathf.Round(this.transform.position.z) == (int)(Mathf.Round(goList[0].transform.position.z) - 25) )
+					if( goList[0] != null )
 					{
-						transform.RotateAround( transform.position, Vector3.right, 2.5f );
-						yield return null;
+						// If the dogs's x pos is == goList object x pos and dog's z pos == goList object z pos - 25   >> empty above
+						if( (int)Mathf.Round(this.transform.position.x) == (int)Mathf.Round(goList[0].transform.position.x) &&
+						    (int)Mathf.Round(this.transform.position.z) == (int)(Mathf.Round(goList[0].transform.position.z) - 25) )
+						{
+							transform.RotateAround( transform.position, Vector3.right, 2.5f );
+							yield return null;
+						}
+						// If the dog's x pos is == goList object x pos and dog's z pos == goList object z pos + 25  >> empty below
+						else if( (int)Mathf.Round(this.transform.position.x) == (int)Mathf.Round(goList[0].transform.position.x) &&
+						    (int)Mathf.Round(this.transform.position.z) == (int)(Mathf.Round(goList[0].transform.position.z) + 25) )
+						{
+							transform.RotateAround( transform.position, Vector3.left, 2.5f );
+							yield return null;
+						}
 					}
-					// If the dog's x pos is == goList object x pos and dog's z pos == goList object z pos + 25  >> empty below
-					else if( (int)Mathf.Round(this.transform.position.x) == (int)Mathf.Round(goList[0].transform.position.x) &&
-					    (int)Mathf.Round(this.transform.position.z) == (int)(Mathf.Round(goList[0].transform.position.z) + 25) )
+					else
 					{
 						transform.RotateAround( transform.position, Vector3.left, 2.5f );
 						yield return null;
 					}
-					
 				}
 			}
 			#endregion

@@ -24,25 +24,35 @@ public class LevelCompleteScript : MonoBehaviour
 		{
 			if( tex.name == "Background" )
 			{
-				tex.pixelInset = new Rect( sWidth * 0.5f - tex.texture.width * 0.5f, 
-				                          sHeight * 0.5f - tex.texture.height * 0.5f, 
-				                          tex.texture.width, tex.texture.height );
+				float texWid = sWidth * 0.25f;
+				float texHei = sHeight * 0.2f;
+				tex.pixelInset = new Rect( sWidth * 0.5f - texWid * 0.5f,
+				                          sHeight * 0.5f - texHei * 0.5f, 
+				                          sWidth * 0.25f, sHeight * 0.2f );
 			}
 			else if( tex.name == "NextLevel" )
 			{
-				tex.pixelInset = new Rect( sWidth * 0.5f - tex.texture.width * 0.5f ,
-				                          sHeight * 0.4f, tex.texture.width * 0.5f, tex.texture.height * 0.5f );
+				float texWid = sWidth * 0.125f;
+				float texHei = sHeight * 0.05f;
+				tex.pixelInset = new Rect( sWidth * 0.5f - texWid,
+				                          sHeight * 0.42f, 
+				                          texWid, texHei );
 			}
 			else
 			{
+				float texWid = sWidth * 0.125f;
+				float texHei = sHeight * 0.05f;
 				tex.pixelInset = new Rect( sWidth * 0.5f,
-				                          sHeight * 0.4f, tex.texture.width * 0.5f, tex.texture.height * 0.5f );
+				                          sHeight * 0.42f, 
+				                          texWid, texHei );
 			}
 		}
 		
-		GUIText text = this.GetComponentInChildren<GUIText>();
-		text.pixelOffset = new Vector2( sWidth * 0.5f, sHeight * 0.52f );
-		text.text = "Level Complete\nScore: " + score;
+		GUIText gText = this.GetComponentInChildren<GUIText>();
+		gText.pixelOffset = new Vector2( sWidth * 0.5f, sHeight * 0.52f );
+		int textSize = sWidth / 30;
+		gText.fontSize = textSize;
+		gText.text = "Level Complete\nScore: " + score;
 
 		this.gameObject.SetActive( false );
 
