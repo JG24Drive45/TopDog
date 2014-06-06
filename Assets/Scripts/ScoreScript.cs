@@ -8,22 +8,25 @@ public class ScoreScript : MonoBehaviour {
 
 	private const float TIME_PENALTY_MULTIPLIER = 0.9f;
 
-	public int 	currentLevel;	//holds the current level number
+	public int 		currentLevel;	//holds the current level number
 	private int 	playerScore;	//stores the player's current score
 	private int 	playerMoveCount;//number of moves the player has made
 	private float 	playerTime;		//stores the player's current time
 	private bool 	timerActive;	//whether or not the timer is currently running
 	private string	playerName;		//what name to attribute any high scores earned to
+	private bool	nameKnown;		//whether or not we know the player's name
 
 	// Use this for initialization
 	void Awake()
 	{
+		DontDestroyOnLoad(transform.gameObject); //allow this script to retain data between frames
 		currentLevel 	= 0;
 		playerScore 	= 0;
 		playerMoveCount = 0;
 		playerTime 		= 0.0f;
 		timerActive 	= false;
 		playerName		= "mysterious stranger"; 
+		nameKnown 		= false; 
 	}
 
 	void Start () 
@@ -70,7 +73,8 @@ public class ScoreScript : MonoBehaviour {
 	void Update () 
 	{
 		if (timerActive)
-			playerTime += Time.deltaTime; //update timer
+			if (nameKnown) //dont update timer while waiting for name
+				playerTime += Time.deltaTime; //update timer
 	}
 
 	//display the information
@@ -85,6 +89,19 @@ public class ScoreScript : MonoBehaviour {
 		          						  "Score: " + playerScore + "\n" +
 		          						  "Moves: " + playerMoveCount + "\n" +
 										  "Level: " + currentLevel);
+
+		//prompt for name
+		if (nameKnown == false)
+		{
+			GUI.BeginGroup (new Rect (Screen.width / 2 - 100, Screen.height / 2 - 50, 200, 100));
+
+			GUI.Box(   	  new Rect(0,  0, 200, 100), "What is your name?");
+			playerName = GUI.TextField(new Rect(0,  25, 200, 30 ), playerName);
+			if(GUI.Button(new Rect(75, 65, 50, 30 ), "Done"))
+			   nameKnown = true;
+
+			GUI.EndGroup();
+		}
 	}
 
 	void saveScore(string name)
