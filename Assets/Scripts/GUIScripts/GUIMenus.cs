@@ -39,6 +39,22 @@ public class GUIMenus : MonoBehaviour {
 		backBtn.SetActive (false);
 		menuBtn.SetActive (true);
 		titleExitBtn.SetActive (true);
+		int sWidth, sHeight;
+		sWidth = Screen.width;
+		sHeight = Screen.height;
+
+
+		float texWid = sWidth * 0.5f;
+		float texHei = sHeight * 0.5f;
+		backBtn.guiTexture.pixelInset = new Rect( sWidth * 0.5f - texWid * 0.93f,
+		                   							sHeight * 0.5f - texHei * 1.25f, 
+			                                   		sWidth * 0.25f, sHeight * 0.07f );
+			//pixelInset = new Rect( sWidth * 0.5f - texWid * 0.5f,
+		        //                  sHeight * 0.5f - texHei * 0.5f, 
+		        //                  sWidth * 0.25f, sHeight * 0.2f );
+
+
+
 	}
 
 
