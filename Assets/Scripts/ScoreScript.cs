@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -8,18 +8,34 @@ public class ScoreScript : MonoBehaviour {
 
 	private const float TIME_PENALTY_MULTIPLIER = 0.9f;
 
-	public int 		currentLevel;	//holds the current level number
-	private int 	playerScore;	//stores the player's current score
-	private int 	playerMoveCount;//number of moves the player has made
-	private float 	playerTime;		//stores the player's current time
-	private bool 	timerActive;	//whether or not the timer is currently running
-	private string	playerName;		//what name to attribute any high scores earned to
-	private bool	nameKnown;		//whether or not we know the player's name
+	public int 				currentLevel;	//holds the current level number
+	private static int 		playerScore;	//stores the player's current score
+	private int 			playerMoveCount;//number of moves the player has made
+	private static float 	playerTime;		//stores the player's current time
+	private bool 			timerActive;	//whether or not the timer is currently running
+	private string			playerName;		//what name to attribute any high scores earned to
+	private bool			nameKnown;		//whether or not we know the player's name
+
+	private static ScoreScript instance = null;
 
 	// Use this for initialization
 	void Awake()
 	{
-		DontDestroyOnLoad(transform.gameObject); //allow this script to retain data between frames
+		if( instance != null && instance != this )
+		{
+			Destroy( this.gameObject );
+			//reaching here means the player died.  reset stuff
+			playerTime = 0.0f; 
+			playerScore = 0;
+			return;
+		}
+		else
+		{
+			instance = this;
+
+		}
+
+		DontDestroyOnLoad(transform.gameObject); //allow this script to retain data between levels
 		currentLevel 	= 0;
 		playerScore 	= 0;
 		playerMoveCount = 0;
@@ -225,6 +241,8 @@ public class ScoreScript : MonoBehaviour {
 
 	void StartTimer()
 	{
+		playerTime = 0.0f; 
+		playerScore = 0;
 		timerActive = true;
 	}
 
@@ -260,6 +278,14 @@ public class ScoreScript : MonoBehaviour {
 		playerScore -= (int)( Math.Floor(playerTime) * TIME_PENALTY_MULTIPLIER ); // reduce score based on completion time
 
 		saveScore(playerName);
+	}
+
+	public static ScoreScript GetInstance
+	{
+		get
+		{
+			return instance;
+		}
 	}
 
 	int getScore()
