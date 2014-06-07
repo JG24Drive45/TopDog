@@ -824,16 +824,25 @@ public class HotDogScript : MonoBehaviour
 				else if( numTouching == 1 )
 				{
 					transform.position -= new Vector3( 0, fDeadSpeed * Time.deltaTime, 0 );
-					// If the dog's x pos is == goList object x pos + 25 AND dog's z pos == goList object z pos   >> empty to the left
-					if( (int)Mathf.Round(this.transform.position.x) == (int)Mathf.Round(goList[0].transform.position.x) + 25 &&
-					   	(int)Mathf.Round(this.transform.position.z) == (int)Mathf.Round(goList[0].transform.position.z) )
+
+					if( goList[0] != null )
 					{
-						transform.RotateAround( transform.position, Vector3.forward, 2.5f );
-						yield return null;
+						// If the dog's x pos is == goList object x pos + 25 AND dog's z pos == goList object z pos   >> empty to the left
+						if( (int)Mathf.Round(this.transform.position.x) == (int)Mathf.Round(goList[0].transform.position.x) + 25 &&
+						   	(int)Mathf.Round(this.transform.position.z) == (int)Mathf.Round(goList[0].transform.position.z) )
+						{
+							transform.RotateAround( transform.position, Vector3.forward, 2.5f );
+							yield return null;
+						}
+						// If the dog's x pos is == goList object x pos - 25 AND dog's z pos == goList object z pos   >> empty to the right
+						if( (int)Mathf.Round(this.transform.position.x) == (int)Mathf.Round(goList[0].transform.position.x) - 25 &&
+						   	(int)Mathf.Round(this.transform.position.z) == (int)Mathf.Round(goList[0].transform.position.z) )
+						{
+							transform.RotateAround( transform.position, Vector3.back, 2.5f );
+							yield return null;
+						}
 					}
-					// If the dog's x pos is == goList object x pos - 25 AND dog's z pos == goList object z pos   >> empty to the right
-					if( (int)Mathf.Round(this.transform.position.x) == (int)Mathf.Round(goList[0].transform.position.x) - 25 &&
-					   	(int)Mathf.Round(this.transform.position.z) == (int)Mathf.Round(goList[0].transform.position.z) )
+					else
 					{
 						transform.RotateAround( transform.position, Vector3.back, 2.5f );
 						yield return null;
