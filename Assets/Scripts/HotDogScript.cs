@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class HotDogScript : MonoBehaviour 
 {
 	#region Delegates
-	public delegate void CondimentHandler();
+	public delegate void CondimentHandler( string color );
 	public delegate void LevelComplete(bool gotAllCondiments);
 	public delegate void ActivateSwitch();
 	public delegate void ActivateBridge();
@@ -94,6 +94,9 @@ public class HotDogScript : MonoBehaviour
 	public List<GameObject> allEmptyTiles;
 	private int numTouching = 0;
 	private int counter = 0;
+
+	// Condiment interface
+
 	#endregion
 
 	#region void Start()
@@ -382,7 +385,7 @@ public class HotDogScript : MonoBehaviour
 
 			case "Ketchup":
 				if( onCondimentAcquired != null )											// If there is a subscriber
-					onCondimentAcquired();														// Send the message out
+					onCondimentAcquired( "Red" );											// Send the message out
 				bHasKetchup = true;															// Player has acquired the ketchup
 				bFullDog = IsFullDog();														// Is the dog full?
 				SetMaterial();																// Update the material
@@ -393,7 +396,7 @@ public class HotDogScript : MonoBehaviour
 
 			case "Mustard":
 				if( onCondimentAcquired != null )											// If there is a subscriber
-					onCondimentAcquired();														// Send the message out
+					onCondimentAcquired( "Yellow" );										// Send the message out
 				bHasMustard = true;															// Player has acquired the mustard
 				bFullDog = IsFullDog();														// Is the dog full?
 				SetMaterial();																// Update the material
@@ -404,7 +407,7 @@ public class HotDogScript : MonoBehaviour
 
 			case "Relish":
 				if( onCondimentAcquired != null )											// If there is a subscriber
-					onCondimentAcquired();														// Send the message out
+					onCondimentAcquired( "Green" );											// Send the message out
 				bHasRelish = true;															// Player has acquired the relish
 				bFullDog = IsFullDog();														// Is the dog full?
 				SetMaterial();																// Update the material

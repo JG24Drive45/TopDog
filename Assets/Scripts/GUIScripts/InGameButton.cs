@@ -28,6 +28,17 @@ public class InGameButton : MonoBehaviour
 	void OnMouseExit(){
 		guiTexture.texture = Normal;
 	}
+
+	void OnEnable()
+	{
+		LevelCompleteScript.onSpace += SpacePushed;
+	}
+
+	void OnDestroy()
+	{
+		LevelCompleteScript.onSpace -= SpacePushed;
+	}
+
 	
 	void OnMouseUp()
 	{
@@ -35,7 +46,9 @@ public class InGameButton : MonoBehaviour
 		{
 		case "NextLevel":
 			if( onNextLevel != null )
+			{
 				onNextLevel();
+			}
 			break;
 
 		case "MainMenu":
@@ -49,5 +62,13 @@ public class InGameButton : MonoBehaviour
 			break;
 		}
 	}
-	
+
+	void SpacePushed()
+	{
+		if (onNextLevel != null )
+		{
+			onNextLevel();
+		}
+	}
+
 }

@@ -195,8 +195,6 @@ public class LevelGeneratorScript : MonoBehaviour,
 	{
 		InGameButton.onNextLevel += LoadNextLevel;
 		InGameButton.onMainMenu += LoadMainMenu;
-
-		LevelCompleteScript.onSpace += LoadNextLevel;
 	}
 	#endregion
 
@@ -205,8 +203,6 @@ public class LevelGeneratorScript : MonoBehaviour,
 	{
 		InGameButton.onNextLevel -= LoadNextLevel;
 		InGameButton.onMainMenu -= LoadMainMenu;
-
-		LevelCompleteScript.onSpace -= LoadNextLevel;
 	}
 	#endregion
 	
@@ -238,8 +234,9 @@ public class LevelGeneratorScript : MonoBehaviour,
 		}
 		else
 		{
-			EventAggregatorManager.Publish(new LoadLevelMessage("MenuScreen"));
 			Destroy(transform.gameObject);
+			GUIMenus.menuState = GUIMenus.GUIState.MAINMENU;
+			Application.LoadLevel( "MenuScreen" );
 		}
 	}
 	#endregion

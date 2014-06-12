@@ -228,7 +228,7 @@ public class ScoreScript : MonoBehaviour {
 
 	//-----------messages------------//
 
-	void AcquiredCondiment()
+	void AcquiredCondiment( string color )
 	{
 		Debug.Log( "Message received" );
 		playerScore += 50;

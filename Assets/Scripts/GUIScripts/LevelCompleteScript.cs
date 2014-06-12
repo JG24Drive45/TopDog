@@ -72,15 +72,18 @@ public class LevelCompleteScript : MonoBehaviour
 	{
 		if( Input.GetKeyDown( KeyCode.Space ) )
 		{
-			Debug.Log( "Blah" );
+			LevelGeneratorScript.CallLoadLevelMessage = true;
 			if( onSpace != null )
 			{
-				Debug.Log( "Good Del" );
-				LevelGeneratorScript.CallLoadLevelMessage = true;
+				int curLevel = int.Parse(LevelGeneratorScript.sLevel.Substring(5));
+				if( curLevel == Application.levelCount - 1 )
+				{
+					LevelGeneratorScript.CallLoadLevelMessage = false;
+				}
+				
 				onSpace();
 			}
-			else
-				Debug.Log("null delegate in InGameButton.cs.");
+
 		}
 	}
 
