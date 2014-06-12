@@ -57,15 +57,6 @@ public class ScoreScript : MonoBehaviour {
 		LevelGeneratorScript.onSetLevelNum += setLevel;
 		HotDogScript.onLevelComplete += LevelComplete;
 		LevelCompleteScript.onNeedScore += getScore;
-
-//		Messenger.AddListener( "increment move count", IncrementMoveCount );
-//		Messenger<int>.AddListener( "set level", setLevel );
-//		Messenger<float>.AddListener( "time bonus", TimeBonus );
-//		Messenger<bool>.AddListener( "level complete", LevelComplete );
-//		Messenger<int>.AddListener( "set score", setScore );
-//		Messenger<int>.AddListener( "set move count", setPlayerMoveCount );
-//		Messenger<float>.AddListener( "set time", setPlayerTime );
-//		Messenger<string>.AddListener( "set player name", setPlayerName );
 	}
 
 	public void OnDisable()
@@ -75,14 +66,6 @@ public class ScoreScript : MonoBehaviour {
 		LevelGeneratorScript.onSetLevelNum -= setLevel;
 		HotDogScript.onLevelComplete -= LevelComplete;
 		LevelCompleteScript.onNeedScore -= getScore;
-
-//		Messenger.RemoveListener( "increment move count", IncrementMoveCount );
-//		Messenger<int>.RemoveListener( "set level", setLevel );
-//		Messenger<float>.RemoveListener( "time bonus", TimeBonus );
-//		Messenger<bool>.RemoveListener( "level complete", LevelComplete );
-//		Messenger<int>.RemoveListener( "set score", setScore );
-//		Messenger<int>.RemoveListener( "set move count", setPlayerMoveCount );
-//		Messenger<float>.RemoveListener( "set time", setPlayerTime );
 	}
 	
 	// Update is called once per frame
