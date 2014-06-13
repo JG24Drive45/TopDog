@@ -18,6 +18,10 @@ public class ScoreScript : MonoBehaviour {
 
 	private static ScoreScript instance = null;
 
+	public delegate void nameEntered();
+
+	public static event nameEntered onNameEntered;
+
 	// Use this for initialization
 	void Awake()
 	{
@@ -48,6 +52,13 @@ public class ScoreScript : MonoBehaviour {
 	void Start () 
 	{
 
+	}
+
+	//called when a level is loaded
+	void OnLevelWasLoaded(int level) 
+	{
+		if (level == 0)
+			UnityEngine.Object.Destroy(this); //destroy score script when returning to main menu
 	}
 
 	public void OnEnable()
@@ -97,7 +108,11 @@ public class ScoreScript : MonoBehaviour {
 			GUI.Box(   	  new Rect(0,  0, 200, 100), "What is your name?");
 			playerName = GUI.TextField(new Rect(0,  25, 200, 30 ), playerName);
 			if(GUI.Button(new Rect(75, 65, 50, 30 ), "Done"))
-			   nameKnown = true;
+			{
+			  	nameKnown = true;
+				if (onNameEntered != null)
+					onNameEntered();
+			}
 
 			GUI.EndGroup();
 		}
