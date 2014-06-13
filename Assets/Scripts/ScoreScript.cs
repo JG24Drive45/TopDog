@@ -68,6 +68,7 @@ public class ScoreScript : MonoBehaviour {
 		LevelGeneratorScript.onSetLevelNum += setLevel;
 		HotDogScript.onLevelComplete += LevelComplete;
 		LevelCompleteScript.onNeedScore += getScore;
+		HotDogScript.onGetNameKnown += IsNameKnown;
 	}
 
 	public void OnDisable()
@@ -77,6 +78,7 @@ public class ScoreScript : MonoBehaviour {
 		LevelGeneratorScript.onSetLevelNum -= setLevel;
 		HotDogScript.onLevelComplete -= LevelComplete;
 		LevelCompleteScript.onNeedScore -= getScore;
+		HotDogScript.onGetNameKnown -= IsNameKnown;
 	}
 	
 	// Update is called once per frame
@@ -324,5 +326,10 @@ public class ScoreScript : MonoBehaviour {
 	void setPlayerName (string name)
 	{
 		playerName = name;
+	}
+
+	bool IsNameKnown()
+	{
+		return nameKnown;
 	}
 }

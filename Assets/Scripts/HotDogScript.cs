@@ -11,6 +11,7 @@ public class HotDogScript : MonoBehaviour
 	public delegate void ActivateBridge();
 	public delegate void FallingTileTouched( GameObject go );
 	public delegate void GamePaused();
+	public delegate bool Del();
 	#endregion
 
 	#region Events
@@ -20,6 +21,7 @@ public class HotDogScript : MonoBehaviour
 	public static event ActivateBridge onActivateBridge;
 	public static event FallingTileTouched onFallingTileTouched;
 	public static event GamePaused onGamePaused;
+	public static event Del onGetNameKnown;
 	#endregion
 
 	#region Hotdog Movement Offsets
@@ -73,7 +75,7 @@ public class HotDogScript : MonoBehaviour
 	private bool bLevelComplete = false;										// Is the level complete?
 
 	private bool bGamePaused = false;											// Is the game currently paused?
-	public bool bCanMove = true;												// Can the player currently move
+	public bool bCanMove = false;												// Can the player currently move
 	private string sLastKeyUsed;													// Last arrow button the player used
 	private bool bIsTeleporting = false;										// Is the player currently teleporting?
 	private Vector3 v3LastTeleportedLocation;
@@ -116,6 +118,9 @@ public class HotDogScript : MonoBehaviour
 			allEmptyTiles.Add( empties[i] );
 			empties[i] = null;
 		}
+
+		if( onGetNameKnown != null )
+			bCanMove = onGetNameKnown();
 	}
 	#endregion
 
@@ -126,6 +131,7 @@ public class HotDogScript : MonoBehaviour
 		LevelGeneratorScript.onSetOState += SetPlayerOriginalOrientationState;
 		InGameButton.onUnpause += UnPauseGame;
 		GamePauseScript.onEscapeToUnpause += UnPauseGame;
+		ScoreScript.onNameEntered += ToggleCanMove;
 	}
 	#endregion
 
@@ -136,6 +142,7 @@ public class HotDogScript : MonoBehaviour
 		LevelGeneratorScript.onSetOState -= SetPlayerOriginalOrientationState;
 		InGameButton.onUnpause -= UnPauseGame;
 		GamePauseScript.onEscapeToUnpause -= UnPauseGame;
+		ScoreScript.onNameEntered -= ToggleCanMove;
 	}
 	#endregion
 	
@@ -985,6 +992,16 @@ public class HotDogScript : MonoBehaviour
 	void UnPauseGame()
 	{
 		bGamePaused = false;
+	}
+	#endregion
+
+	#region void ToggleCanMove()
+	void ToggleCanMove()
+	{
+		if( bCanMove == false )
+			bCanMove = true;
+		else
+			bCanMove = false;
 	}
 	#endregion
 }
