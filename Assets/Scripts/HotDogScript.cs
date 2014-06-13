@@ -252,6 +252,7 @@ public class HotDogScript : MonoBehaviour
 
 					#endregion
 				}
+				iConveyorDelay = -1;
 			}
 		}
 	}
@@ -444,7 +445,7 @@ public class HotDogScript : MonoBehaviour
 		case "Conveyor":
 			if( bCanMove && !bTouchingATile )
 			{
-				if( iConveyorDelay != 0 )
+				if( iConveyorDelay > 0 )
 				{
 					StartCoroutine( MoveDogOnConveyor( other.gameObject ) );
 				}
