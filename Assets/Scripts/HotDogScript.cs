@@ -73,12 +73,12 @@ public class HotDogScript : MonoBehaviour
 	private bool bLevelComplete = false;										// Is the level complete?
 
 	private bool bGamePaused = false;											// Is the game currently paused?
-	private bool bCanMove = true;												// Can the player currently move
+	public bool bCanMove = true;												// Can the player currently move
 	private string sLastKeyUsed;													// Last arrow button the player used
 	private bool bIsTeleporting = false;										// Is the player currently teleporting?
 	private Vector3 v3LastTeleportedLocation;
-	private bool bTouchingATile = true;											// Is the player currently touching any tiles?
-	private bool bOnConveyor = false;
+	public bool bTouchingATile = true;											// Is the player currently touching any tiles?
+	public bool bOnConveyor = false;
 
 	private Vector3 v3OriginalPosition;											// Starting position for the level
 	private Vector3 v3OriginalRotation;											// Starting rotation for the level
@@ -95,6 +95,8 @@ public class HotDogScript : MonoBehaviour
 	private int numTouching = 0;
 	private int counter = 0;
 
+	private int iConveyorDelay = 0;
+
 	// Condiment interface
 
 	#endregion
@@ -104,8 +106,6 @@ public class HotDogScript : MonoBehaviour
 	{
 		v3OriginalPosition = transform.position;								// Cache original position
 		v3OriginalRotation = transform.rotation.eulerAngles;					// Cache original rotation
-		Physics.gravity *= 5.0f;												// Testing - Increasing the rate of gravity
-		Debug.Log( Physics.gravity );											// Testing	
 
 		renderer.material = hotdogMaterials[0];									// Give the hotdog the empty material
 
@@ -341,14 +341,12 @@ public class HotDogScript : MonoBehaviour
 			switch( other.gameObject.tag )
 			{
 			case "MainTile":
-				Debug.Log( "Touching main tile" );
 				bTouchingATile = true;
 				break;
 
 			case "TeleporterTile":
 				if( !bIsTeleporting && orientationState == OrientationState.VERTICAL )
 				{
-					Debug.Log( "Touched Teleporter" );
 					TeleportPlayer( other.transform.position );
 				}
 				if( !bFalling )
@@ -357,23 +355,18 @@ public class HotDogScript : MonoBehaviour
 
 			case "FallingTile":
 				bTouchingATile = true;
-				//other.gameObject.SendMessage( "ToggleBeenTouched" );
 				if( onFallingTileTouched != null )
 					onFallingTileTouched( other.gameObject );
 
-				Debug.Log( "Touched falling tile" );
 				break;
 
 			case "Switch":
-				Debug.Log( "Touched Switch" );
 				EventAggregatorManager.Publish( new PlaySoundMessage( "switch", false ) );
 				if( other.gameObject.GetComponent<CapsuleCollider>().enabled )
 				{
 					other.gameObject.GetComponent<CapsuleCollider>().enabled = false;
-					//Messenger.Broadcast( "set active switch material" );
 					if( onActivateSwitch != null )
 						onActivateSwitch();
-					//Messenger.Broadcast( "activate bridge" );
 					if( onActivateBridge != null )
 						onActivateBridge();
 				}
@@ -391,7 +384,6 @@ public class HotDogScript : MonoBehaviour
 				SetMaterial();																// Update the material
 				EventAggregatorManager.Publish( new PlaySoundMessage( "splat", false ) );	// Play the splat sound
 				Destroy( other.gameObject );
-				Debug.Log( "You collided with ketchup" );
 				break;
 
 			case "Mustard":
@@ -402,7 +394,6 @@ public class HotDogScript : MonoBehaviour
 				SetMaterial();																// Update the material
 				EventAggregatorManager.Publish( new PlaySoundMessage( "splat", false ) );	// Play the splat sound
 				Destroy( other.gameObject );
-				Debug.Log( "You collided with mustard" );
 				break;
 
 			case "Relish":
@@ -413,7 +404,6 @@ public class HotDogScript : MonoBehaviour
 				SetMaterial();																// Update the material
 				EventAggregatorManager.Publish( new PlaySoundMessage( "splat", false ) );	// Play the splat sound
 				Destroy( other.gameObject );
-				Debug.Log( "You collided with relish" );
 				break;
 
 			case "GoalTile":
@@ -431,9 +421,9 @@ public class HotDogScript : MonoBehaviour
 				break;
 
 			case "zEmptyTile":
+				Debug.Log( "HIT EMPTY" );
 				if( !bOnConveyor )
 				{
-					Debug.Log( "Touched empty tile" );
 					bTouchingATile = true;
 					bCanMove = false;
 					bFalling = true;
@@ -454,14 +444,20 @@ public class HotDogScript : MonoBehaviour
 		case "Conveyor":
 			if( bCanMove && !bTouchingATile )
 			{
-				StartCoroutine( MoveDogOnConveyor( other.gameObject ) );
+				if( iConveyorDelay != 0 )
+				{
+					StartCoroutine( MoveDogOnConveyor( other.gameObject ) );
+				}
+				else 
+				{
+					iConveyorDelay++;
+				}
 			}
 			break;
 
 		case "zEmptyTile":
 			if( !bFalling && !bOnConveyor )
 			{
-				Debug.Log( "Staying on empty tile" );
 				bTouchingATile = true;
 				bCanMove = false;
 				bFalling = true;
@@ -589,6 +585,7 @@ public class HotDogScript : MonoBehaviour
 
 		bOnConveyor = false;
 		bCanMove = true;
+		iConveyorDelay = 0;
 	}
 	#endregion
 

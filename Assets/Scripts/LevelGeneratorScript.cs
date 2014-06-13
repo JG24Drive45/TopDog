@@ -55,7 +55,7 @@ public class LevelGeneratorScript : MonoBehaviour,
         GameEventAggregator.GameMessenger.Subscribe(this);
 		#region Load in Level Data
         //sLevel = System.IO.Path.GetFileNameWithoutExtension(EditorApplication.currentScene);						// Get the name of the current level
-        Debug.Log(sLevel);
+        
         iLevelNum = int.Parse(sLevel.Substring(5));				// Level number for the score script
 
 		if( onSetLevelNum != null )
@@ -134,7 +134,6 @@ public class LevelGeneratorScript : MonoBehaviour,
 
 		// Read line 37 to get the player's orientation state
 		int tempState = int.Parse( lines[36] );
-		//Debug.Log( "OState is: " + tempState );
 		// Send the message to set the player's orientation state
 		//Messenger<int>.Broadcast( "set player original orientation state", tempState );
 		if( onSetOState != null )
@@ -180,12 +179,10 @@ public class LevelGeneratorScript : MonoBehaviour,
     void OnDestroy()
     {
         GameEventAggregator.GameMessenger.Unsubscribe(this);
-        Debug.Log("Destroyed Level");
         EventAggregatorManager.Publish(new LevelIsDestroyedMessage());
         if(CallLoadLevelMessage)
 		{
             EventAggregatorManager.Publish(new LoadLevelMessage("Level" + iLevelNum.ToString() ));
-			Debug.Log( "Got to here" );
 		}
     }
 	
