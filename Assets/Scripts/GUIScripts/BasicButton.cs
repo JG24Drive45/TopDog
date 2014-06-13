@@ -32,6 +32,9 @@ public class BasicButton : MonoBehaviour {
 		else if (state == "MAINMENU") {
 			GUIMenus.menuState = GUIMenus.GUIState.MAINMENU;
 		}
+		else if (state == "LEVELSELECT") {
+			GUIMenus.menuState = GUIMenus.GUIState.LEVELSELECT;
+		}
 		guiTexture.texture = Normal;
 	}
 

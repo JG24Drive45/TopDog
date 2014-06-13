@@ -30,7 +30,6 @@ public class HighScores : MonoBehaviour {
 	private KeyValuePair<int,string>[] scores ;
 	// Use this for initialization
 	void Start () {
-
 		sWidth = Screen.width;
 		sHeight = Screen.height;
 		for( int k = 0; k < totalLevels; k++ )
@@ -48,11 +47,13 @@ public class HighScores : MonoBehaviour {
 				{
 					int key = Convert.ToInt32( input.ReadLine() );
 					string value = input.ReadLine();
-					
 					scores[i] = new KeyValuePair<int, string>(key,value);
 					i++;
 				}
-				
+				if( i > 0 )
+				{
+					GUIMenus.levelUnlocked = currentLevel + 1;
+				}
 				input.Close();
 			}
 			catch (FileNotFoundException e)
@@ -65,7 +66,6 @@ public class HighScores : MonoBehaviour {
 				//if the file does not exist, log warning and continue anyway
 				Debug.LogWarning("ScoreScript.SaveScore: could not find file " + e.Data + ".  This message SHOULD be harmless: the script continues regardless.");
 			}
-
 			currentLevel++;
 			string temp ;
 			temp = scores [0].ToString ();

@@ -2,8 +2,9 @@
 using System.Collections;
 
 public class GUIMenus : MonoBehaviour {
-	public enum GUIState{ TITLE, MAINMENU, INSTRUCTIONS, HIGHSCORES, CREDITS, OPTIONS };
+	public enum GUIState{ TITLE, MAINMENU, INSTRUCTIONS, HIGHSCORES, CREDITS, OPTIONS, LEVELSELECT };
 	public static GUIState menuState ;
+	public static int levelUnlocked ;
 
 	public Texture2D mainMenu;
 	public Texture2D instructions;
@@ -11,6 +12,7 @@ public class GUIMenus : MonoBehaviour {
 	public Texture2D credits;
 	public Texture2D options;
 	public Texture2D title;
+	public Texture2D levelSelect;
 
 	public GameObject background;
 	public GameObject playBtn;
@@ -24,9 +26,26 @@ public class GUIMenus : MonoBehaviour {
 	public GameObject menuBtn;
 	public GameObject titleExitBtn;
 
+	// buttons for loading each level
+	public GameObject oneBtn;
+	public GameObject twoBtn;
+	public GameObject threeBtn;
+	public GameObject fourBtn;
+	public GameObject fiveBtn;
+	public GameObject sixBtn;
+	public GameObject sevenBtn;
+	public GameObject eightBtn;
+	public GameObject nineBtn;
+	public GameObject tenBtn;
+	public GameObject elevenBtn;
+	public GameObject twelveBtn;
+	public GameObject thirteenBtn;
+	public GameObject fourteenBtn;
+	public GameObject fifteenBtn;
+
+
 	// Use this for initialization
 	void Start () {
-
 //		menuState = GUIState.TITLE;
 		background.guiTexture.texture = title;
 		playBtn.SetActive (false);
@@ -39,6 +58,23 @@ public class GUIMenus : MonoBehaviour {
 		backBtn.SetActive (false);
 		menuBtn.SetActive (true);
 		titleExitBtn.SetActive (true);
+
+		oneBtn.SetActive (false);
+		twoBtn.SetActive (false);
+		threeBtn.SetActive (false);
+		fourBtn.SetActive (false);
+		fiveBtn.SetActive (false);
+		sixBtn.SetActive (false);
+		sevenBtn.SetActive (false);
+		eightBtn.SetActive (false);
+		nineBtn.SetActive (false);
+		tenBtn.SetActive (false);
+		elevenBtn.SetActive (false);
+		twelveBtn.SetActive (false);
+		thirteenBtn.SetActive (false);
+		fourteenBtn.SetActive (false);
+		fifteenBtn.SetActive (false);
+
 		int sWidth, sHeight;
 		sWidth = Screen.width;
 		sHeight = Screen.height;
@@ -73,6 +109,22 @@ public class GUIMenus : MonoBehaviour {
 			backBtn.SetActive (true);
 			menuBtn.SetActive (false);
 			titleExitBtn.SetActive (false);
+
+			oneBtn.SetActive (false);
+			twoBtn.SetActive (false);
+			threeBtn.SetActive (false);
+			fourBtn.SetActive (false);
+			fiveBtn.SetActive (false);
+			sixBtn.SetActive (false);
+			sevenBtn.SetActive (false);
+			eightBtn.SetActive (false);
+			nineBtn.SetActive (false);
+			tenBtn.SetActive (false);
+			elevenBtn.SetActive (false);
+			twelveBtn.SetActive (false);
+			thirteenBtn.SetActive (false);
+			fourteenBtn.SetActive (false);
+			fifteenBtn.SetActive (false);
 			break;
 
 		case GUIState.HIGHSCORES:
@@ -87,9 +139,26 @@ public class GUIMenus : MonoBehaviour {
 			backBtn.SetActive (true);
 			menuBtn.SetActive (false);
 			titleExitBtn.SetActive (false);
+
+			oneBtn.SetActive (false);
+			twoBtn.SetActive (false);
+			threeBtn.SetActive (false);
+			fourBtn.SetActive (false);
+			fiveBtn.SetActive (false);
+			sixBtn.SetActive (false);
+			sevenBtn.SetActive (false);
+			eightBtn.SetActive (false);
+			nineBtn.SetActive (false);
+			tenBtn.SetActive (false);
+			elevenBtn.SetActive (false);
+			twelveBtn.SetActive (false);
+			thirteenBtn.SetActive (false);
+			fourteenBtn.SetActive (false);
+			fifteenBtn.SetActive (false);
 			break;
 
 		case GUIState.INSTRUCTIONS:
+
 			background.guiTexture.texture = instructions;
 			playBtn.SetActive (false);
 			instructionsBtn.SetActive (false);
@@ -101,6 +170,22 @@ public class GUIMenus : MonoBehaviour {
 			backBtn.SetActive (true);
 			menuBtn.SetActive (false);
 			titleExitBtn.SetActive (false);
+
+			oneBtn.SetActive (false);
+			twoBtn.SetActive (false);
+			threeBtn.SetActive (false);
+			fourBtn.SetActive (false);
+			fiveBtn.SetActive (false);
+			sixBtn.SetActive (false);
+			sevenBtn.SetActive (false);
+			eightBtn.SetActive (false);
+			nineBtn.SetActive (false);
+			tenBtn.SetActive (false);
+			elevenBtn.SetActive (false);
+			twelveBtn.SetActive (false);
+			thirteenBtn.SetActive (false);
+			fourteenBtn.SetActive (false);
+			fifteenBtn.SetActive (false);
 			break;
 
 		case GUIState.MAINMENU:
@@ -115,6 +200,22 @@ public class GUIMenus : MonoBehaviour {
 			backBtn.SetActive (false);
 			menuBtn.SetActive (false);
 			titleExitBtn.SetActive (false);
+
+			oneBtn.SetActive (false);
+			twoBtn.SetActive (false);
+			threeBtn.SetActive (false);
+			fourBtn.SetActive (false);
+			fiveBtn.SetActive (false);
+			sixBtn.SetActive (false);
+			sevenBtn.SetActive (false);
+			eightBtn.SetActive (false);
+			nineBtn.SetActive (false);
+			tenBtn.SetActive (false);
+			elevenBtn.SetActive (false);
+			twelveBtn.SetActive (false);
+			thirteenBtn.SetActive (false);
+			fourteenBtn.SetActive (false);
+			fifteenBtn.SetActive (false);
 			break;
 
 		case GUIState.OPTIONS:
@@ -129,7 +230,57 @@ public class GUIMenus : MonoBehaviour {
 			backBtn.SetActive (true);
 			menuBtn.SetActive (false);
 			titleExitBtn.SetActive (false);
+
+			oneBtn.SetActive (false);
+			twoBtn.SetActive (false);
+			threeBtn.SetActive (false);
+			fourBtn.SetActive (false);
+			fiveBtn.SetActive (false);
+			sixBtn.SetActive (false);
+			sevenBtn.SetActive (false);
+			eightBtn.SetActive (false);
+			nineBtn.SetActive (false);
+			tenBtn.SetActive (false);
+			elevenBtn.SetActive (false);
+			twelveBtn.SetActive (false);
+			thirteenBtn.SetActive (false);
+			fourteenBtn.SetActive (false);
+			fifteenBtn.SetActive (false);
 			break;
+
+		case GUIState.LEVELSELECT:
+			background.guiTexture.texture = levelSelect;
+			playBtn.SetActive (false);
+			instructionsBtn.SetActive (false);
+			highScoresBtn.SetActive (false);
+			highScoresObject.SetActive (false);
+			creditsBtn.SetActive (false);
+			optionsBtn.SetActive (false);
+			exitBtn.SetActive (false);
+			backBtn.SetActive (true);
+			menuBtn.SetActive (false);
+			titleExitBtn.SetActive (false);
+
+
+		
+
+			oneBtn.SetActive (true);
+			twoBtn.SetActive (true);
+			threeBtn.SetActive (true);
+			fourBtn.SetActive (true);
+			fiveBtn.SetActive (true);
+			sixBtn.SetActive (true);
+			sevenBtn.SetActive (true);
+			eightBtn.SetActive (true);
+			nineBtn.SetActive (true);
+			tenBtn.SetActive (true);
+			elevenBtn.SetActive (true);
+			twelveBtn.SetActive (true);
+			thirteenBtn.SetActive (true);
+			fourteenBtn.SetActive (true);
+			fifteenBtn.SetActive (true);
+			break;
+			
 		}
 	
 	}
