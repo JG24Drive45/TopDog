@@ -99,7 +99,6 @@ public class ScoreScript : MonoBehaviour {
 		//create label
 		GUI.Label( new Rect(0,0,512,128), "Time: " + iMinutes + ":" + fSeconds + "\n" +
 		          						  "Score: " + playerScore + "\n" +
-		          						  "Moves: " + playerMoveCount + "\n" +
 										  "Level: " + currentLevel);
 
 		//prompt for name
