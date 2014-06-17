@@ -25,6 +25,7 @@ public class GUIMenus : MonoBehaviour {
 	public GameObject backBtn;
 	public GameObject menuBtn;
 	public GameObject titleExitBtn;
+	public GameObject grill;
 
 	// buttons for loading each level
 	public GameObject oneBtn;
@@ -86,14 +87,118 @@ public class GUIMenus : MonoBehaviour {
 		sHeight = Screen.height;
 
 
-		float texWid = sWidth * 0.5f;
-		float texHei = sHeight * 0.5f;
-		backBtn.guiTexture.pixelInset = new Rect( sWidth * 0.5f - texWid * 0.93f,
-		                   							sHeight * 0.5f - texHei * 1.25f, 
-			                                   		sWidth * 0.25f, sHeight * 0.07f );
+//		float texWid = sWidth * 0.5f;
+//		float texHei = sHeight * 0.5f;
+//		backBtn.guiTexture.pixelInset = new Rect( sWidth * 0.5f - texWid * 0.93f,
+//		                   							sHeight * 0.5f - texHei * 1.25f, 
+//			                                   		sWidth * 0.25f, sHeight * 0.07f );
 			//pixelInset = new Rect( sWidth * 0.5f - texWid * 0.5f,
 		        //                  sHeight * 0.5f - texHei * 0.5f, 
 		        //                  sWidth * 0.25f, sHeight * 0.2f );
+
+		float tWidScale = 0.0625f;//0.0711f;//64.0f / sWidth;
+		float tHeiScale = 0.0833f;//0.0948f;//64.0f / sHeight;
+		float xLoc = tWidScale * 0.5f;
+		float yLoc = -tHeiScale * 0.5f;
+		oneBtn.guiTexture.pixelInset = new Rect( xLoc, yLoc, tWidScale * sWidth, 
+		                                        tHeiScale * sHeight );
+		twoBtn.guiTexture.pixelInset = new Rect( xLoc, yLoc, tWidScale * sWidth, 
+		                                        tHeiScale * sHeight );
+		threeBtn.guiTexture.pixelInset = new Rect( xLoc, yLoc, tWidScale * sWidth, 
+		                                        tHeiScale * sHeight );
+		fourBtn.guiTexture.pixelInset = new Rect( xLoc, yLoc, tWidScale * sWidth, 
+		                                        tHeiScale * sHeight );
+		fiveBtn.guiTexture.pixelInset = new Rect( xLoc, yLoc, tWidScale * sWidth, 
+		                                        tHeiScale * sHeight );
+		sixBtn.guiTexture.pixelInset = new Rect( xLoc, yLoc, tWidScale * sWidth, 
+		                                        tHeiScale * sHeight );
+		sevenBtn.guiTexture.pixelInset = new Rect( xLoc, yLoc, tWidScale * sWidth, 
+		                                        tHeiScale * sHeight );
+		eightBtn.guiTexture.pixelInset = new Rect( xLoc, yLoc, tWidScale * sWidth, 
+		                                        tHeiScale * sHeight );
+		nineBtn.guiTexture.pixelInset = new Rect( xLoc, yLoc, tWidScale * sWidth, 
+		                                        tHeiScale * sHeight );
+		tenBtn.guiTexture.pixelInset = new Rect( xLoc, yLoc, tWidScale * sWidth, 
+		                                        tHeiScale * sHeight );
+		elevenBtn.guiTexture.pixelInset = new Rect( xLoc, yLoc, tWidScale * sWidth, 
+		                                        tHeiScale * sHeight );
+		twelveBtn.guiTexture.pixelInset = new Rect( xLoc, yLoc, tWidScale * sWidth, 
+		                                        tHeiScale * sHeight );
+		thirteenBtn.guiTexture.pixelInset = new Rect( xLoc, yLoc, tWidScale * sWidth, 
+		                                        tHeiScale * sHeight );
+		fourteenBtn.guiTexture.pixelInset = new Rect( xLoc, yLoc, tWidScale * sWidth, 
+		                                        tHeiScale * sHeight );
+		fifteenBtn.guiTexture.pixelInset = new Rect( xLoc, yLoc, tWidScale * sWidth, 
+		                                        tHeiScale * sHeight );
+		sixteenBtn.guiTexture.pixelInset = new Rect( xLoc, yLoc, tWidScale * sWidth, 
+		                                        tHeiScale * sHeight );
+		seventeenBtn.guiTexture.pixelInset = new Rect( xLoc, yLoc, tWidScale * sWidth, 
+		                                        tHeiScale * sHeight );
+		eightteenBtn.guiTexture.pixelInset = new Rect( xLoc, yLoc, tWidScale * sWidth, 
+		                                        tHeiScale * sHeight );
+
+		tWidScale = 0.25f;
+		tHeiScale = 0.0833f;
+		xLoc = tWidScale * 0.5f;
+		yLoc = -tHeiScale * 0.5f;
+		backBtn.guiTexture.pixelInset = new Rect( xLoc, yLoc, tWidScale * sWidth, 
+		                                              tHeiScale * sHeight );
+		tWidScale = 0.3125f;
+		tHeiScale = 0.104125f;
+		xLoc = tWidScale * 0.5f;
+		yLoc = -tHeiScale * 0.5f;
+		creditsBtn.guiTexture.pixelInset = new Rect( xLoc, yLoc, tWidScale * sWidth, 
+		                                         tHeiScale * sHeight );
+		tWidScale = 0.3125f;
+		tHeiScale = 0.104125f;
+		xLoc = tWidScale * 0.5f;
+		yLoc = -tHeiScale * 0.5f;
+		highScoresBtn.guiTexture.pixelInset = new Rect( xLoc, yLoc, tWidScale * sWidth, 
+		                                            tHeiScale * sHeight );
+		tWidScale = 0.3125f;
+		tHeiScale = 0.104125f;
+		xLoc = tWidScale * 0.5f;
+		yLoc = -tHeiScale * 0.5f;
+		instructionsBtn.guiTexture.pixelInset = new Rect( xLoc, yLoc, tWidScale * sWidth, 
+		                                               tHeiScale * sHeight );
+		tWidScale = 0.3125f;
+		tHeiScale = 0.104125f;
+		xLoc = tWidScale * 0.5f;
+		yLoc = -tHeiScale * 0.5f;
+		playBtn.guiTexture.pixelInset = new Rect( xLoc, yLoc, tWidScale * sWidth, 
+		                                                 tHeiScale * sHeight );
+		tWidScale = 0.3125f;
+		tHeiScale = 0.104125f;
+		xLoc = tWidScale * 0.5f;
+		yLoc = -tHeiScale * 0.5f;
+		exitBtn.guiTexture.pixelInset = new Rect( xLoc, yLoc, tWidScale * sWidth, 
+		                                         tHeiScale * sHeight );
+
+		tWidScale = 0.2f;
+		tHeiScale = 0.115f;
+		xLoc = tWidScale * 0.5f;
+		yLoc = -tHeiScale * 0.5f;
+		menuBtn.guiTexture.pixelInset = new Rect( xLoc, yLoc, tWidScale * sWidth, 
+		                                         tHeiScale * sHeight );
+		tWidScale = 0.2f;
+		tHeiScale = 0.115f;
+		xLoc = tWidScale * 0.5f;
+		yLoc = -tHeiScale * 0.5f;
+		titleExitBtn.guiTexture.pixelInset = new Rect( xLoc, yLoc, tWidScale * sWidth, 
+		                                         tHeiScale * sHeight );
+
+		tWidScale = 0.5f;
+		tHeiScale = 1.3333f;
+		xLoc = tWidScale * 0.5f;
+		yLoc = -tHeiScale * 0.5f;
+		background.guiTexture.pixelInset = new Rect( xLoc, yLoc, tWidScale * sWidth, 
+		                                         tHeiScale * sHeight );
+		tWidScale = 1.0f;
+		tHeiScale = 1.0f;
+		xLoc = tWidScale * 0.5f;
+		yLoc = -tHeiScale * 0.5f;
+		grill.guiTexture.pixelInset = new Rect( xLoc, yLoc, tWidScale * sWidth, 
+		                                            tHeiScale * sHeight );
 
 	}
 

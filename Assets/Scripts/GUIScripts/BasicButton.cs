@@ -10,10 +10,14 @@ public class BasicButton : MonoBehaviour {
 
 	void OnMouseEnter(){
 		guiTexture.texture = Hover;
+		EventAggregatorManager.Publish(new PlaySoundMessage("hotdogStep", false));
 	}
 	
 	void OnMouseExit(){
 		guiTexture.texture = Normal;
+	}
+	void OnMouseDown(){
+		EventAggregatorManager.Publish( new PlaySoundMessage( "goal", false ) );
 	}
 
 	void OnMouseUp(){

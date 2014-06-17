@@ -142,42 +142,42 @@ public class HighScores : MonoBehaviour {
 
 	void OnGUI()
 	{
-		float offset = 20.0f;
-		GUI.Label( new Rect( sWidth * 0.4f , sHeight * 0.13f + offset, 
+		float offset = sHeight * 0.026f; // 20.0f;
+		GUI.Label( new Rect( sWidth * 0.4f , sHeight * 0.13f - offset, 
 		                    200, 80 ), "Level 1   " + level1HS, style );
-		GUI.Label( new Rect( sWidth * 0.4f , sHeight * 0.16f + offset, 
+		GUI.Label( new Rect( sWidth * 0.4f , sHeight * 0.16f - offset, 
 		                    200, 80 ), "Level 2   " + level2HS, style );
-		GUI.Label( new Rect( sWidth * 0.4f , sHeight * 0.19f + offset, 
+		GUI.Label( new Rect( sWidth * 0.4f , sHeight * 0.19f - offset, 
 		                    200, 80 ), "Level 3   " + level3HS, style );
-		GUI.Label( new Rect( sWidth * 0.4f , sHeight * 0.22f + offset, 
+		GUI.Label( new Rect( sWidth * 0.4f , sHeight * 0.22f - offset, 
 		                    200, 80 ), "Level 4   " + level4HS, style );
-		GUI.Label( new Rect( sWidth * 0.4f , sHeight * 0.25f + offset, 
+		GUI.Label( new Rect( sWidth * 0.4f , sHeight * 0.25f - offset, 
 		                    200, 80 ), "Level 5   " + level5HS, style );
-		GUI.Label( new Rect( sWidth * 0.4f , sHeight * 0.28f + offset, 
+		GUI.Label( new Rect( sWidth * 0.4f , sHeight * 0.28f - offset, 
 		                    200, 80 ), "Level 6   " + level6HS, style );
-		GUI.Label( new Rect( sWidth * 0.4f , sHeight * 0.31f + offset, 
+		GUI.Label( new Rect( sWidth * 0.4f , sHeight * 0.31f - offset, 
 		                    200, 80 ), "Level 7   " + level7HS, style );
-		GUI.Label( new Rect( sWidth * 0.4f , sHeight * 0.34f + offset, 
+		GUI.Label( new Rect( sWidth * 0.4f , sHeight * 0.34f - offset, 
 		                    200, 80 ), "Level 8   " + level8HS, style );
-		GUI.Label( new Rect( sWidth * 0.4f , sHeight * 0.37f + offset, 
+		GUI.Label( new Rect( sWidth * 0.4f , sHeight * 0.37f - offset, 
 		                    200, 80 ), "Level 9   " + level9HS, style );
-		GUI.Label( new Rect( sWidth * 0.4f , sHeight * 0.4f + offset, 
+		GUI.Label( new Rect( sWidth * 0.4f , sHeight * 0.4f - offset, 
 		                    200, 80 ), "Level 10  " + level10HS, style );
-		GUI.Label( new Rect( sWidth * 0.4f , sHeight * 0.43f + offset, 
+		GUI.Label( new Rect( sWidth * 0.4f , sHeight * 0.43f - offset, 
 		                    200, 80 ), "Level 11  " + level11HS, style );
-		GUI.Label( new Rect( sWidth * 0.4f , sHeight * 0.46f + offset, 
+		GUI.Label( new Rect( sWidth * 0.4f , sHeight * 0.46f - offset, 
 		                    200, 80 ), "Level 12  " + level12HS, style );
-		GUI.Label( new Rect( sWidth * 0.4f , sHeight * 0.49f + offset, 
+		GUI.Label( new Rect( sWidth * 0.4f , sHeight * 0.49f - offset, 
 		                    200, 80 ), "Level 13  " + level13HS, style );
-		GUI.Label( new Rect( sWidth * 0.4f , sHeight * 0.52f + offset, 
+		GUI.Label( new Rect( sWidth * 0.4f , sHeight * 0.52f - offset, 
 		                    200, 80 ), "Level 14  " + level14HS, style );
-		GUI.Label( new Rect( sWidth * 0.4f , sHeight * 0.55f + offset, 
+		GUI.Label( new Rect( sWidth * 0.4f , sHeight * 0.55f - offset, 
 		                    200, 80 ), "Level 15  " + level15HS, style );
-		GUI.Label( new Rect( sWidth * 0.4f , sHeight * 0.58f + offset, 
+		GUI.Label( new Rect( sWidth * 0.4f , sHeight * 0.58f - offset, 
 		                    200, 80 ), "Level 16  " + level16HS, style );
-		GUI.Label( new Rect( sWidth * 0.4f , sHeight * 0.61f + offset, 
+		GUI.Label( new Rect( sWidth * 0.4f , sHeight * 0.61f - offset, 
 		                    200, 80 ), "Level 17  " + level17HS, style );
-		GUI.Label( new Rect( sWidth * 0.4f , sHeight * 0.64f + offset, 
+		GUI.Label( new Rect( sWidth * 0.4f , sHeight * 0.64f - offset, 
 		                    200, 80 ), "Level 18  " + level18HS, style );
 
 	}

@@ -16,6 +16,7 @@ public class LoadButton : MonoBehaviour {
 	void OnMouseEnter(){
 		if (Unlocked) {
 			guiTexture.texture = Hover;	
+			EventAggregatorManager.Publish(new PlaySoundMessage("hotdogStep", false));
 		}
 		else {
 			guiTexture.texture = Gray;	
@@ -32,6 +33,11 @@ public class LoadButton : MonoBehaviour {
 
 	}
 		
+	void OnMouseDown(){
+		if (Unlocked) {
+			EventAggregatorManager.Publish( new PlaySoundMessage( "goal", false ) );
+		}
+	}
 	void OnMouseUp(){
 		if (Unlocked) {
 			EventAggregatorManager.Publish (new LoadLevelMessage (LevelToLoad));

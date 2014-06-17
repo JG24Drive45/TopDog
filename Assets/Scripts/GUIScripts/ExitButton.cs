@@ -9,6 +9,7 @@ public class ExitButton : MonoBehaviour {
 	
 	void OnMouseEnter(){
 		guiTexture.texture = Hover;
+		EventAggregatorManager.Publish(new PlaySoundMessage("hotdogStep", false));
 	}
 	
 	void OnMouseExit(){
@@ -16,6 +17,9 @@ public class ExitButton : MonoBehaviour {
 	}
 	
 	void OnMouseDown(){
-		Application.Quit();
+		EventAggregatorManager.Publish( new PlaySoundMessage( "goal", false ) );
+	}
+	void OnMouseUp(){
+		Application.Quit ();
 	}
 }
