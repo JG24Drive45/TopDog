@@ -22,6 +22,8 @@ public class ScoreScript : MonoBehaviour {
 
 	public static event nameEntered onNameEntered;
 
+	public GUISkin skin;
+
 	// Use this for initialization
 	void Awake()
 	{
@@ -95,6 +97,8 @@ public class ScoreScript : MonoBehaviour {
 		//divide time into minutes and seconds
 		int iMinutes = (int)playerTime / 60;
 		float fSeconds = playerTime - (iMinutes * 60);
+
+		GUI.skin = skin; //apply background
 
 		//create label
 		GUI.Label( new Rect(0,0,512,128), "Time: " + iMinutes + ":" + fSeconds + "\n" +
