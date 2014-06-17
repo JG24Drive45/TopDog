@@ -26,9 +26,9 @@ public class BasicButton : MonoBehaviour {
 		else if (state == "HIGHSCORES") {
 			GUIMenus.menuState = GUIMenus.GUIState.HIGHSCORES;
 		}
-		else if (state == "OPTIONS") {
-			GUIMenus.menuState = GUIMenus.GUIState.OPTIONS;
-		}
+//		else if (state == "OPTIONS") {
+//			GUIMenus.menuState = GUIMenus.GUIState.OPTIONS;
+//		}
 		else if (state == "MAINMENU") {
 			GUIMenus.menuState = GUIMenus.GUIState.MAINMENU;
 		}

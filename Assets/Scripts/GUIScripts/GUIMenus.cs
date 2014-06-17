@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class GUIMenus : MonoBehaviour {
-	public enum GUIState{ TITLE, MAINMENU, INSTRUCTIONS, HIGHSCORES, CREDITS, OPTIONS, LEVELSELECT };
+	public enum GUIState{ TITLE, MAINMENU, INSTRUCTIONS, HIGHSCORES, CREDITS, LEVELSELECT };
 	public static GUIState menuState ;
 	public static int levelUnlocked ;
 
@@ -10,7 +10,7 @@ public class GUIMenus : MonoBehaviour {
 	public Texture2D instructions;
 	public Texture2D highscores;
 	public Texture2D credits;
-	public Texture2D options;
+//	public Texture2D options;
 	public Texture2D title;
 	public Texture2D levelSelect;
 
@@ -20,7 +20,7 @@ public class GUIMenus : MonoBehaviour {
 	public GameObject highScoresBtn;
 	public GameObject highScoresObject;
 	public GameObject creditsBtn;
-	public GameObject optionsBtn;
+//	public GameObject optionsBtn;
 	public GameObject exitBtn;
 	public GameObject backBtn;
 	public GameObject menuBtn;
@@ -42,6 +42,9 @@ public class GUIMenus : MonoBehaviour {
 	public GameObject thirteenBtn;
 	public GameObject fourteenBtn;
 	public GameObject fifteenBtn;
+	public GameObject sixteenBtn;
+	public GameObject seventeenBtn;
+	public GameObject eightteenBtn;
 
 
 	// Use this for initialization
@@ -53,7 +56,7 @@ public class GUIMenus : MonoBehaviour {
 		highScoresBtn.SetActive (false);
 		highScoresObject.SetActive (false);
 		creditsBtn.SetActive (false);
-		optionsBtn.SetActive (false);
+//		optionsBtn.SetActive (false);
 		exitBtn.SetActive (false);
 		backBtn.SetActive (false);
 		menuBtn.SetActive (true);
@@ -74,6 +77,9 @@ public class GUIMenus : MonoBehaviour {
 		thirteenBtn.SetActive (false);
 		fourteenBtn.SetActive (false);
 		fifteenBtn.SetActive (false);
+		sixteenBtn.SetActive (false);		
+		seventeenBtn.SetActive (false);
+		eightteenBtn.SetActive (false);
 
 		int sWidth, sHeight;
 		sWidth = Screen.width;
@@ -89,8 +95,6 @@ public class GUIMenus : MonoBehaviour {
 		        //                  sHeight * 0.5f - texHei * 0.5f, 
 		        //                  sWidth * 0.25f, sHeight * 0.2f );
 
-
-
 	}
 
 
@@ -104,7 +108,7 @@ public class GUIMenus : MonoBehaviour {
 			highScoresBtn.SetActive (false);
 			highScoresObject.SetActive (false);
 			creditsBtn.SetActive (false);
-			optionsBtn.SetActive (false);
+//			optionsBtn.SetActive (false);
 			exitBtn.SetActive (false);
 			backBtn.SetActive (true);
 			menuBtn.SetActive (false);
@@ -125,6 +129,9 @@ public class GUIMenus : MonoBehaviour {
 			thirteenBtn.SetActive (false);
 			fourteenBtn.SetActive (false);
 			fifteenBtn.SetActive (false);
+			sixteenBtn.SetActive (false);		
+			seventeenBtn.SetActive (false);
+			eightteenBtn.SetActive (false);
 			break;
 
 		case GUIState.HIGHSCORES:
@@ -134,7 +141,7 @@ public class GUIMenus : MonoBehaviour {
 			highScoresBtn.SetActive (false);
 			highScoresObject.SetActive (true);
 			creditsBtn.SetActive (false);
-			optionsBtn.SetActive (false);
+//			optionsBtn.SetActive (false);
 			exitBtn.SetActive (false);
 			backBtn.SetActive (true);
 			menuBtn.SetActive (false);
@@ -155,6 +162,9 @@ public class GUIMenus : MonoBehaviour {
 			thirteenBtn.SetActive (false);
 			fourteenBtn.SetActive (false);
 			fifteenBtn.SetActive (false);
+			sixteenBtn.SetActive (false);		
+			seventeenBtn.SetActive (false);
+			eightteenBtn.SetActive (false);
 			break;
 
 		case GUIState.INSTRUCTIONS:
@@ -165,7 +175,7 @@ public class GUIMenus : MonoBehaviour {
 			highScoresBtn.SetActive (false);
 			highScoresObject.SetActive (false);
 			creditsBtn.SetActive (false);
-			optionsBtn.SetActive (false);
+//			optionsBtn.SetActive (false);
 			exitBtn.SetActive (false);
 			backBtn.SetActive (true);
 			menuBtn.SetActive (false);
@@ -186,6 +196,9 @@ public class GUIMenus : MonoBehaviour {
 			thirteenBtn.SetActive (false);
 			fourteenBtn.SetActive (false);
 			fifteenBtn.SetActive (false);
+			sixteenBtn.SetActive (false);		
+			seventeenBtn.SetActive (false);
+			eightteenBtn.SetActive (false);
 			break;
 
 		case GUIState.MAINMENU:
@@ -195,7 +208,7 @@ public class GUIMenus : MonoBehaviour {
 			highScoresBtn.SetActive (true);
 			highScoresObject.SetActive (false);
 			creditsBtn.SetActive (true);
-			optionsBtn.SetActive (true);
+//			optionsBtn.SetActive (true);
 			exitBtn.SetActive (true);
 			backBtn.SetActive (false);
 			menuBtn.SetActive (false);
@@ -216,37 +229,40 @@ public class GUIMenus : MonoBehaviour {
 			thirteenBtn.SetActive (false);
 			fourteenBtn.SetActive (false);
 			fifteenBtn.SetActive (false);
+			sixteenBtn.SetActive (false);		
+			seventeenBtn.SetActive (false);
+			eightteenBtn.SetActive (false);
 			break;
 
-		case GUIState.OPTIONS:
-			background.guiTexture.texture = options;
-			playBtn.SetActive (false);
-			instructionsBtn.SetActive (false);
-			highScoresBtn.SetActive (false);
-			highScoresObject.SetActive (false);
-			creditsBtn.SetActive (false);
-			optionsBtn.SetActive (false);
-			exitBtn.SetActive (false);
-			backBtn.SetActive (true);
-			menuBtn.SetActive (false);
-			titleExitBtn.SetActive (false);
+//		case GUIState.OPTIONS:
+//			background.guiTexture.texture = options;
+//			playBtn.SetActive (false);
+//			instructionsBtn.SetActive (false);
+//			highScoresBtn.SetActive (false);
+//			highScoresObject.SetActive (false);
+//			creditsBtn.SetActive (false);
+//			optionsBtn.SetActive (false);
+//			exitBtn.SetActive (false);
+//			backBtn.SetActive (true);
+//			menuBtn.SetActive (false);
+//			titleExitBtn.SetActive (false);
 
-			oneBtn.SetActive (false);
-			twoBtn.SetActive (false);
-			threeBtn.SetActive (false);
-			fourBtn.SetActive (false);
-			fiveBtn.SetActive (false);
-			sixBtn.SetActive (false);
-			sevenBtn.SetActive (false);
-			eightBtn.SetActive (false);
-			nineBtn.SetActive (false);
-			tenBtn.SetActive (false);
-			elevenBtn.SetActive (false);
-			twelveBtn.SetActive (false);
-			thirteenBtn.SetActive (false);
-			fourteenBtn.SetActive (false);
-			fifteenBtn.SetActive (false);
-			break;
+//			oneBtn.SetActive (false);
+//			twoBtn.SetActive (false);
+//			threeBtn.SetActive (false);
+//			fourBtn.SetActive (false);
+//			fiveBtn.SetActive (false);
+//			sixBtn.SetActive (false);
+//			sevenBtn.SetActive (false);
+//			eightBtn.SetActive (false);
+//			nineBtn.SetActive (false);
+//			tenBtn.SetActive (false);
+//			elevenBtn.SetActive (false);
+//			twelveBtn.SetActive (false);
+//			thirteenBtn.SetActive (false);
+//			fourteenBtn.SetActive (false);
+//			fifteenBtn.SetActive (false);
+//			break;
 
 		case GUIState.LEVELSELECT:
 			background.guiTexture.texture = levelSelect;
@@ -255,7 +271,7 @@ public class GUIMenus : MonoBehaviour {
 			highScoresBtn.SetActive (false);
 			highScoresObject.SetActive (false);
 			creditsBtn.SetActive (false);
-			optionsBtn.SetActive (false);
+//			optionsBtn.SetActive (false);
 			exitBtn.SetActive (false);
 			backBtn.SetActive (true);
 			menuBtn.SetActive (false);
@@ -279,6 +295,9 @@ public class GUIMenus : MonoBehaviour {
 			thirteenBtn.SetActive (true);
 			fourteenBtn.SetActive (true);
 			fifteenBtn.SetActive (true);
+			sixteenBtn.SetActive (true);		
+			seventeenBtn.SetActive (true);
+			eightteenBtn.SetActive (true);
 			break;
 			
 		}

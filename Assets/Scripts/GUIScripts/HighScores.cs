@@ -8,7 +8,7 @@ public class HighScores : MonoBehaviour {
 	public GUIStyle style ;
 
 	int currentLevel = 1 ;
-	int totalLevels = 15 ;
+	int totalLevels = 18 ;
 	int sWidth, sHeight;
 
 	string level1HS ;
@@ -26,6 +26,11 @@ public class HighScores : MonoBehaviour {
 	string level13HS ;
 	string level14HS ;
 	string level15HS ;
+	string level16HS ;
+	string level17HS ;
+	string level18HS ;
+
+
 
 	private KeyValuePair<int,string>[] scores ;
 	// Use this for initialization
@@ -119,6 +124,15 @@ public class HighScores : MonoBehaviour {
 			case 14:
 				level15HS = temp ;
 				break;
+			case 15:
+				level16HS = temp ;
+				break;
+			case 16:
+				level17HS = temp ;
+				break;
+			case 17:
+				level18HS = temp ;
+				break;
 			}
 
 		}
@@ -159,6 +173,12 @@ public class HighScores : MonoBehaviour {
 		                    200, 80 ), "Level 14  " + level14HS, style );
 		GUI.Label( new Rect( sWidth * 0.4f , sHeight * 0.55f + offset, 
 		                    200, 80 ), "Level 15  " + level15HS, style );
+		GUI.Label( new Rect( sWidth * 0.4f , sHeight * 0.58f + offset, 
+		                    200, 80 ), "Level 16  " + level16HS, style );
+		GUI.Label( new Rect( sWidth * 0.4f , sHeight * 0.61f + offset, 
+		                    200, 80 ), "Level 17  " + level17HS, style );
+		GUI.Label( new Rect( sWidth * 0.4f , sHeight * 0.64f + offset, 
+		                    200, 80 ), "Level 18  " + level18HS, style );
 
 	}
 
