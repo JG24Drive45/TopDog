@@ -101,7 +101,7 @@ public class ScoreScript : MonoBehaviour {
 		GUI.skin = skin; //apply background
 
 		//create label
-		GUI.Label( new Rect(0,0,512,128), "Time: " + iMinutes + ":" + fSeconds + "\n" +
+		GUI.Label( new Rect(0,0,512,128), "Time: " + iMinutes.ToString("00") + ":" + fSeconds.ToString("00.00") + "\n" +
 		          						  "Score: " + playerScore + "\n" +
 										  "Level: " + currentLevel);
 
