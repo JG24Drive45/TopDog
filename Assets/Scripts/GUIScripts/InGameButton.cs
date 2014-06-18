@@ -23,6 +23,7 @@ public class InGameButton : MonoBehaviour
 
 	void OnMouseEnter(){
 		guiTexture.texture = Hover;
+		EventAggregatorManager.Publish(new PlaySoundMessage("hotdogStep", false));
 	}
 	
 	void OnMouseExit(){
