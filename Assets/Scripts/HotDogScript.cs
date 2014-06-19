@@ -81,7 +81,8 @@ public class HotDogScript : MonoBehaviour
 	private Vector3 v3LastTeleportedLocation;
 	public bool bTouchingATile = true;											// Is the player currently touching any tiles?
 	public bool bOnConveyor = false;
-	
+	public GameObject smoke; 													// The particle system used to spawn smoke
+
 	private Vector3 v3OriginalPosition;											// Starting position for the level
 	private Vector3 v3OriginalRotation;											// Starting rotation for the level
 	private OrientationState oStateOriginal;									// Starting orientation state
@@ -601,11 +602,20 @@ public class HotDogScript : MonoBehaviour
 	#region IEnumerator FallDown( point, axis, angle)
 	public IEnumerator FallDown( Vector3 offset, Vector3 axis, float angle )
 	{
-		
+		bool bSmokeSpawned = false; //whether or not smoke has been spawned yet
+
 		while( transform.position.y > fKillHeight )
 		{
 			if( transform.position.y < fSizzleHeight )
+			{
 				EventAggregatorManager.Publish(new PlaySoundMessage("death", false));
+				if (!bSmokeSpawned)
+				{
+					//spawn smoke
+					Instantiate(smoke, transform.position, smoke.transform.localRotation);
+					bSmokeSpawned = true;
+				}
+			}
 			
 			transform.position -= new Vector3( 0, fDeadSpeed * Time.deltaTime, 0 );
 			transform.RotateAround( transform.position - offset, axis, angle );
