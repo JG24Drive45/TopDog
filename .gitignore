@@ -3,6 +3,7 @@
 Temp/
 Library/
 Build/
+AssetPackages/
 Assets/Resources/Scores
 
 *.svd
