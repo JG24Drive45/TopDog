@@ -75,13 +75,17 @@ public class HotDogScript : MonoBehaviour
 	private bool bLevelComplete = false;										// Is the level complete?
 	
 	private bool bGamePaused = false;											// Is the game currently paused?
-	public bool bCanMove = false;												// Can the player currently move
+	private bool bCanMove = false;												// Can the player currently move
 	private string sLastKeyUsed;													// Last arrow button the player used
 	private bool bIsTeleporting = false;										// Is the player currently teleporting?
 	private Vector3 v3LastTeleportedLocation;
-	public bool bTouchingATile = true;											// Is the player currently touching any tiles?
-	public bool bOnConveyor = false;
+	private bool bTouchingATile = true;											// Is the player currently touching any tiles?
+	private bool bOnConveyor = false;
+
 	public GameObject smoke; 													// The particle system used to spawn smoke
+	public GameObject ketchupParticles;											// Particles for the ketchup
+	public GameObject mustardParticles;											// Particles for the mustard
+	public GameObject relishParticles;											// Particles for the relish
 
 	private Vector3 v3OriginalPosition;											// Starting position for the level
 	private Vector3 v3OriginalRotation;											// Starting rotation for the level
@@ -392,7 +396,8 @@ public class HotDogScript : MonoBehaviour
 				bFullDog = IsFullDog();														// Is the dog full?
 				SetMaterial();																// Update the material
 				EventAggregatorManager.Publish( new PlaySoundMessage( "splat", false ) );	// Play the splat sound
-				Destroy( other.gameObject );
+				Instantiate( ketchupParticles, other.transform.position, Quaternion.identity );	// Create particles
+				Destroy( other.gameObject );												// Destroy the ketchup
 				break;
 				
 			case "Mustard":
@@ -402,6 +407,7 @@ public class HotDogScript : MonoBehaviour
 				bFullDog = IsFullDog();														// Is the dog full?
 				SetMaterial();																// Update the material
 				EventAggregatorManager.Publish( new PlaySoundMessage( "splat", false ) );	// Play the splat sound
+				Instantiate( mustardParticles, other.transform.position, Quaternion.identity );	// Create particles
 				Destroy( other.gameObject );
 				break;
 				
@@ -412,6 +418,7 @@ public class HotDogScript : MonoBehaviour
 				bFullDog = IsFullDog();														// Is the dog full?
 				SetMaterial();																// Update the material
 				EventAggregatorManager.Publish( new PlaySoundMessage( "splat", false ) );	// Play the splat sound
+				Instantiate( relishParticles, other.transform.position, Quaternion.identity );	// Create particles
 				Destroy( other.gameObject );
 				break;
 				
